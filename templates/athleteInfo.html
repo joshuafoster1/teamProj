@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+        {% block breadcrumb %}
+        <li class="breadcrumb-item active">{{ athlete.user.username}}</li>
+        {% endblock %}
+
+      {% block content %}
+      <ul>
+      <li>{{athlete.user.username}}</li>
+      <li>{{athlete.user.first_name}}</li>
+      <li>{{session.sessionDate}}</li>
+      <li>{{athlete.user.email}}</li>
+      <li>{{athlete.birthdate}}</li>
+      </ul>
+      {% endblock %}

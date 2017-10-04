@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ block.super }}
+{% endblock %}
+{% block breadcrumb %}
+<li class="breadcrumb-item active">{{ date }}</li>
+{% endblock %}
+{% block content %}
+<div class='mb-4'>
+  <a href='{% url 'newConditioning' athlete.id %}' class='btn btn-primary'>Add Conditioning</a>
+</div>
+<table class="table">
+  <thead class="thead-inverse">
+  <tr>
+    <th>Athlete</th>
+    <th>Pull</th>
+    <th>Core</th>
+    <th>Push</th>
+    <th>Triceps</th>
+  </tr>
+</thead>
+<tbody>
+  {% for athlete in athletes %}
+  <tr>
+    <td>
+<a href="{% url 'athletePage' athlete.id %}">{{ athlete.user.username }}</a> <br>
+<small class="text-muted d-block">{{ athlete.birthdate }} </small>
+</td>
+<td class="align-middle"></td>
+<td class="align-middle"></td>
+<td></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>More Stuff<th>
+        <th>Even More Stuff<th>
+        </tr>
+      </thead>
+        <tbody>
+          {% for condition in conditioning %}
+          <tr>
+           <td>{{condition.repetitions}}</td>
+           <td></td>
+         </tr>
+       </tbody>
+     </table>
+          {% endfor %}
+{% endblock %}
