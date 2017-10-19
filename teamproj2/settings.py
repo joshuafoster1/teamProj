@@ -27,7 +27,7 @@ DEBUG = True
 
 # From command prompt do 'ifconfig'
 #    probably want 'ifconfig en0'
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.8', '192.168.1.6']
+ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.8', '192.168.1.6', '192.168.1.12']
 
 
 # Application definition
@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'teamproj2.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.11/ref/settings/#databases
+# Mysql- https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -128,6 +128,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
-
+# added elements to settings.py
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

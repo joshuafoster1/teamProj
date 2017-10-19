@@ -3,51 +3,36 @@
 {{ block.super }}
 {% endblock %}
 {% block breadcrumb %}
-<li class="breadcrumb-item active">{{ date }}</li>
+<li class="breadcrumb-item active">{{athlete.user.username}}</li>
+<li class="breadcrumb-item">{{ date }}</li>
 {% endblock %}
 {% block content %}
 <div class='mb-4'>
-  <a href='{% url 'newConditioning' athlete.id %}' class='btn btn-primary'>Add Conditioning</a>
+  <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
+  <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
+
 </div>
-<table class="table">
+<table class="table table-sm table-striped table-bordered">
   <thead class="thead-inverse">
+    <h5> Most Recent Conditioning</h5>
   <tr>
-    <th>Athlete</th>
-    <th>Pull</th>
-    <th>Core</th>
-    <th>Push</th>
-    <th>Triceps</th>
+    <th>Session</th>
+    {% for condition in conditioning.1 %}
+    <th>{{ condition.exercise.category }}</th>
+    {% endfor %}
   </tr>
 </thead>
 <tbody>
-  {% for athlete in athletes %}
+  {% for condition in conditioning %}
   <tr>
-    <td>
-<a href="{% url 'athletePage' athlete.id %}">{{ athlete.user.username }}</a> <br>
-<small class="text-muted d-block">{{ athlete.birthdate }} </small>
+    <td class="align-middle">{{ condition.0.session.sessionDate }}</td>
+    {% for item in condition %}
+    <td class="align-middle">{{ item.repetitions}}
+<small class="text-muted d-block">{{ item.exercise }} </small>
 </td>
-<td class="align-middle"></td>
-<td class="align-middle"></td>
-<td></td>
-</tr>
 {% endfor %}
-</tbody>
-</table>
+</tr>
 
-<table>
-  <thead>
-    <tr>
-      <th>More Stuff<th>
-        <th>Even More Stuff<th>
-        </tr>
-      </thead>
-        <tbody>
-          {% for condition in conditioning %}
-          <tr>
-           <td>{{condition.repetitions}}</td>
-           <td></td>
-         </tr>
-       </tbody>
-     </table>
-          {% endfor %}
+{% endfor %}
+
 {% endblock %}

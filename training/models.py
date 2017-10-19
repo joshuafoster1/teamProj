@@ -25,8 +25,12 @@ class Session(models.Model):
     class Meta:
         unique_together = ('athlete', 'sessionDate')
 
+    def get_first_set(self):
+        '''returns multiple objects'''
+        return Conditioning.objects.filter(session=self, setnum=1)
+
     def __str__(self):
-        return self.athlete.user.username + str(self.sessionDate)
+        return str(self.sessionDate)
 
 class RefCategory(models.Model):
     description = models.CharField(max_length=200, blank=True)

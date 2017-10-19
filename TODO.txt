@@ -1,0 +1,77 @@
+teamproj2 notes
+
+todo:
+Database model
+  -add fields to exercise model
+     -numbering to order the exercises
+     -number of reps required to move up
+     -add getter to conditioning model to retrieve the last exercise.
+
+Forms
+  -conditioning form
+     - initialize athlete conditioning form with last exercise input from user.
+  -ccform
+     - finish the form ordering/put the athlete field first
+
+url
+  -createathlete url. decide if this is a page I want to create and utilize.
+   accounts/views
+  -when a new user is created, automatically link them to an athlete instance.
+
+signup/authentication
+  -finish cleaning up the template to implement the background and go back to change the
+   font and add it to the css. (styling from tutorial)
+
+Git
+  -create live project
+  -create development branch
+
+Additional features
+ -Athlete information page
+   -format page to display athlete information
+   -create update form to allow athlete to change information
+ -Add competition calendar
+ -Add events calendar
+ -add pinch block functionality
+ -add goals functionality
+ -add a climbing video feed/links to videos
+ -add techique learning page
+    -add videos, descriptions, pictures and drills?
+
+Crazy Ideas
+  -Build a scraper to pull comp information and put information into webpage.
+
+LAUNCH TODO:
+  Clean up home page.
+
+  first launch layout.
+  #keep it simple
+    -homepage
+       link to:
+        -conditioning page
+
+    Conditioning page
+       presents most recent sets of conditioning.
+       link to:
+         -new conditioning
+
+Things to add:
+  pinch block page
+    present amount of weight needed for workout.
+    link to:
+       pinch block input page
+  goals page
+    present hierarchy of goal structure.
+     Ex:
+       big goal-be champion
+         sub goals-send v10
+           focus goal-improve power
+             action- send many v8's
+         sub goal-top ten regionals
+           target-more consistent climbing
+             focus goal-improve footwork
+                action-perform footwork drill every practice
+    link to:
+      -add goals
+      -goal accomplished (button on goal)
+        place accomplished goals on a page of there own.

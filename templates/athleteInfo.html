@@ -4,9 +4,27 @@
         {% endblock %}
 
       {% block content %}
+      <table class="table table-sm table-bordered">
+        <thead>
+          <tr>
+            <th>
+              Athlete Information
+            </th>
+          <tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>First Name</td>
+            <td>{{athlete.user.username}}</td>
+          </tr>
+          <tr>
+            <td>Last Name</td>
+          </tr>
+        </tbody>
+
       <ul>
       <li>{{athlete.user.username}}</li>
-      <li>{{athlete.user.first_name}}</li>
+      <li></li>
       <li>{{session.sessionDate}}</li>
       <li>{{athlete.user.email}}</li>
       <li>{{athlete.birthdate}}</li>

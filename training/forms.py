@@ -1,8 +1,7 @@
 from django.forms import inlineformset_factory
 from django import forms
 from .models import Conditioning, RefExercise, Athlete
-class FullConditioningForm(forms.Form):
-    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
+class AthleteConditioningForm(forms.Form):
     Pulls = forms.ModelChoiceField(queryset=RefExercise.objects.filter(category__id=1))
     Pull_Reps = forms.IntegerField(min_value=1, max_value=12)
     Core = forms.ModelChoiceField(queryset=None)
@@ -14,12 +13,17 @@ class FullConditioningForm(forms.Form):
     Set = forms.IntegerField(min_value=1, max_value=3)
 
     def __init__(self, *args, **kwargs):
-        super(FullConditioningForm, self).__init__(*args, **kwargs)
+        super(AthleteConditioningForm, self).__init__(*args, **kwargs)
         # self.fields['Pulls'].queryset =RefExercise.objects.filter(category__id=1)
         self.fields['Core'].queryset =RefExercise.objects.filter(category__id=3)
         self.fields['Push'].queryset =RefExercise.objects.filter(category__id=2)
         self.fields['Triceps'].queryset =RefExercise.objects.filter(category__id=4)
+class FullConditioningForm(AthleteConditioningForm):
+    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
 
+    def __init__(self, *args, **kwargs):
+        super(FullConditioningForm, self).__init__(*args, **kwargs)
+        self.fields.keyOrder = ['Athlete', ]
 
 class ConditioningForm(forms.ModelForm):
     # category_choices = RefExercise.objects.get(category__id=1)

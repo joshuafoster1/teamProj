@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+        {% block breadcrumb %}
+        <li class="breadcrumb-item active">Homepage</li>
+        {% endblock %}
+
+      {% block content %}
+      <table class="table">
+        <thead class="thead-inverse">
+        <tr>
+          <th>Athlete</th>
+          <th>stuff</th>
+          <th>Other Stuff</th>
+          <th>The bees knees</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for athlete in athletes %}
+        <tr>
+          <td>
+      <a href="{% url 'athletePage' athlete.id %}">{{ athlete.user.username }}</a> <br>
+      <small class="text-muted d-block">{{ athlete.birthdate }} </small>
+    </td>
+
+    <td class="align-middle"><a href="{% url 'athleteInfo' athlete.id %}">Athlete Info</a></td>
+    <td class="align-middle"></td>
+    <td></td>
+  </tr>
+  {% endfor %}
+
+</tbody>
+</table>
+{% endblock %}

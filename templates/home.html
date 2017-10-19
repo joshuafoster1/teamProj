@@ -1,32 +1,34 @@
 {% extends 'base.html' %}
         {% block breadcrumb %}
-        <li class="breadcrumb-item active">Athetes</li>
+        <li class="breadcrumb-item active">It's prime climbing time, {{ athlete.user.username }}</li>
         {% endblock %}
 
       {% block content %}
-      <table class="table">
-        <thead class="thead-inverse">
-        <tr>
-          <th>Athlete</th>
-          <th>stuff</th>
-          <th>Other Stuff</th>
-          <th>The bees knees</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for athlete in athletes %}
-        <tr>
-          <td>
-      <a href="{% url 'athletePage' athlete.id %}">{{ athlete.user.username }}</a> <br>
-      <small class="text-muted d-block">{{ athlete.birthdate }} </small>
-    </td>
+      <div class='mb-4'>
+        <a href='{% url 'athletePage' %}' class='btn btn-primary'>Conditioning</a>
+        <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
+        <a href='{% url 'athleteInfo' %}' class='btn btn-primary'>Profile Information</a>
 
-    <td class="align-middle"><a href="{% url 'athleteInfo' athlete.id %}">Athlete Info</a></td>
-    <td class="align-middle"></td>
-    <td></td>
-  </tr>
-  {% endfor %}
+      </div>
+      <h5>Welcome to the Sacramento Pipworks Competitive Team page.</h5>
 
+<p>This pAGe iS a work in pROGRess...</p>
+  <a href="http://www.usaclimbing.org/Disciplines/Bouldering/2017-2018_Season_Schedule___Results.htm" target="_blank">
+    USAClimbing Schedule
+  </a>
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <div></div>
+        <div></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div></div>
+      </td>
+    </tr>
+  </tbody>
 </tbody>
-</table>
 {% endblock %}
