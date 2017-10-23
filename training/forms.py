@@ -1,6 +1,6 @@
 from django.forms import inlineformset_factory
 from django import forms
-from .models import Conditioning, RefExercise, Athlete
+from .models import Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs
 class AthleteConditioningForm(forms.Form):
     Pulls = forms.ModelChoiceField(queryset=RefExercise.objects.filter(category__id=1))
     Pull_Reps = forms.IntegerField(min_value=1, max_value=12)
@@ -18,6 +18,7 @@ class AthleteConditioningForm(forms.Form):
         self.fields['Core'].queryset =RefExercise.objects.filter(category__id=3)
         self.fields['Push'].queryset =RefExercise.objects.filter(category__id=2)
         self.fields['Triceps'].queryset =RefExercise.objects.filter(category__id=4)
+
 class FullConditioningForm(AthleteConditioningForm):
     Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
 
@@ -42,14 +43,12 @@ class ConditioningForm(forms.ModelForm):
         self.fields['exercise'].queryset = x
 
 
-
-class CategoryForm(forms.ModelForm):
+class PinchBlockForm(forms.ModelForm):
     class Meta:
-        model = RefExercise
-        fields = ['exercise']
+        model = PinchBlocks
+        fields = ['block', 'seconds']
 
-def conditioningForm(athleteObject):
-    print 'cf1'
-    form = inlineformset_factory(Athlete, Session, Conditioning, fields=('exercise', 'repetitions'))
-    formset = form(instance=athleteObject)
-    print 'cf1'
+class WeightedHangsForm(forms.ModelForm):
+    class Meta:
+        model = WeightedHangs
+        fields = ['rung', 'seconds']

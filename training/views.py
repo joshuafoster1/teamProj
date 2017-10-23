@@ -7,45 +7,50 @@ from django.http import HttpResponse
 from .models import Athlete, Session, Conditioning, RefCategory, RefExercise
 from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm
 # Create your views here.
+def get_user(request):
+    pk = request.user.pk
+    athlete = get_object_or_404(Athlete, user__pk=pk)
+    return athlete
 
 # splash page should present Team info link to schedule, usaclimbing, login
 @login_required
 def home(request):
-    pk = request.user.pk
-    athlete = get_object_or_404(Athlete, pk=pk)
+    athlete = get_user(request)
+    # pk = request.user.pk
+    # athlete = get_object_or_404(Athlete, user__pk=pk)
 
     return render(request, 'home.html', {'athlete': athlete})
 
 # Athlete home page. present recent conditioning, goals, sends, button to add conditioning
 @login_required
 def athletePage(request):
-    pk = request.user.pk
-    print pk
-    athlete = get_object_or_404(Athlete, pk=pk)
+    athlete = get_user(request)
     sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate') #.last()
     conditioning_set=[]
     for session in sessions:
         conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)#.order_by('session__sessionDate')
         conditioning_set.append(conditioning)
-    conditioning_set =conditioning_set[-4:]
+    conditioning_set =conditioning_set[-2:]
+    conditioning_set.reverse()
+
     for item in conditioning_set:
-        print('one')
-        # print(item)
+        for thing in item:
+            print thing
+            avg = thing.exercise.get_avg()
+            print avg
     date = datetime.date.today()
     return render(request, 'athlete_page.html', {'athlete': athlete, 'date': date, 'conditioning': conditioning_set})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
 def athleteInfo(request):
-    pk = request.user.pk
-    athlete = get_object_or_404(Athlete, pk=pk)
+    athlete = get_user(request)
     return render(request, 'athleteInfo.html', {'athlete': athlete})
 
 # currently a universal form. should restrict view to coach and create another page for athlete add conditioning.
 @login_required
 def newConditioning(request):
-    pk = request.user.pk
-    athlete = get_object_or_404(Athlete, pk=pk)
+    athlete = get_user(request)
 
     # modelform code below. saving for modelform exploration
     # CoreCategory = get_object_or_404(RefCategory, pk=3)
@@ -162,3 +167,6 @@ def coachNewConditioning(request):
         form = FullConditioningForm()
         # form = ConditioningForm(categoryInit=CoreCategory)
     return render(request, 'coach_conditioning_entry.html', {'athlete': athlete, 'form': form, 'date': date})
+@login_required
+def new_pinch(request):
+    athlete = get_user()

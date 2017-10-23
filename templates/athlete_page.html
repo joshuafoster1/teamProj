@@ -2,19 +2,21 @@
 {% block title %}
 {{ block.super }}
 {% endblock %}
+
 {% block breadcrumb %}
 <li class="breadcrumb-item active">{{athlete.user.username}}</li>
 <li class="breadcrumb-item">{{ date }}</li>
 {% endblock %}
+
 {% block content %}
 <div class='mb-4'>
   <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
-  <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
-
 </div>
+
 <table class="table table-sm table-striped table-bordered">
+
   <thead class="thead-inverse">
-    <h5> Most Recent Conditioning</h5>
+    <h4> Most Recent Conditioning</h4>
   <tr>
     <th>Session</th>
     {% for condition in conditioning.1 %}
@@ -22,16 +24,31 @@
     {% endfor %}
   </tr>
 </thead>
+
 <tbody>
   {% for condition in conditioning %}
   <tr>
     <td class="align-middle">{{ condition.0.session.sessionDate }}</td>
-    {% for item in condition %}
-    <td class="align-middle">{{ item.repetitions}}
-<small class="text-muted d-block">{{ item.exercise }} </small>
-</td>
+
+{% for item in condition %}
+ {% if item.repetitions == item.exercise.get_avg %}
+    <td class="table-warning align-middle">{{ item.repetitions}}
+      <small class="text-muted d-block">{{ item.exercise }} </small>
+   </td>
+
+ {% elif item.repetitions < item.exercise.get_avg %}
+    <td class="table-danger align-middle">{{ item.repetitions}}
+      <small class="text-muted d-block">{{ item.exercise }} </small>
+    </td>
+
+ {% elif item.repetitions > item.exercise.get_avg %}
+    <td class="table-success align-middle">{{ item.repetitions}}
+      <small class="text-muted d-block">{{ item.exercise }} </small>
+    </td>
+
+{% endif %}
 {% endfor %}
-</tr>
+  </tr>
 
 {% endfor %}
 

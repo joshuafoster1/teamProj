@@ -44,6 +44,15 @@ class RefExercise(models.Model):
     description = models.CharField(max_length=200, blank=True)
     category = models.ForeignKey(RefCategory, related_name='exercises')
 
+    def get_avg(self):
+        exercise_instances = Conditioning.objects.filter(exercise=self)
+        instance_total = len(exercise_instances)
+        rep_total = 0
+        for instance in exercise_instances:
+            rep_total += int(instance.repetitions)
+
+        return rep_total / instance_total
+
     def __str__(self):
         return self.exercise
 
@@ -63,3 +72,23 @@ class Conditioning(models.Model):
 
     def __str__(self):
         return self.session.athlete.user.username+ self.exercise.exercise +str(self.setNum)
+
+class PinchBlocks(models.Model):
+    BLOCK = (
+        (1, '1'),
+        (2, '2'),
+        (3, '3'),
+    )
+    session = models.ForeignKey(Session, related_name='pinch_blocks')
+    block = models.IntegerField(choices=BLOCK, default=1)
+    seconds = models.IntegerField()
+
+class WeightedHangs(models.Model):
+    RUNG = (
+        (1, 'Easy'),
+        (2, 'Medium'),
+        (3, 'Large'),
+    )
+    session = models.ForeignKey(Session, related_name='weighted_hangs')
+    rung = models.IntegerField(choices=RUNG, default=1)
+    seconds = models.IntegerField()
