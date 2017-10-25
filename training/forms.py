@@ -1,6 +1,8 @@
 from django.forms import inlineformset_factory
 from django import forms
 from .models import Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs
+
+
 class AthleteConditioningForm(forms.Form):
     Pulls = forms.ModelChoiceField(queryset=RefExercise.objects.filter(category__id=1))
     Pull_Reps = forms.IntegerField(min_value=1, max_value=12)
@@ -46,9 +48,31 @@ class ConditioningForm(forms.ModelForm):
 class PinchBlockForm(forms.ModelForm):
     class Meta:
         model = PinchBlocks
-        fields = ['block', 'seconds']
+        fields = ['pinch', 'seconds', 'weight']
+    def __init__(self, *args, **kwargs):
+        super(PinchBlockForm, self).__init__(*args, **kwargs)
+        self.fields['pinch'].queryset =RefExercise.objects.filter(category__id=5)
+        self.fields['weight'].widget.attrs['min'] =0
+
+class FullPinchBlockForm(PinchBlockForm):
+    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(FullPinchBlockForm, self).__init__(*args, **kwargs)
+        self.fields.keyOrder = ['Athlete', 'pinch', 'seconds', 'weight']
 
 class WeightedHangsForm(forms.ModelForm):
     class Meta:
         model = WeightedHangs
-        fields = ['rung', 'seconds']
+        fields = ['hang', 'seconds', 'weight']
+
+    def __init__(self, *args, **kwargs):
+        super(WeightedHangsForm, self).__init__(*args, **kwargs)
+        self.fields['hang'].queryset =RefExercise.objects.filter(category__id=6)
+
+class FullWeightedHangsForm(WeightedHangsForm):
+    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(FullWeightedHangsForm, self).__init__(*args, **kwargs)
+        self.fields.keyOrder = ['Athlete', 'hang', 'seconds', 'weight']

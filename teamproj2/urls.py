@@ -54,6 +54,13 @@ urlpatterns = [
     url(r'^AthletePage/$', views.athletePage, name='athletePage'),
     url(r'^AthleteInfo/$', views.athleteInfo, name='athleteInfo'),
     url(r'^AthletePage/new/$', views.newConditioning, name='newConditioning'),
-    url(r'^ccform/add/$', views.coachNewConditioning, name='ccform')
+    url(r'^ccform/add/$', views.coachNewConditioning, name='ccform'),
+
+    url(r'^PinchBlocks/add/$', views.pinch_blocks, name='pinch_blocks'),
+    url(r'^coachPinchBlocks/add/$', views.coach_pinch_blocks, name='coach_pinch_blocks'),
+
+
+    url(r'^WeightedHangs/add/$', views.weighted_hangs, name='weighted_hangs'),
+    url(r'^coachWeightedHangs/add/$', views.coach_weighted_hangs, name='coach_weighted_hangs'),
 
 ]

@@ -5,19 +5,24 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from .models import Athlete, Session, Conditioning, RefCategory, RefExercise
-from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm
-# Create your views here.
+from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
+
+#view globals
+CAT_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
+DATE = datetime.date.today()
+
+#view function
 def get_user(request):
     pk = request.user.pk
     athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
 
+
+###Views
 # splash page should present Team info link to schedule, usaclimbing, login
 @login_required
 def home(request):
     athlete = get_user(request)
-    # pk = request.user.pk
-    # athlete = get_object_or_404(Athlete, user__pk=pk)
 
     return render(request, 'home.html', {'athlete': athlete})
 
@@ -25,70 +30,65 @@ def home(request):
 @login_required
 def athletePage(request):
     athlete = get_user(request)
-    sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate') #.last()
+    sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate')
+
     conditioning_set=[]
     for session in sessions:
-        conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)#.order_by('session__sessionDate')
+        conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
         conditioning_set.append(conditioning)
     conditioning_set =conditioning_set[-2:]
     conditioning_set.reverse()
 
-    for item in conditioning_set:
-        for thing in item:
-            print thing
-            avg = thing.exercise.get_avg()
-            print avg
-    date = datetime.date.today()
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': date, 'conditioning': conditioning_set})
+    # date = datetime.date.today()
+    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
 def athleteInfo(request):
     athlete = get_user(request)
-    return render(request, 'athleteInfo.html', {'athlete': athlete})
+    info = athlete.get_user_info()
+
+    return render(request, 'athleteInfo.html', {'athlete': athlete, 'info': info})
 
 # currently a universal form. should restrict view to coach and create another page for athlete add conditioning.
 @login_required
 def newConditioning(request):
     athlete = get_user(request)
 
-    # modelform code below. saving for modelform exploration
-    # CoreCategory = get_object_or_404(RefCategory, pk=3)
-    # PushCategory = get_object_or_404(RefCategory, pk=1)
-    # PullCategory = get_object_or_404(RefCategory, pk=2)
-    # TriCategory = get_object_or_404(RefCategory, pk=4)
+    pulls = RefCategory.objects.get(pk=CAT_ID['pulls']).get_last_exercise(athlete)
+    core = RefCategory.objects.get(pk=CAT_ID['core']).get_last_exercise(athlete)
+    push = RefCategory.objects.get(pk=CAT_ID['push']).get_last_exercise(athlete)
+    triceps = RefCategory.objects.get(pk=CAT_ID['triceps']).get_last_exercise(athlete)
 
-    date = datetime.date.today()
+    # date = datetime.date.today()
 
     if request.method == 'POST':
         form = AthleteConditioningForm(request.POST)
-        # form = ConditioningForm(request.POST, categoryInit=category)
         if form.is_valid():
-            conditioning = form #save(commit=False)
-            # athlete = conditioning.cleaned_data['Athlete']
+            conditioning = form
             coreObject = Conditioning()
-            coreObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            coreObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             coreObject.exercise = conditioning.cleaned_data['Core']
             coreObject.repetitions = conditioning.cleaned_data['Core_Reps']
             coreObject.setNum = conditioning.cleaned_data['Set']
 
             pullObject = Conditioning()
-            pullObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            pullObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pullObject.exercise = conditioning.cleaned_data['Pulls']
             pullObject.repetitions = conditioning.cleaned_data['Pull_Reps']
             pullObject.setNum = conditioning.cleaned_data['Set']
 
             pushObject = Conditioning()
-            pushObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            pushObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pushObject.exercise = conditioning.cleaned_data['Push']
             pushObject.repetitions = conditioning.cleaned_data['Push_Reps']
             pushObject.setNum = conditioning.cleaned_data['Set']
 
             TricepsObject = Conditioning()
-            TricepsObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            TricepsObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             TricepsObject.exercise = conditioning.cleaned_data['Triceps']
             TricepsObject.repetitions = conditioning.cleaned_data['Tricep_Reps']
@@ -102,9 +102,9 @@ def newConditioning(request):
 
             return redirect('athletePage')
     else:
-        form = AthleteConditioningForm()
+        form = AthleteConditioningForm(initial={'Pulls': pulls, 'Core': core, 'Push': push, 'Triceps': triceps })
         # form = ConditioningForm(categoryInit=CoreCategory)
-    return render(request, 'new_conditioning.html', {'athlete': athlete, 'form': form, 'date': date})
+    return render(request, 'new_conditioning.html', {'athlete': athlete, 'form': form, 'date': DATE})
 
 # def is_coach(user):
 #     return user.group == 'Coach'
@@ -120,7 +120,7 @@ def coachNewConditioning(request):
     # PullCategory = get_object_or_404(RefCategory, pk=2)
     # TriCategory = get_object_or_404(RefCategory, pk=4)
 
-    date = datetime.date.today()
+    # date = datetime.date.today()
 
     if request.method == 'POST':
         form = FullConditioningForm(request.POST)
@@ -129,28 +129,28 @@ def coachNewConditioning(request):
             conditioning = form #save(commit=False)
             athlete = conditioning.cleaned_data['Athlete']
             coreObject = Conditioning()
-            coreObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            coreObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             coreObject.exercise = conditioning.cleaned_data['Core']
             coreObject.repetitions = conditioning.cleaned_data['Core_Reps']
             coreObject.setNum = conditioning.cleaned_data['Set']
 
             pullObject = Conditioning()
-            pullObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            pullObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pullObject.exercise = conditioning.cleaned_data['Pulls']
             pullObject.repetitions = conditioning.cleaned_data['Pull_Reps']
             pullObject.setNum = conditioning.cleaned_data['Set']
 
             pushObject = Conditioning()
-            pushObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            pushObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pushObject.exercise = conditioning.cleaned_data['Push']
             pushObject.repetitions = conditioning.cleaned_data['Push_Reps']
             pushObject.setNum = conditioning.cleaned_data['Set']
 
             TricepsObject = Conditioning()
-            TricepsObject.session, created = Session.objects.get_or_create(sessionDate=date,
+            TricepsObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             TricepsObject.exercise = conditioning.cleaned_data['Triceps']
             TricepsObject.repetitions = conditioning.cleaned_data['Tricep_Reps']
@@ -166,7 +166,66 @@ def coachNewConditioning(request):
     else:
         form = FullConditioningForm()
         # form = ConditioningForm(categoryInit=CoreCategory)
-    return render(request, 'coach_conditioning_entry.html', {'athlete': athlete, 'form': form, 'date': date})
+    return render(request, 'coach_conditioning_entry.html', {'athlete': athlete, 'form': form, 'date': DATE})
+
 @login_required
-def new_pinch(request):
-    athlete = get_user()
+def pinch_blocks(request):
+    athlete = get_user(request)
+    if request.method == 'POST':
+        form = PinchBlockForm(request.POST)
+        if form.is_valid():
+            pinch_training = form.save(commit=False)
+            pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            pinch_training.save()
+            return redirect('pinch_blocks')
+    else:
+        form = PinchBlockForm()
+    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form})
+
+
+def coach_pinch_blocks(request):
+
+    if request.method == 'POST':
+        form = FullPinchBlockForm(request.POST)
+        if form.is_valid():
+            pinch_training = form
+            athlete = pinch_training.cleaned_data['Athlete']
+            pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            print pinch_training.session, pinch_training.session.athlete
+            pinch_training.save()
+            return redirect('athletePage')
+    else:
+        form = FullPinchBlockForm()
+    return render(request, 'add_pinch_blocks.html', {'form': form})
+
+@login_required
+def weighted_hangs(request):
+    athlete = get_user(request)
+    if request.method == 'POST':
+        form = WeightedHangsForm(request.POST)
+        if form.is_valid():
+            weighted_hang = form.save(commit=False)
+            weighted_hang.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            weighted_hang.save()
+            return redirect('weighted_hang')
+    else:
+        form = WeightedHangsForm()
+    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form})
+
+def coach_weighted_hangs(request):
+
+    if request.method == 'POST':
+        form = FullWeightedHangsForm(request.POST)
+        if form.is_valid():
+            weighted_hang = form
+            athlete = weighted_hang.cleaned_data['Athlete']
+            weighted_hang.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            weighted_hang.save()
+            return redirect('athletePage')
+    else:
+        form = FullWeightedHangsForm()
+    return render(request, 'add_weighted_hangs.html', {'form': form})

@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date
 # Create your models here.
 
 
@@ -17,6 +18,37 @@ class Athlete(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def get_category(self):
+        athlete_years = date.today().year - self.birthdate.year
+
+        if athlete_years < 11:
+            return "Youth D"
+        elif athlete_years < 13:
+            return "Youth C"
+        elif athlete_years < 15:
+            return "Youth B"
+        elif athlete_years < 17:
+            return "Youth A"
+        elif athlete_years < 19:
+            return "Junior"
+        else:
+            return "Need Date of Birth"
+
+    def get_user_info(self):
+        """User information: Username, First Name, Last Name, email, Birthdate, Category"""
+
+        user_info = []
+
+        user_info.append(('User Name',self.user.username))
+        user_info.append(('First Name', self.user.first_name))
+        user_info.append(('Last Name', self.user.last_name))
+        user_info.append(('Email', self.user.email))
+
+        user_info.append(('Birthdate',self.birthdate))
+        user_info.append(('Category', self.get_category()))
+
+        return user_info
 
 class Session(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='sessions')
@@ -38,6 +70,10 @@ class RefCategory(models.Model):
 
     def __str__(self):
         return self.category
+
+    def get_last_exercise(self, athlete):
+        last_exercise = Conditioning.objects.filter(session__athlete = athlete, exercise__category=self).last()
+        return last_exercise.exercise
 
 class RefExercise(models.Model):
     exercise = models.CharField(max_length=40)
@@ -74,21 +110,14 @@ class Conditioning(models.Model):
         return self.session.athlete.user.username+ self.exercise.exercise +str(self.setNum)
 
 class PinchBlocks(models.Model):
-    BLOCK = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-    )
+
     session = models.ForeignKey(Session, related_name='pinch_blocks')
-    block = models.IntegerField(choices=BLOCK, default=1)
+    pinch = models.ForeignKey(RefExercise, related_name='pinch_blocks') #, related_name='pinch_blocks')
+    weight = models.IntegerField()
     seconds = models.IntegerField()
 
 class WeightedHangs(models.Model):
-    RUNG = (
-        (1, 'Easy'),
-        (2, 'Medium'),
-        (3, 'Large'),
-    )
     session = models.ForeignKey(Session, related_name='weighted_hangs')
-    rung = models.IntegerField(choices=RUNG, default=1)
+    hang = models.ForeignKey(RefExercise, related_name="weighted_hangs")
+    weight = models.IntegerField()
     seconds = models.IntegerField()

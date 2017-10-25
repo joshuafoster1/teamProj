@@ -27,7 +27,7 @@ DEBUG = True
 
 # From command prompt do 'ifconfig'
 #    probably want 'ifconfig en0'
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.8', '192.168.1.6', '192.168.1.12']
+ALLOWED_HOSTS = ['joshuafoster1.pythonanywhere.com', '127.0.0.1', '192.168.1.8', '192.168.1.6', '192.168.1.12']
 
 
 # Application definition
@@ -79,6 +79,7 @@ WSGI_APPLICATION = 'teamproj2.wsgi.application'
 # Database
 # Mysql- https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+### For production change database name to 'teamProj.db'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -124,6 +125,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+### For production on Python anywhere
+# STATIC_ROOT = "/home/joshuafoster1/teamProj/static/"
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')

@@ -5,9 +5,11 @@
 
       {% block content %}
       <div class='mb-4'>
-        <a href='{% url 'athletePage' %}' class='btn btn-primary'>Conditioning</a>
+        <a href='{% url 'athletePage' %}' class='btn btn-primary'>Training Log</a>
         <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
-        <a href='{% url 'athleteInfo' %}' class='btn btn-primary'>Profile Information</a>
+        <a href='{% url 'weighted_hangs' %}' class='btn btn-primary'>Add Weighted Hangs</a>
+        <a href='{% url 'pinch_blocks' %}' class='btn btn-primary'>Add Pinch Training</a>
+
 
       </div>
       <h4>Welcome to the Sacramento Pipworks Competitive Team page.</h4>

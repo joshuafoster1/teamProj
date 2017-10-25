@@ -13,20 +13,13 @@
           <tr>
         </thead>
         <tbody>
+      {% for item in info %}
           <tr>
-            <td>First Name</td>
-            <td>{{athlete.user.username}}</td>
+            <td>{{item.0}}</td>
+            <td>{{item.1}}</td>
           </tr>
-          <tr>
-            <td>Last Name</td>
-          </tr>
+      {% endfor %}
+
         </tbody>
 
-      <ul>
-      <li>{{athlete.user.username}}</li>
-      <li></li>
-      <li>{{session.sessionDate}}</li>
-      <li>{{athlete.user.email}}</li>
-      <li>{{athlete.birthdate}}</li>
-      </ul>
       {% endblock %}
