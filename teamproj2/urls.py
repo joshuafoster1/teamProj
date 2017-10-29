@@ -63,4 +63,5 @@ urlpatterns = [
     url(r'^WeightedHangs/add/$', views.weighted_hangs, name='weighted_hangs'),
     url(r'^coachWeightedHangs/add/$', views.coach_weighted_hangs, name='coach_weighted_hangs'),
 
+    url(r'^coachmaxconditioning/add/$', views.coach_max_conditioning, name='coach_max_conditioning'),
 ]

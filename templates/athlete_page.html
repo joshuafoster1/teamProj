@@ -22,9 +22,11 @@
     <h4> Most Recent Conditioning</h4>
   <tr>
     <th>Session</th>
-    {% for condition in conditioning.1 %}
-    <th>{{ condition.exercise.category }}</th>
-    {% endfor %}
+    <th>Triceps</th>
+    <th>Push</th>
+    <th>Pulls</th>
+    <th>Core</th>
+
   </tr>
 </thead>
 
@@ -54,5 +56,54 @@
   </tr>
 
 {% endfor %}
+</tbody>
+</table>
 
+<table class='table table-sm table-striped table-bordered'>
+<thead class='thead-inverse'>
+<h4 class ='py-3'>Most Recent Weighted Hangs-Max Weight:
+</h4>
+<tr>
+  <th>Session</th>
+  <th>Str-S</th>
+  <th>Str-M</th>
+  <th>Str-L</th>
+</tr>
+{% for item in str-hangs %}
+<tr>
+  {% if item.hang == 'Small - Straight Arm'}
+  <td>
+    {{item.weight}}
+  </td>
+  {% elif item.hang == 'Medium - Straight Arm'}
+  <td>
+    {{item.weight}}
+  </td>
+  {% if item.hang == 'Large - Straight Arm'}
+  <td>
+    {{item.weight}}
+  </td>
+</tr>
+</thead>
+<thead class='thead-inverse'>
+<tr>
+  <th></th>
+  <th>Lock-S</th>
+  <th>Lock-M</th>
+  <th>Lock-L</th>
+</tr>
+<tr>
+</tr>
+</thead>
+<thead class='thead-inverse'>
+<tr>
+  <th></th>
+  <th>Str-3-1</th>
+  <th>Str-1-3</th>
+  <th>Lock-3-1</th>
+  <th>Lock-1-3</th>
+</tr>
+<tr>
+</tr>
+</thead>
 {% endblock %}

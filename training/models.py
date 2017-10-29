@@ -19,6 +19,17 @@ class Athlete(models.Model):
     def __str__(self):
         return self.user.username
 
+    ### Clean up the query to copulate conditioning, categorize into dictionary.
+    # def return_recent_conditioning(self):
+    #     sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate')
+    #
+    #     conditioning_set={}
+    #     for session in sessions:
+    #         conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
+    #         conditioning_set[conditioning.category] =[conditioning.exercise, conditioning.repetitions]
+    #     conditioning_set =conditioning_set[-3:]
+
+
     def get_category(self):
         athlete_years = date.today().year - self.birthdate.year
 
@@ -72,8 +83,11 @@ class RefCategory(models.Model):
         return self.category
 
     def get_last_exercise(self, athlete):
-        last_exercise = Conditioning.objects.filter(session__athlete = athlete, exercise__category=self).last()
-        return last_exercise.exercise
+        try:
+            last_exercise = Conditioning.objects.filter(session__athlete = athlete, exercise__category=self).last()
+            return last_exercise.exercise
+        except:
+            return None
 
 class RefExercise(models.Model):
     exercise = models.CharField(max_length=40)

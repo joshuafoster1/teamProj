@@ -65,6 +65,7 @@ class WeightedHangsForm(forms.ModelForm):
     class Meta:
         model = WeightedHangs
         fields = ['hang', 'seconds', 'weight']
+        widgets = {'session': forms.HiddenInput()}
 
     def __init__(self, *args, **kwargs):
         super(WeightedHangsForm, self).__init__(*args, **kwargs)
@@ -73,6 +74,6 @@ class WeightedHangsForm(forms.ModelForm):
 class FullWeightedHangsForm(WeightedHangsForm):
     Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
 
-    def __init__(self, *args, **kwargs):
-        super(FullWeightedHangsForm, self).__init__(*args, **kwargs)
-        self.fields.keyOrder = ['Athlete', 'hang', 'seconds', 'weight']
+    # def __init__(self, *args, **kwargs):
+    #     super(FullWeightedHangsForm, self).__init__(*args, **kwargs)
+    #     self.fields.keyOrder = ['Athlete', 'hang', 'seconds', 'weight']

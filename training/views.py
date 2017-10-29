@@ -4,14 +4,14 @@ import datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
-from .models import Athlete, Session, Conditioning, RefCategory, RefExercise
+from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, WeightedHangs, PinchBlocks
 from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
 
 #view globals
 CAT_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
 
-#view function
+#view helper function(s)
 def get_user(request):
     pk = request.user.pk
     athlete = get_object_or_404(Athlete, user__pk=pk)
@@ -36,11 +36,11 @@ def athletePage(request):
     for session in sessions:
         conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
         conditioning_set.append(conditioning)
-    conditioning_set =conditioning_set[-2:]
+    conditioning_set =conditioning_set[-3:]
     conditioning_set.reverse()
 
     # date = datetime.date.today()
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set})
+    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set, 'str_hangs': str_hangs, 'lock_hangs': lock_hangs, 'offset_hangs': offset_hangs})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
@@ -55,6 +55,7 @@ def athleteInfo(request):
 def newConditioning(request):
     athlete = get_user(request)
 
+    # retrive last exercise from prior session to prepopulate form
     pulls = RefCategory.objects.get(pk=CAT_ID['pulls']).get_last_exercise(athlete)
     core = RefCategory.objects.get(pk=CAT_ID['core']).get_last_exercise(athlete)
     push = RefCategory.objects.get(pk=CAT_ID['push']).get_last_exercise(athlete)
@@ -191,14 +192,18 @@ def coach_pinch_blocks(request):
         if form.is_valid():
             pinch_training = form
             athlete = pinch_training.cleaned_data['Athlete']
-            pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
+            session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
-            print pinch_training.session, pinch_training.session.athlete
-            pinch_training.save()
-            return redirect('athletePage')
+            today = PinchBlocks()
+            today.pinch = pinch_training.cleaned_data['pinch']
+            today.seconds = pinch_training.cleaned_data['seconds']
+            today.weight = pinch_training.cleaned_data['weight']
+            today.session = session
+            today.save()
+            return redirect('coach_pinch_blocks')
     else:
         form = FullPinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'form': form})
+    return render(request, 'add_pinch_blocks.html', {'form': form, 'date':DATE})
 
 @login_required
 def weighted_hangs(request):
@@ -210,22 +215,46 @@ def weighted_hangs(request):
             weighted_hang.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             weighted_hang.save()
-            return redirect('weighted_hang')
+            return redirect('weighted_hangs')
     else:
         form = WeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form})
+    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form, 'date': DATE})
 
 def coach_weighted_hangs(request):
 
     if request.method == 'POST':
         form = FullWeightedHangsForm(request.POST)
         if form.is_valid():
-            weighted_hang = form
-            athlete = weighted_hang.cleaned_data['Athlete']
-            weighted_hang.session, created = Session.objects.get_or_create(sessionDate=DATE,
+            hang_form = form#.save(commit=False)
+            athlete = hang_form.cleaned_data['Athlete']
+            session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
-            weighted_hang.save()
-            return redirect('athletePage')
+            today = WeightedHangs()
+            today.hang = hang_form.cleaned_data['hang']
+            today.seconds = hang_form.cleaned_data['seconds']
+            today.weight = hang_form.cleaned_data['weight']
+            today.session = session
+            today.save()
+            return redirect('coach_weighted_hangs')
     else:
         form = FullWeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'form': form})
+    return render(request, 'add_weighted_hangs.html', {'form': form, 'date':DATE})
+
+def coach_max_conditioning(request):
+    if request.method == 'POST':
+        form = FullMaxConditioningForm(request.POST)
+        if form.is_valid():
+            max_form = form#.save(commit=False)
+            athlete = max_form.cleaned_data['Athlete']
+            session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            today = MaxConditioning()
+            today.hang = hang_form.cleaned_data['hang']
+            today.seconds = hang_form.cleaned_data['seconds']
+            today.weight = hang_form.cleaned_data['weight']
+            today.session = session
+            today.save()
+            return redirect('coach_weighted_hangs')
+    else:
+        form = FullWeightedHangsForm()
+    return render(request, 'add_weighted_hangs.html', {'form': form, 'date': DATE})
