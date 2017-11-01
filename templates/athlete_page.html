@@ -69,21 +69,23 @@
   <th>Str-M</th>
   <th>Str-L</th>
 </tr>
-{% for item in str-hangs %}
+{% for item in str_hangs %}
 <tr>
-  {% if item.hang == 'Small - Straight Arm'}
   <td>
+  {% if item.hang == 'Small - Straight Arm'%}
     {{item.weight}}
   </td>
-  {% elif item.hang == 'Medium - Straight Arm'}
   <td>
+  {% elif item.hang == 'Medium - Straight Arm'%}
     {{item.weight}}
   </td>
-  {% if item.hang == 'Large - Straight Arm'}
   <td>
+  {% elif item.hang == 'Large - Straight Arm'%}
     {{item.weight}}
   </td>
 </tr>
+{% endif %}
+{% endfor %}
 </thead>
 <thead class='thead-inverse'>
 <tr>

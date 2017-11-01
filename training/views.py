@@ -39,7 +39,9 @@ def athletePage(request):
     conditioning_set =conditioning_set[-3:]
     conditioning_set.reverse()
 
-    # date = datetime.date.today()
+    str_hangs = ['this']
+    lock_hangs = ['that']
+    offset_hangs = ['those']
     return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set, 'str_hangs': str_hangs, 'lock_hangs': lock_hangs, 'offset_hangs': offset_hangs})
 
 # display athletes current information and provide links to change information if incorrect
