@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from django import forms
 from django.contrib import admin
-from .models import Athlete, Session, Conditioning, RefCategory, RefExercise
+from .models import Athlete, Session, Conditioning, RefCategory, RefExercise, PinchBlocks, WeightedHangs
 # Register your models here.
 
 # class adminTable(admin.ModelAdmin):
@@ -56,3 +56,5 @@ admin.site.register(Session, QuestionAdmin)
 admin.site.register(Conditioning)
 admin.site.register(RefCategory)
 admin.site.register(RefExercise)
+admin.site.register(PinchBlocks)
+admin.site.register(WeightedHangs)
