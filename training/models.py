@@ -20,15 +20,24 @@ class Athlete(models.Model):
         return self.user.username
 
     ### Clean up the query to copulate conditioning, categorize into dictionary.
-    # def return_recent_conditioning(self):
-    #     sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate')
-    #
-    #     conditioning_set={}
-    #     for session in sessions:
-    #         conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
-    #         conditioning_set[conditioning.category] =[conditioning.exercise, conditioning.repetitions]
-    #     conditioning_set =conditioning_set[-3:]
-
+    def return_recent_conditioning(self):
+        sessions = Session.objects.filter(athlete=self).order_by('sessionDate')
+        sessions = sessions[len(sessions)-3:]
+        conditioning_sessions={}
+        conditioning_set = {}
+        for session in sessions:
+            try:
+                conditioning = Conditioning.objects.filter(session=session)
+                for condition in conditioning:
+                    if condition:
+                        conditioning_set[str(condition.exercise.category)] =[condition.exercise.exercise, condition.repetitions]
+                    else:
+                        continue
+                conditioning_sessions[str(session)] = [conditioning_set]
+            except:
+                continue
+        # conditioning_set =conditioning_set[-3:]
+        print conditioning_sessions
 
     def get_category(self):
         athlete_years = date.today().year - self.birthdate.year
@@ -60,6 +69,13 @@ class Athlete(models.Model):
         user_info.append(('Category', self.get_category()))
 
         return user_info
+
+    def get_weighted_hangs(self):
+        hangs = WeightedHangs.objects.filter(session__athlete=self)
+        hang_session = {}
+        for hang in hangs:
+            hang_session.setdefault(str(hang.hang.exercise),[]).append([hang.session, hang.weight, hang.seconds >=10])
+        print hang_session
 
 class Session(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='sessions')
@@ -130,8 +146,14 @@ class PinchBlocks(models.Model):
     weight = models.IntegerField()
     seconds = models.IntegerField()
 
+    def increase_weight(self):
+        return self.seconds >=10
+
 class WeightedHangs(models.Model):
     session = models.ForeignKey(Session, related_name='weighted_hangs')
     hang = models.ForeignKey(RefExercise, related_name="weighted_hangs")
     weight = models.IntegerField()
     seconds = models.IntegerField()
+
+    def increase_weight(self):
+        return self.seconds >=10

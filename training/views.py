@@ -31,7 +31,8 @@ def home(request):
 def athletePage(request):
     athlete = get_user(request)
     sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate')
-
+    print 'test'
+    hangs = athlete.get_weighted_hangs()
     conditioning_set=[]
     for session in sessions:
         conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
@@ -42,7 +43,7 @@ def athletePage(request):
     str_hangs = ['this']
     lock_hangs = ['that']
     offset_hangs = ['those']
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set, 'str_hangs': str_hangs, 'lock_hangs': lock_hangs, 'offset_hangs': offset_hangs})
+    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set, 'str_hangs': str_hangs, 'lock_hangs': lock_hangs, 'offset_hangs': offset_hangs, 'hangs': hangs})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
@@ -184,7 +185,7 @@ def pinch_blocks(request):
             return redirect('pinch_blocks')
     else:
         form = PinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form})
+    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form, 'date': DATE})
 
 
 def coach_pinch_blocks(request):
