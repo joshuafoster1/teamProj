@@ -14,32 +14,27 @@ class Athlete(models.Model):
     guardian1_email = models.EmailField(max_length=75, blank=True)
     guardian2 = models.CharField(max_length=50, blank=True)
     guardian2_email = models.EmailField(max_length=75, blank=True)
-    # catergory = birthday related value
 
     def __str__(self):
         return self.user.username
 
-    ### Clean up the query to copulate conditioning, categorize into dictionary.
+    ### Clean up the query to populate conditioning, categorize into dictionary.
     def return_recent_conditioning(self):
+        '''return 3 most recent sets of conditioning'''
         sessions = Session.objects.filter(athlete=self).order_by('sessionDate')
-        sessions = sessions[len(sessions)-3:]
-        conditioning_sessions={}
-        conditioning_set = {}
+        conditioning_set=[]
         for session in sessions:
-            try:
-                conditioning = Conditioning.objects.filter(session=session)
-                for condition in conditioning:
-                    if condition:
-                        conditioning_set[str(condition.exercise.category)] =[condition.exercise.exercise, condition.repetitions]
-                    else:
-                        continue
-                conditioning_sessions[str(session)] = [conditioning_set]
-            except:
-                continue
-        # conditioning_set =conditioning_set[-3:]
-        print conditioning_sessions
+            condition = Conditioning.objects.filter(setNum=1, session=session)
+            condition = Conditioning.objects.filter(setNum=1, session=session)
+            if condition:
+                conditioning_set.append(condition)
+        conditioning_set =conditioning_set[-3:]
+        conditioning_set.reverse()
+        return conditioning_set
+
 
     def get_category(self):
+        '''Returns athlete category based on year of birth.'''
         athlete_years = date.today().year - self.birthdate.year
 
         if athlete_years < 11:
@@ -55,6 +50,7 @@ class Athlete(models.Model):
         else:
             return "Need Date of Birth"
 
+
     def get_user_info(self):
         """User information: Username, First Name, Last Name, email, Birthdate, Category"""
 
@@ -64,7 +60,6 @@ class Athlete(models.Model):
         user_info.append(('First Name', self.user.first_name))
         user_info.append(('Last Name', self.user.last_name))
         user_info.append(('Email', self.user.email))
-
         user_info.append(('Birthdate',self.birthdate))
         user_info.append(('Category', self.get_category()))
 
@@ -89,7 +84,7 @@ class Session(models.Model):
         return Conditioning.objects.filter(session=self, setnum=1)
 
     def __str__(self):
-        return str(self.sessionDate)
+        return str(self.sessionDate) + str(self.athlete.user.username)
 
 class RefCategory(models.Model):
     description = models.CharField(max_length=200, blank=True)

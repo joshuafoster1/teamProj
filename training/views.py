@@ -30,16 +30,10 @@ def home(request):
 @login_required
 def athletePage(request):
     athlete = get_user(request)
-    sessions = Session.objects.filter(athlete=athlete).order_by('sessionDate')
-    print 'test'
-    hangs = athlete.get_weighted_hangs()
-    conditioning_set=[]
-    for session in sessions:
-        conditioning = Conditioning.objects.filter(setNum=1, session__athlete=athlete, session__sessionDate=session.sessionDate)
-        conditioning_set.append(conditioning)
-    conditioning_set =conditioning_set[-3:]
-    conditioning_set.reverse()
 
+    conditioning_set = athlete.return_recent_conditioning()
+    
+    hangs = ['No']
     str_hangs = ['this']
     lock_hangs = ['that']
     offset_hangs = ['those']
