@@ -13,24 +13,26 @@
 
       </div>
       <h4>Welcome to the Sacramento Pipeworks Competitive Team page.</h4>
-
+<div class="my-4">
 <p>This pAGe iS a work in pROGRess...</p>
   <a href="http://www.usaclimbing.org/Disciplines/Bouldering/2017-2018_Season_Schedule___Results.htm" target="_blank">
     USAClimbing Schedule
   </a>
-<table>
+</div>
+<table class="table">
+  <thead>Team Event Calendar</thead>
   <tbody>
+    {% for event in calendar %}
     <tr>
       <td>
-        <div></div>
-        <div></div>
+        <div>{{event.event_title}}</div>
+        <div>{{event.event_date}}</div>
+        <div>{{event.event_location}}</div>
+        <div>{{event.event_format}}</div>
+        <div>{{event.event_description}}</div>
       </td>
     </tr>
-    <tr>
-      <td>
-        <div></div>
-      </td>
-    </tr>
+    {% endfor %}
   </tbody>
 </table>
 {% endblock %}

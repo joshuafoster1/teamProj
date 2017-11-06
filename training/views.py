@@ -23,8 +23,9 @@ def get_user(request):
 @login_required
 def home(request):
     athlete = get_user(request)
+    calendar = Calendar.objects.all()
 
-    return render(request, 'home.html', {'athlete': athlete})
+    return render(request, 'home.html', {'athlete': athlete, 'calendar': calendar})
 
 # Athlete home page. present recent conditioning, goals, sends, button to add conditioning
 @login_required
