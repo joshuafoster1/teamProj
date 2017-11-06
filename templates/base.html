@@ -35,14 +35,14 @@
                 </ul>
                 {% else %}
                 <form class="form-inline ml-auto">
-                <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in</a>
-                <a href="#" class="btn btn-primary ml-2">Sign up</a>
-            </form>
+                   <a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in</a>
+                   <a href="#" class="btn btn-primary ml-2">Sign up</a>
+                </form>
             {% endif %}
               </div>
       </div>
     </nav>
-
+<div class="background">
     <div class="container">
       <ol class="breadcrumb my-4">
         {% block breadcrumb %}
@@ -55,5 +55,14 @@
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  </div>
   </body>
+  <footer class="pt-3">
+    <div class='bg-dark'>
+      <div class='blockquote text-white text-center'>
+        <p class='pt-3'>There were no holds so I had to use skill</p>
+        <p class= 'pb-3 blockquote-footer'>Anonymous</p>
+      </div>
+    </div>
+  </footer>
 </html>

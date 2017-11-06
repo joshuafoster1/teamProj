@@ -8,7 +8,7 @@ from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise,
 from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
 
 #view globals
-CAT_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
+CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
 
 #view helper function(s)
@@ -32,7 +32,7 @@ def athletePage(request):
     athlete = get_user(request)
 
     conditioning_set = athlete.return_recent_conditioning()
-    
+
     hangs = ['No']
     str_hangs = ['this']
     lock_hangs = ['that']
@@ -53,10 +53,10 @@ def newConditioning(request):
     athlete = get_user(request)
 
     # retrive last exercise from prior session to prepopulate form
-    pulls = RefCategory.objects.get(pk=CAT_ID['pulls']).get_last_exercise(athlete)
-    core = RefCategory.objects.get(pk=CAT_ID['core']).get_last_exercise(athlete)
-    push = RefCategory.objects.get(pk=CAT_ID['push']).get_last_exercise(athlete)
-    triceps = RefCategory.objects.get(pk=CAT_ID['triceps']).get_last_exercise(athlete)
+    pulls = RefCategory.objects.get(pk=CATEGORY_ID['pulls']).get_last_exercise(athlete)
+    core = RefCategory.objects.get(pk=CATEGORY_ID['core']).get_last_exercise(athlete)
+    push = RefCategory.objects.get(pk=CATEGORY_ID['push']).get_last_exercise(athlete)
+    triceps = RefCategory.objects.get(pk=CATEGORY_ID['triceps']).get_last_exercise(athlete)
 
     # date = datetime.date.today()
 

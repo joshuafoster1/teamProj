@@ -18,18 +18,22 @@ class Athlete(models.Model):
     def __str__(self):
         return self.user.username
 
+
     ### Clean up the query to populate conditioning, categorize into dictionary.
     def return_recent_conditioning(self):
         '''return 3 most recent sets of conditioning'''
         sessions = Session.objects.filter(athlete=self).order_by('sessionDate')
+
         conditioning_set=[]
         for session in sessions:
             condition = Conditioning.objects.filter(setNum=1, session=session)
-            condition = Conditioning.objects.filter(setNum=1, session=session)
+
             if condition:
                 conditioning_set.append(condition)
+
         conditioning_set =conditioning_set[-3:]
         conditioning_set.reverse()
+
         return conditioning_set
 
 
@@ -119,9 +123,9 @@ class RefExercise(models.Model):
 
 class Conditioning(models.Model):
     SETS = (
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
+        (1, 'First'),
+        (2, 'Second'),
+        (3, 'Third'),
     )
     session = models.ForeignKey(Session, related_name='conditioning_sets')
     exercise = models.ForeignKey(RefExercise, related_name='conditioning_sets')
@@ -152,3 +156,11 @@ class WeightedHangs(models.Model):
 
     def increase_weight(self):
         return self.seconds >=10
+
+class Calendar(models.Model):
+    post_date = models.DateField()
+    event_date = models.DateField()
+    event_title = models.CharField(max_length=100)
+    event_description = models.CharField(max_length=300, blank=True)
+    event_location = models.CharField(max_length=200, blank=True)
+    event_format = models.CharField(max_length=100, blank=True)
