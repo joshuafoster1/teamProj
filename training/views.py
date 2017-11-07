@@ -32,13 +32,20 @@ def home(request):
 def athletePage(request):
     athlete = get_user(request)
 
-    conditioning_set = athlete.return_recent_conditioning()
 
-    hangs = ['No']
-    str_hangs = ['this']
-    lock_hangs = ['that']
-    offset_hangs = ['those']
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning_set, 'str_hangs': str_hangs, 'lock_hangs': lock_hangs, 'offset_hangs': offset_hangs, 'hangs': hangs})
+    conditioning = []
+    for key in CATEGORY_ID:
+        exercise_obj = athlete.get_conditioning(CATEGORY_ID[key], True)
+
+        if exercise_obj is not None:
+            conditioning.append(exercise_obj)
+    print conditioning
+
+    weighted_hangs = athlete.get_weighted_hangs()
+    pinch_training = athlete.get_pinch_training()
+
+
+    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning, 'weighted_hangs': weighted_hangs, 'pinch_training':pinch_training})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
@@ -170,6 +177,9 @@ def coachNewConditioning(request):
 @login_required
 def pinch_blocks(request):
     athlete = get_user(request)
+
+    pinch_training = athlete.get_pinch_training()
+
     if request.method == 'POST':
         form = PinchBlockForm(request.POST)
         if form.is_valid():
@@ -180,8 +190,7 @@ def pinch_blocks(request):
             return redirect('pinch_blocks')
     else:
         form = PinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form, 'date': DATE})
-
+    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form, 'pinch_training':pinch_training, 'date': DATE})
 
 def coach_pinch_blocks(request):
 
@@ -206,6 +215,9 @@ def coach_pinch_blocks(request):
 @login_required
 def weighted_hangs(request):
     athlete = get_user(request)
+
+    weighted_hangs = athlete.get_weighted_hangs()
+
     if request.method == 'POST':
         form = WeightedHangsForm(request.POST)
         if form.is_valid():
@@ -216,7 +228,7 @@ def weighted_hangs(request):
             return redirect('weighted_hangs')
     else:
         form = WeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form, 'date': DATE})
+    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form, 'weighted_hangs': weighted_hangs, 'date': DATE})
 
 def coach_weighted_hangs(request):
 

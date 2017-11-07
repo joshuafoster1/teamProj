@@ -9,6 +9,29 @@
 {% endblock %}
 
 {% block content %}
+<h4>Completed:</h4>
+<table class='table table-sm table-striped table-bordered'>
+<thead class='thead-inverse'>
+<tr>
+  <th>Pinch Training</th>
+  <th>Seconds</th>
+  <th>Weight</th>
+</tr>
+</thead>
+<tbody>
+  {% for item in pinch_training %}
+
+  <tr>
+    <td>{{ item.pinch }}</td>
+    <td>{{ item.seconds }}</td>
+    <td>{{ item.weight }}</td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+
+<h4>Next:</h4>
+
 <form method="post" novalidate>
   {% csrf_token %}
   {% include 'includes/form.html' %}

@@ -20,22 +20,39 @@ class Athlete(models.Model):
 
 
     ### Clean up the query to populate conditioning, categorize into dictionary.
-    def return_recent_conditioning(self):
-        '''return 3 most recent sets of conditioning'''
-        sessions = Session.objects.filter(athlete=self).order_by('sessionDate')
+    def get_pinch_training(self):
 
-        conditioning_set=[]
-        for session in sessions:
-            condition = Conditioning.objects.filter(setNum=1, session=session)
+        last_session = PinchBlocks.objects.filter(session__athlete=self).last()
+        last_pinches = PinchBlocks.objects.filter(session=last_session.session)
+        return last_pinches
 
-            if condition:
-                conditioning_set.append(condition)
+    def get_weighted_hangs(self):
 
-        conditioning_set =conditioning_set[-3:]
-        conditioning_set.reverse()
+        last_session = WeightedHangs.objects.filter(session__athlete=self).last()
+        last_hangs = WeightedHangs.objects.filter(session=last_session.session)
+        print "HERE", last_hangs
+        return last_hangs
 
-        return conditioning_set
 
+    def get_conditioning(self, category_id, average=False):
+        '''return object'''
+
+        conditionings = Conditioning.objects.filter(session__athlete=self,
+                exercise__category__id=category_id).last()
+        if average:
+            exercise_instances = Conditioning.objects.filter(session__athlete=self, exercise=conditionings.exercise)
+            instance_total = len(exercise_instances)
+            rep_total = 0
+            for instance in exercise_instances:
+                rep_total += int(instance.repetitions)
+
+            return {'object': conditionings, 'average':rep_total / instance_total}
+
+
+        return {'object': conditionings}
+
+    def can_do_weigthed_exercise(self):
+        return date.today().year - self.birthdate.year > 13
 
     def get_category(self):
         '''Returns athlete category based on year of birth.'''
@@ -54,7 +71,6 @@ class Athlete(models.Model):
         else:
             return "Need Date of Birth"
 
-
     def get_user_info(self):
         """User information: Username, First Name, Last Name, email, Birthdate, Category"""
 
@@ -69,12 +85,6 @@ class Athlete(models.Model):
 
         return user_info
 
-    def get_weighted_hangs(self):
-        hangs = WeightedHangs.objects.filter(session__athlete=self)
-        hang_session = {}
-        for hang in hangs:
-            hang_session.setdefault(str(hang.hang.exercise),[]).append([hang.session, hang.weight, hang.seconds >=10])
-        print hang_session
 
 class Session(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='sessions')
