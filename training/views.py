@@ -6,7 +6,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, WeightedHangs, PinchBlocks
 from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
-
+from django.views.generic import UpdateView
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth.models import User
 #view globals
 CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
@@ -54,6 +56,40 @@ def athleteInfo(request):
     info = athlete.get_user_info()
 
     return render(request, 'athleteInfo.html', {'athlete': athlete, 'info': info})
+
+class UpdateAthleteBday(UpdateView):
+    model = Athlete
+    fields = ['birthdate']
+    template_name = 'update_athlete.html'
+    success_url = reverse_lazy('athleteInfo')
+
+class UpdateAthlete(UpdateView):
+    model = User
+    fields = ['username', 'first_name', 'last_name', 'email']
+    template_name = 'update_athlete.html'
+    success_url = reverse_lazy('athleteInfo')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+# @login_required
+# def updateathleteInfo(request):
+#     athlete = get_user(request)
+#
+#     if request.method == 'POST':
+#         form = AthleteUpdate(request.POST)
+#         if form.is_valid():
+#             pinch_training = form.save(commit=False)
+#             pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
+#                 athlete=athlete)
+#             pinch_training.save()
+#             return redirect('athleteInfo')
+#     else:
+#         form = AthleteUpdate()
+#     return render(request, 'update_athleteInfo.html', {'athlete':athlete, 'form': form, 'date': DATE})
+#
+#
+#     return render(request, 'athleteInfo.html', {'athlete': athlete, 'info': info})
+
 
 # currently a universal form. should restrict view to coach and create another page for athlete add conditioning.
 @login_required

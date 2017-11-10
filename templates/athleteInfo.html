@@ -22,4 +22,8 @@
 
         </tbody>
       </table>
-      {% endblock %}
+<div>
+  <a href='{% url "update_athleteInfo" athlete.user.pk %}' class='btn btn-primary'>Update Name and Contact</a>
+  <a href='{% url "update_athleteBdayInfo" athlete.pk %}' class='btn btn-primary'>Update Birthdate</a>
+</div>
+{% endblock %}

@@ -19,7 +19,6 @@ from django.contrib.auth import views as auth_views
 from training import views
 from accounts import views as accounts_views
 
-
 urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^signup/$', accounts_views.signup, name='signup'),
@@ -53,6 +52,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^AthletePage/$', views.athletePage, name='athletePage'),
     url(r'^AthleteInfo/$', views.athleteInfo, name='athleteInfo'),
+    url(r'^AthleteInfo/update/(?P<pk>\d+)/$', views.UpdateAthlete.as_view(), name='update_athleteInfo'),
+    url(r'^AthleteInfo/update/Bday/(?P<pk>\d+)/$', views.UpdateAthleteBday.as_view(), name='update_athleteBdayInfo'),
+
     url(r'^AthletePage/new/$', views.newConditioning, name='newConditioning'),
     url(r'^ccform/add/$', views.coachNewConditioning, name='ccform'),
 

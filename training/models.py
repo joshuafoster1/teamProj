@@ -52,23 +52,28 @@ class Athlete(models.Model):
         return {'object': conditionings}
 
     def can_do_weigthed_exercise(self):
-        return date.today().year - self.birthdate.year > 13
+        try:
+            return date.today().year - self.birthdate.year > 13
+        except:
+            return False
 
     def get_category(self):
         '''Returns athlete category based on year of birth.'''
-        athlete_years = date.today().year - self.birthdate.year
+        try:
+            athlete_years = date.today().year - self.birthdate.year
 
-        if athlete_years < 11:
-            return "Youth D"
-        elif athlete_years < 13:
-            return "Youth C"
-        elif athlete_years < 15:
-            return "Youth B"
-        elif athlete_years < 17:
-            return "Youth A"
-        elif athlete_years < 19:
-            return "Junior"
-        else:
+            if athlete_years < 11:
+                return "Youth D"
+            elif athlete_years < 13:
+                return "Youth C"
+            elif athlete_years < 15:
+                return "Youth B"
+            elif athlete_years < 17:
+                return "Youth A"
+            elif athlete_years < 19:
+                return "Junior"
+
+        except:
             return "Need Date of Birth"
 
     def get_user_info(self):
