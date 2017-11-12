@@ -21,18 +21,19 @@ class Athlete(models.Model):
 
     ### Clean up the query to populate conditioning, categorize into dictionary.
     def get_pinch_training(self):
+        '''Returns completed pinch block exercise from previous session containing
+           pinch blocks'''
 
         last_session = PinchBlocks.objects.filter(session__athlete=self).last()
         last_pinches = PinchBlocks.objects.filter(session=last_session.session)
         return last_pinches
 
     def get_weighted_hangs(self):
+        '''Returns completed hangs from precious session containing hangs.'''
 
         last_session = WeightedHangs.objects.filter(session__athlete=self).last()
         last_hangs = WeightedHangs.objects.filter(session=last_session.session)
-        print "HERE", last_hangs
         return last_hangs
-
 
     def get_conditioning(self, category_id, average=False):
         '''return object'''
@@ -47,7 +48,6 @@ class Athlete(models.Model):
                 rep_total += int(instance.repetitions)
 
             return {'object': conditionings, 'average':rep_total / instance_total}
-
 
         return {'object': conditionings}
 
@@ -72,12 +72,14 @@ class Athlete(models.Model):
                 return "Youth A"
             elif athlete_years < 19:
                 return "Junior"
+            else:
+                return "Too old!!!"
 
         except:
             return "Need Date of Birth"
 
     def get_user_info(self):
-        """User information: Username, First Name, Last Name, email, Birthdate, Category"""
+        """User information in a list of tuples: Username, First Name, Last Name, email, Birthdate, Category"""
 
         user_info = []
 
@@ -105,6 +107,7 @@ class Session(models.Model):
     def __str__(self):
         return str(self.sessionDate) + str(self.athlete.user.username)
 
+
 class RefCategory(models.Model):
     description = models.CharField(max_length=200, blank=True)
     category = models.CharField(max_length=40)
@@ -119,22 +122,15 @@ class RefCategory(models.Model):
         except:
             return None
 
+
 class RefExercise(models.Model):
     exercise = models.CharField(max_length=40)
     description = models.CharField(max_length=200, blank=True)
     category = models.ForeignKey(RefCategory, related_name='exercises')
 
-    def get_avg(self):
-        exercise_instances = Conditioning.objects.filter(exercise=self)
-        instance_total = len(exercise_instances)
-        rep_total = 0
-        for instance in exercise_instances:
-            rep_total += int(instance.repetitions)
-
-        return rep_total / instance_total
-
     def __str__(self):
         return self.exercise
+
 
 class Conditioning(models.Model):
     SETS = (
@@ -153,6 +149,7 @@ class Conditioning(models.Model):
     def __str__(self):
         return self.session.athlete.user.username+ self.exercise.exercise +str(self.setNum)
 
+
 class PinchBlocks(models.Model):
 
     session = models.ForeignKey(Session, related_name='pinch_blocks')
@@ -160,8 +157,12 @@ class PinchBlocks(models.Model):
     weight = models.IntegerField()
     seconds = models.IntegerField()
 
+    def __str__(self):
+        return self.session.athlete.user.username + str(self.session.sessionDate) + self.pinch.exercise
+
     def increase_weight(self):
         return self.seconds >=10
+
 
 class WeightedHangs(models.Model):
     session = models.ForeignKey(Session, related_name='weighted_hangs')
@@ -169,8 +170,12 @@ class WeightedHangs(models.Model):
     weight = models.IntegerField()
     seconds = models.IntegerField()
 
+    def __str__(self):
+        return self.session.athlete.user.username + str(self.session.sessionDate) + self.hang.exercise
+
     def increase_weight(self):
         return self.seconds >=10
+
 
 class Calendar(models.Model):
     post_date = models.DateField()
@@ -179,3 +184,54 @@ class Calendar(models.Model):
     event_description = models.CharField(max_length=300, blank=True)
     event_location = models.CharField(max_length=200, blank=True)
     event_format = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.event_title + str(self.event_date)
+
+    def is_valid(self, date):
+        if date < self.event_date:
+            return True
+        else:
+            return False
+
+
+class RefRoutine(models.Model):
+    routine = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class RefConditioning(models.Model):
+    conditioning = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class RefFingerTraining(models.Model):
+    finger_training = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class RefTechnique(models.Model):
+    technique = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class RefTechniqueDrill(models.Model):
+    primary_technique = models.ForeignKey(RefTechnique, related_name='technique_drill1')
+    secondary_technique = models.ForeignKey(RefTechnique, blank=True, related_name='technique_drill2')
+    drill = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class RefWarmup(models.Model):
+    warmup = models.CharField(max_length=100)
+    description = models.CharField(max_length=150, blank=True)
+
+
+class Practice(models.Model):
+    warmup = models.ForeignKey(RefWarmup, related_name='practice1')
+    technique = models.ForeignKey(RefTechniqueDrill, related_name='practice2')
+    routine_1 = models.ForeignKey(RefWarmup, related_name='practice3')
+    routine_2 = models.ForeignKey(RefWarmup, blank=True, related_name='practice4')
+    conditioning_1 = models.ForeignKey(RefConditioning, related_name='practice5')
+    Conditioning_2 = models.ForeignKey(RefConditioning, blank=True, related_name='practice6')
+    finger_training = models.ForeignKey(RefFingerTraining, blank=True, related_name='practice7')

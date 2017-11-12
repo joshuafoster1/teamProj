@@ -21,13 +21,21 @@ def get_user(request):
 
 
 ###Views
-# splash page should present Team info link to schedule, usaclimbing, login
+# splash page should present Team info link to schedule, usaclimbing
 @login_required
 def home(request):
     athlete = get_user(request)
-    calendar = Calendar.objects.all()
+    calendar_objs = Calendar.objects.all()
+    print athlete.user.groups.filter(name='Coach').exists()
+    # populate upcoming events
+    calendar = []
+    for item in calendar_objs:
+        if item.is_valid(DATE):
+            calendar.append(item)
 
     return render(request, 'home.html', {'athlete': athlete, 'calendar': calendar})
+
+
 
 # Athlete home page. present recent conditioning, goals, sends, button to add conditioning
 @login_required

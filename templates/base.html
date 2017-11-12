@@ -21,6 +21,23 @@
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
                 <ul class="navbar-nav ml-auto">
+
+                {% ifequal user.groups.all.0.name 'Coach' %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Team Stats</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Roster</a>
+                  </li>
+                  {% endifequal %}
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'athletePage' %}">Training Log</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="#">Schedule</a>
+                  </li>
+
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id='userMenu' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{ user.username }}
