@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %} Practice Schedule{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">{{date}}</li>
+  <li class="breadcrumb-item"><a href="{% url 'athletePage' %}">{{ athlete.user.username }}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'athleteInfo' %}">Training Schedule</a></li>
+
+{% endblock %}
+
+{% block content %}
+<div>
+<table class="table">
+  <thead>Practice Schedule</thead>
+  <tbody>
+    {% for activity in schedule %}
+    <tr>
+      <td>
+        <div>{{activity.warmup}}</div>
+        <div>{{activity.technique}}</div>
+        <div>{{activity.routine_1}}</div>
+        <div>{{activity.routine_2}}</div>
+        <div>{{activity.conditioning_1}}</div>
+        <div>{{activity.conditioning_1}}</div>
+        <div>{{activity.finger_training}}</div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<div>
+<table class="table">
+  <thead>Extra  Practice</thead>
+  <tbody>
+    {% if assigned_practice is not None %}
+    {% for activity in assigned_practice %}
+    <tr>
+      <td>
+        <div>{{activity.date}}
+        <div>{{activity.practice.warmup}}</div>
+        <div>{{activity.practice.technique}}</div>
+        <div>{{activity.practice.routine_1}}</div>
+        <div>{{activity.practice.routine_2}}</div>
+        <div>{{activity.practice.conditioning_1}}</div>
+        <div>{{activity.practice.conditioning_1}}</div>
+        <div>{{activity.practice.finger_training}}</div>
+
+      </td>
+    </tr>
+    {% endfor %}
+    {% else %}
+    <tr>
+      <td>No additional practices</td>
+    </tr>
+    {% endif %}
+  </tbody>
+</table>
+</div>
+{% endblock %}
