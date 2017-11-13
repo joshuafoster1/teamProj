@@ -5,10 +5,12 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, WeightedHangs, PinchBlocks
-from .forms import FullConditioningForm, ConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
+from .forms import FullConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
+
+
 #view globals
 CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
@@ -19,14 +21,16 @@ def get_user(request):
     athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
 
+def is_coach(user):
+    return user.groups.filter(name='Coach').exists()
+
 
 ###Views
-# splash page should present Team info link to schedule, usaclimbing
+# home page link to schedule, usaclimbing, show events
 @login_required
 def home(request):
     athlete = get_user(request)
     calendar_objs = Calendar.objects.all()
-    print athlete.user.groups.filter(name='Coach').exists()
     # populate upcoming events
     calendar = []
     for item in calendar_objs:
@@ -37,7 +41,7 @@ def home(request):
 
 
 
-# Athlete home page. present recent conditioning, goals, sends, button to add conditioning
+# Training log. present recent conditioning, goals, sends, button to add conditioning
 @login_required
 def athletePage(request):
     athlete = get_user(request)
@@ -49,13 +53,14 @@ def athletePage(request):
 
         if exercise_obj is not None:
             conditioning.append(exercise_obj)
-    print conditioning
 
     weighted_hangs = athlete.get_weighted_hangs()
     pinch_training = athlete.get_pinch_training()
 
 
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'conditioning': conditioning, 'weighted_hangs': weighted_hangs, 'pinch_training':pinch_training})
+    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE,
+              'conditioning': conditioning, 'weighted_hangs': weighted_hangs,
+              'pinch_training':pinch_training})
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
@@ -79,27 +84,8 @@ class UpdateAthlete(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
-# @login_required
-# def updateathleteInfo(request):
-#     athlete = get_user(request)
-#
-#     if request.method == 'POST':
-#         form = AthleteUpdate(request.POST)
-#         if form.is_valid():
-#             pinch_training = form.save(commit=False)
-#             pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
-#                 athlete=athlete)
-#             pinch_training.save()
-#             return redirect('athleteInfo')
-#     else:
-#         form = AthleteUpdate()
-#     return render(request, 'update_athleteInfo.html', {'athlete':athlete, 'form': form, 'date': DATE})
-#
-#
-#     return render(request, 'athleteInfo.html', {'athlete': athlete, 'info': info})
 
 
-# currently a universal form. should restrict view to coach and create another page for athlete add conditioning.
 @login_required
 def newConditioning(request):
     athlete = get_user(request)
@@ -152,15 +138,16 @@ def newConditioning(request):
 
             return redirect('athletePage')
     else:
-        form = AthleteConditioningForm(initial={'Pulls': pulls, 'Core': core, 'Push': push, 'Triceps': triceps })
+        form = AthleteConditioningForm(initial={'Pulls': pulls, 'Core': core, 'Push': push,
+                'Triceps': triceps })
         # form = ConditioningForm(categoryInit=CoreCategory)
     return render(request, 'new_conditioning.html', {'athlete': athlete, 'form': form, 'date': DATE})
 
 # def is_coach(user):
 #     return user.group == 'Coach'
 #
-# @login_required
-# @user_passes_test(is_coach)
+@login_required
+@user_passes_test(is_coach)
 def coachNewConditioning(request):
     athlete = get_object_or_404(Athlete, pk=1)
 
@@ -234,8 +221,11 @@ def pinch_blocks(request):
             return redirect('pinch_blocks')
     else:
         form = PinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form, 'pinch_training':pinch_training, 'date': DATE})
+    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form,
+            'pinch_training':pinch_training, 'date': DATE})
 
+@login_required
+@user_passes_test(is_coach)
 def coach_pinch_blocks(request):
 
     if request.method == 'POST':
@@ -272,8 +262,11 @@ def weighted_hangs(request):
             return redirect('weighted_hangs')
     else:
         form = WeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form, 'weighted_hangs': weighted_hangs, 'date': DATE})
+    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form,
+                'weighted_hangs': weighted_hangs, 'date': DATE})
 
+@login_required
+@user_passes_test(is_coach)
 def coach_weighted_hangs(request):
 
     if request.method == 'POST':
@@ -312,3 +305,11 @@ def coach_max_conditioning(request):
     else:
         form = FullWeightedHangsForm()
     return render(request, 'add_weighted_hangs.html', {'form': form, 'date': DATE})
+
+@login_required
+def practice_schedule(request):
+    athlete = get_user(request)
+    schedule= Practice.objects.all()
+    assigned_practice = athlete.get_assigned_practice()
+
+    return render(request, 'practice_schedule.html', {'athlete': athlete, 'assigned_practice': assigned_practice, 'practice': schedule, 'date': DATE})

@@ -18,7 +18,9 @@ class Athlete(models.Model):
     def __str__(self):
         return self.user.username
 
-
+    def get_assigned_practice(self):
+        assigned_practice = AssignedPractice.objects.filter(athlete=self)
+        return assigned_practice
     ### Clean up the query to populate conditioning, categorize into dictionary.
     def get_pinch_training(self):
         '''Returns completed pinch block exercise from previous session containing
@@ -127,6 +129,11 @@ class RefExercise(models.Model):
     exercise = models.CharField(max_length=40)
     description = models.CharField(max_length=200, blank=True)
     category = models.ForeignKey(RefCategory, related_name='exercises')
+    order = models.IntegerField()
+    goal = models.IntegerField()
+
+    # class Meta:
+    #     unique_together = ('category', 'order')
 
     def __str__(self):
         return self.exercise
@@ -199,39 +206,61 @@ class RefRoutine(models.Model):
     routine = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.routine
+
 
 class RefConditioning(models.Model):
     conditioning = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.conditioning
 
 class RefFingerTraining(models.Model):
     finger_training = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.finger_training
 
 class RefTechnique(models.Model):
     technique = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.technique
 
 class RefTechniqueDrill(models.Model):
     primary_technique = models.ForeignKey(RefTechnique, related_name='technique_drill1')
-    secondary_technique = models.ForeignKey(RefTechnique, blank=True, related_name='technique_drill2')
+    secondary_technique = models.ForeignKey(RefTechnique, blank=True, null=True, related_name='technique_drill2')
     drill = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.drill
 
 class RefWarmup(models.Model):
     warmup = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
 
+    def __str__(self):
+        return self.warmup
 
 class Practice(models.Model):
     warmup = models.ForeignKey(RefWarmup, related_name='practice1')
     technique = models.ForeignKey(RefTechniqueDrill, related_name='practice2')
-    routine_1 = models.ForeignKey(RefWarmup, related_name='practice3')
-    routine_2 = models.ForeignKey(RefWarmup, blank=True, related_name='practice4')
+    routine_1 = models.ForeignKey(RefRoutine, related_name='practice3')
+    routine_2 = models.ForeignKey(RefRoutine, blank=True, null=True, related_name='practice4')
     conditioning_1 = models.ForeignKey(RefConditioning, related_name='practice5')
-    Conditioning_2 = models.ForeignKey(RefConditioning, blank=True, related_name='practice6')
-    finger_training = models.ForeignKey(RefFingerTraining, blank=True, related_name='practice7')
+    Conditioning_2 = models.ForeignKey(RefConditioning, blank=True, null=True, related_name='practice6')
+    finger_training = models.ForeignKey(RefFingerTraining, blank=True, null=True, related_name='practice7')
+
+    def __str__(self):
+        return "should I add a date to this?"
+
+
+class AssignedPractice(models.Model):
+    athlete = models.ForeignKey(Athlete, related_name='assigned_practice')
+    practice = models.ForeignKey(Practice, related_name='assigned_practice')
+    date = models.DateField()
