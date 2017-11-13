@@ -21,6 +21,29 @@
         <div class="collapse navbar-collapse" id="mainMenu">
           {% if user.is_authenticated %}
                 <ul class="navbar-nav ml-auto">
+
+                {% ifequal user.groups.all.0.name 'Coach' %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id='CoachMenu' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Coach's Forms
+                  </a>
+                 <div class='dropdown-menu dropdown-menu-right' aria-labelledby="userMenu">
+                   <a class="dropdown-item" href="{% url 'ccform' %}">Conditioning</a>
+                   <a class="dropdown-item" href="{% url 'coach_weighted_hangs' %}">Weighted Hangs</a>
+                   <a class="dropdown-item" href="{% url 'coach_pinch_blocks' %}">Pinch Blocks</a>
+                 </div>
+                </li>
+
+
+                  {% endifequal %}
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'athletePage' %}">Training Log</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'practice_schedule' %}">Schedule</a>
+                  </li>
+
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id='userMenu' data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       {{ user.username }}
