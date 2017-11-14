@@ -27,15 +27,21 @@ class Athlete(models.Model):
            pinch blocks'''
 
         last_session = PinchBlocks.objects.filter(session__athlete=self).last()
-        last_pinches = PinchBlocks.objects.filter(session=last_session.session)
-        return last_pinches
+        try:
+            last_pinches = PinchBlocks.objects.filter(session=last_session.session)
+            return last_pinches
+        except:
+            return None
 
     def get_weighted_hangs(self):
         '''Returns completed hangs from precious session containing hangs.'''
 
         last_session = WeightedHangs.objects.filter(session__athlete=self).last()
-        last_hangs = WeightedHangs.objects.filter(session=last_session.session)
-        return last_hangs
+        try:
+            last_hangs = WeightedHangs.objects.filter(session=last_session.session)
+            return last_hangs
+        except:
+            return None
 
     def get_conditioning(self, category_id, average=False):
         '''return object'''
