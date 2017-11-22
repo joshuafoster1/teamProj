@@ -211,7 +211,7 @@ def coachNewConditioning(request):
 def pinch_blocks(request):
     athlete = get_user(request)
 
-    pinch_training = athlete.get_pinch_training()
+    pinch_training = athlete.get_weighted_training(PinchBlocks)
 
     if request.method == 'POST':
         form = PinchBlockForm(request.POST)
@@ -252,7 +252,7 @@ def coach_pinch_blocks(request):
 def weighted_hangs(request):
     athlete = get_user(request)
 
-    weighted_hangs = athlete.get_weighted_hangs()
+    weighted_hangs = athlete.get_weighted_training(WeightedHangs)
 
     if request.method == 'POST':
         form = WeightedHangsForm(request.POST)
