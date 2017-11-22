@@ -9,13 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<div class='mb-4'>
-  <a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
-  {% if athlete.can_do_weigthed_exercise %}
-  <a href='{% url 'weighted_hangs' %}' class='btn btn-primary'>Add Weighted Hangs</a>
-  <a href='{% url 'pinch_blocks' %}' class='btn btn-primary'>Add Pinch Training</a>
-{% endif %}
-</div>
 
 <table class="table table-sm table-striped table-bordered">
 
@@ -64,6 +57,7 @@
 {% endfor %}
 </tbody>
 </table>
+<a href='{% url 'newConditioning' %}' class='btn btn-primary'>Add Conditioning</a>
 
 
 {% if athlete.can_do_weigthed_exercise %}
@@ -88,6 +82,7 @@
 {% endfor %}
 </tbody>
 </table>
+<a href='{% url 'weighted_hangs' %}' class='btn btn-primary'>Add Weighted Hangs</a>
 
 <h4 class ='py-3'>Most Recent Pinch Training-Max Weight: {{ max_weighted_pinch.weight }}
 </h4>
@@ -101,6 +96,7 @@
 </tr>
 </thead>
 <tbody>
+
   {% for item in pinch_training %}
 
   <tr>
@@ -111,5 +107,8 @@
   {% endfor %}
 </tbody>
 </table>
+<a href='{% url 'pinch_blocks' %}' class='btn btn-primary'>Add Pinch Training</a>
+
+
 {% endif %}
 {% endblock %}

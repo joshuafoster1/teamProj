@@ -5,6 +5,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import date
 # Create your models here.
+DATE = date.today()
 
 
 class Athlete(models.Model):
@@ -20,8 +21,12 @@ class Athlete(models.Model):
 
     def get_assigned_practice(self):
         assigned_practice = AssignedPractice.objects.filter(athlete=self)
-        return assigned_practice
-    ### Clean up the query to populate conditioning, categorize into dictionary.
+        calendar = []
+        for item in assigned_practice:
+            if item.practice.is_valid(DATE):
+                calendar.append(item)
+
+        return calendar
 
     def get_weighted_training(self, training, max_weight=False):
         '''Returns completed hangs from precious session containing hangs.'''
@@ -106,9 +111,6 @@ class Session(models.Model):
     class Meta:
         unique_together = ('athlete', 'sessionDate')
 
-    def get_first_set(self):
-        '''returns multiple objects'''
-        return Conditioning.objects.filter(session=self, setnum=1)
 
     def __str__(self):
         return str(self.sessionDate) + str(self.athlete.user.username)
@@ -264,11 +266,16 @@ class Practice(models.Model):
     def __str__(self):
         return "practice: " + str(self.date)
 
+    def is_valid(self, date):
+        if date < self.date:
+            return True
+        else:
+            return False
 
 class AssignedPractice(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='assigned_practice')
     practice = models.ForeignKey(Practice, related_name='assigned_practice')
-    comment = models.CharField(max_length=200)
+    comment = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.athlete + " " + str(self.practice.date)
+        return str(self.athlete) + " " + str(self.practice.date)

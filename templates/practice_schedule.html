@@ -11,11 +11,12 @@
 {% block content %}
 <div>
 <table class="table">
-  <thead>Practice Schedule</thead>
+  <thead class="thead-default">Practice Schedule</thead>
   <tbody>
     {% for activity in schedule %}
     <tr>
       <td>
+        <div>Date:{{activity.date}}</div>
         <div>Warmup:{{activity.warmup}}</div>
         <div>Technique:{{activity.technique}}</div>
         <div>Routine:{{activity.routine_1}}</div>
@@ -32,20 +33,25 @@
 
 <div>
 <table class="table">
-  <thead>Extra  Practice</thead>
+  <thead class="thead-default">
+    <tr>
+      <th>Assigned Practice</th>
+    </tr>
+  </thead>
   <tbody>
     {% if assigned_practice is not None %}
     {% for activity in assigned_practice %}
     <tr>
       <td>
-        <div>{{activity.comment}}
-        <div>{{activity.practice.warmup}}</div>
-        <div>{{activity.practice.technique}}</div>
-        <div>{{activity.practice.routine_1}}</div>
-        <div>{{activity.practice.routine_2}}</div>
-        <div>{{activity.practice.conditioning_1}}</div>
-        <div>{{activity.practice.conditioning_1}}</div>
-        <div>{{activity.practice.finger_training}}</div>
+        <div><small>Date: </small>{{activity.practice.date}}</div>
+        <div>{{activity.comment}}</div>
+        <div><small>Warmup: </small>{{activity.practice.warmup}}</div>
+        <div><small>Technique: </small>{{activity.practice.technique}}</div>
+        <div><small>Routine: </small>{{activity.practice.routine_1}}</div>
+        <div><small></small>{{activity.practice.routine_2}}</div>
+        <div><small>Conditioning: </small>{{activity.practice.conditioning_1}}</div>
+        <div><small></small>{{activity.practice.conditioning_2}}</div>
+        <div><small>Finger Training: </small>{{activity.practice.finger_training}}</div>
 
       </td>
     </tr>
