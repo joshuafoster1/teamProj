@@ -48,14 +48,18 @@ class Athlete(models.Model):
 
         conditionings = Conditioning.objects.filter(session__athlete=self,
                 exercise__category__id=category_id).last()
-        if average:
-            exercise_instances = Conditioning.objects.filter(session__athlete=self, exercise=conditionings.exercise)
-            instance_total = len(exercise_instances)
-            rep_total = 0
-            for instance in exercise_instances:
-                rep_total += int(instance.repetitions)
 
-            return {'object': conditionings, 'average':rep_total / instance_total}
+        if average:
+            try:
+                exercise_instances = Conditioning.objects.filter(session__athlete=self, exercise=conditionings.exercise)
+                instance_total = len(exercise_instances)
+                rep_total = 0
+                for instance in exercise_instances:
+                    rep_total += int(instance.repetitions)
+
+                return {'object': conditionings, 'average':rep_total / instance_total}
+            except:
+                return None
 
         return {'object': conditionings}
 
@@ -261,12 +265,16 @@ class Practice(models.Model):
     conditioning_1 = models.ForeignKey(RefConditioning, related_name='practice5')
     Conditioning_2 = models.ForeignKey(RefConditioning, blank=True, null=True, related_name='practice6')
     finger_training = models.ForeignKey(RefFingerTraining, blank=True, null=True, related_name='practice7')
+    date = models.DateField()
 
     def __str__(self):
-        return "should I add a date to this?"
+        return "practice: " + str(self.date)
 
 
 class AssignedPractice(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='assigned_practice')
     practice = models.ForeignKey(Practice, related_name='assigned_practice')
-    date = models.DateField()
+    comment = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.athlete + " " + str(self.practice.date)

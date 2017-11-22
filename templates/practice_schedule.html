@@ -16,11 +16,11 @@
     {% for activity in schedule %}
     <tr>
       <td>
-        <div>{{activity.warmup}}</div>
-        <div>{{activity.technique}}</div>
-        <div>{{activity.routine_1}}</div>
+        <div>Warmup:{{activity.warmup}}</div>
+        <div>Technique:{{activity.technique}}</div>
+        <div>Routine:{{activity.routine_1}}</div>
         <div>{{activity.routine_2}}</div>
-        <div>{{activity.conditioning_1}}</div>
+        <div>Conditioning:{{activity.conditioning_1}}</div>
         <div>{{activity.conditioning_1}}</div>
         <div>{{activity.finger_training}}</div>
       </td>
@@ -38,7 +38,7 @@
     {% for activity in assigned_practice %}
     <tr>
       <td>
-        <div>{{activity.date}}
+        <div>{{activity.comment}}
         <div>{{activity.practice.warmup}}</div>
         <div>{{activity.practice.technique}}</div>
         <div>{{activity.practice.routine_1}}</div>
