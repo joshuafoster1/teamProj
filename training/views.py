@@ -54,12 +54,14 @@ def athletePage(request):
         if exercise_obj is not None:
             conditioning.append(exercise_obj)
 
-    weighted_hangs = athlete.get_weighted_hangs()
-    pinch_training = athlete.get_pinch_training()
+    weighted_hangs = athlete.get_weighted_training(WeightedHangs)
+    pinch_training = athlete.get_weighted_training(PinchBlocks)
 
+    max_weighted_hangs = athlete.get_weighted_training(WeightedHangs, max_weight=True)
+    max_weighted_pinch = athlete.get_weighted_training(PinchBlocks, max_weight=True)
 
     return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE,
-              'conditioning': conditioning, 'weighted_hangs': weighted_hangs,
+              'conditioning': conditioning,'max_weighted_pinch':max_weighted_pinch, 'max_weighted_hangs': max_weighted_hangs, 'weighted_hangs': weighted_hangs,
               'pinch_training':pinch_training})
 
 # display athletes current information and provide links to change information if incorrect

@@ -22,29 +22,23 @@ class Athlete(models.Model):
         assigned_practice = AssignedPractice.objects.filter(athlete=self)
         return assigned_practice
     ### Clean up the query to populate conditioning, categorize into dictionary.
-    def get_pinch_training(self):
-        '''Returns completed pinch block exercise from previous session containing
-           pinch blocks'''
 
-        last_session = PinchBlocks.objects.filter(session__athlete=self).last()
-        try:
-            last_pinches = PinchBlocks.objects.filter(session=last_session.session)
-            return last_pinches
-        except:
-            return None
-
-    def get_weighted_hangs(self):
+    def get_weighted_training(self, training, max_weight=False):
         '''Returns completed hangs from precious session containing hangs.'''
 
-        last_session = WeightedHangs.objects.filter(session__athlete=self).last()
+        last_session = training.objects.filter(session__athlete=self).last()
         try:
-            last_hangs = WeightedHangs.objects.filter(session=last_session.session)
+            if max_weight:
+                last_hangs = max(training.objects.filter(session=last_session.session).values('weight'))
+            else:
+                last_hangs = training.objects.filter(session=last_session.session)
+
             return last_hangs
         except:
             return None
 
     def get_conditioning(self, category_id, average=False):
-        '''return object'''
+        '''return dictionary object {object:"", average:int}.'''
 
         conditionings = Conditioning.objects.filter(session__athlete=self,
                 exercise__category__id=category_id).last()

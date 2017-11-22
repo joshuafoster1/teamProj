@@ -33,8 +33,14 @@
 <tbody>
   {% for condition in conditioning %}
   <tr>
-    <td class="align-middle">{{ condition.object.exercise }}</td>
+    {% if condition.object.repetitions >= condition.object.exercise.goal %}
+    <td class="align-middle table-success">{{ condition.object.exercise }}
+      <div>  <small class="text-right">BUMP UP!</small></div>
+    </td>
 
+      {% else %}
+      <td class="align-middle">{{ condition.object.exercise }}</td>
+{% endif %}
 
     {% if condition.object.repetitions == condition.average %}
     <td class="table-warning align-middle">{{ condition.object.repetitions}}
@@ -50,7 +56,7 @@
 
 {% endif %}
 
-    <td class="align-middle">{{ condition.exercise.category }}
+    <td class="align-middle">{{ condition.object.exercise.goal }}
     </td>
 
   </tr>
@@ -63,7 +69,7 @@
 {% if athlete.can_do_weigthed_exercise %}
 <table class='table table-sm table-striped table-bordered'>
 <thead class='thead-inverse'>
-<h4 class ='py-3'>Most Recent Weighted Hangs-Max Weight:
+<h4 class ='py-3'>Most Recent Weighted Hangs-Max Weight: {{ max_weighted_hangs.weight }}
 </h4>
 <tr>
   <th>Weighted Hangs</th>
@@ -83,7 +89,7 @@
 </tbody>
 </table>
 
-<h4 class ='py-3'>Most Recent Pinch Training-Max Weight:
+<h4 class ='py-3'>Most Recent Pinch Training-Max Weight: {{ max_weighted_pinch.weight }}
 </h4>
 
 <table class='table table-sm table-striped table-bordered'>
