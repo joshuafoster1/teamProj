@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, WeightedHangs, PinchBlocks
-from .forms import FullConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
+from .forms import CoachTop3SendsForm, CoachMaxConditioningForm, Top3SendsForm, MaxConditioningForm, FullConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
@@ -289,24 +289,89 @@ def coach_weighted_hangs(request):
         form = FullWeightedHangsForm()
     return render(request, 'add_weighted_hangs.html', {'form': form, 'date':DATE})
 
+@login_required
+def max_conditioning(request):
+    athlete = get_user(request)
+
+    if request.method == 'POST':
+        form = MaxConditioningForm(request.POST)
+        if form.is_valid():
+            max_conditioning = form.save(commit=False)
+            max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            max_conditioning.save()
+            return redirect('weighted_hangs')
+    else:
+        form = MaxConditioningForm()
+    return render(request, 'add_max_conditioning.html', {'athlete':athlete, 'form': form,
+                'date': DATE})
+
+
+@login_required
+def top_3_sends(request):
+    athlete = get_user(request)
+
+    if request.method == 'POST':
+        form = Top3SendsForm(request.POST)
+        if form.is_valid():
+            max_conditioning = form.save(commit=False)
+            max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            max_conditioning.save()
+            return redirect('weighted_hangs')
+    else:
+        form = Top3SendsForm()
+    return render(request, 'add_top_3_sends.html', {'athlete':athlete, 'form': form,
+                'date': DATE})
+
+@login_required
+@user_passes_test(is_coach)
+def coach_top_3_sends(request):
+    if request.method == 'POST':
+        form = CoachTop3SendsForm(request.POST)
+        if form.is_valid():
+            max_form = form#.save(commit=False)
+            athlete = max_form.cleaned_data['Athlete']
+            session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            today = Top3Sends()
+            today.hang = hang_form.cleaned_data['hang']
+            today.seconds = hang_form.cleaned_data['seconds']
+            today.weight = hang_form.cleaned_data['weight']
+            today.session = session
+            today.save()
+            return redirect('coach_max_conditioning')
+    else:
+        form = CoachTop3SendsForm()
+    return render(request, 'add_weighted_hangs.html', {'form': form, 'date': DATE})
+
+
+
+
+@login_required
+def athleteMetrics(request):
+    athlete = get_user(request)
+    return render(request, 'athlete_metrics.html', {'date':DATE, 'athlete': athlete})
+
+@login_required
+@user_passes_test(is_coach)
 def coach_max_conditioning(request):
     if request.method == 'POST':
-        form = FullMaxConditioningForm(request.POST)
+        form = CoachMaxConditioningForm(request.POST)
         if form.is_valid():
             max_form = form#.save(commit=False)
             athlete = max_form.cleaned_data['Athlete']
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             today = MaxConditioning()
-            today.hang = hang_form.cleaned_data['hang']
-            today.seconds = hang_form.cleaned_data['seconds']
-            today.weight = hang_form.cleaned_data['weight']
+            today.exercise = max_form.cleaned_data['exercise']
+            today.repetitions = max_form.cleaned_data['repetitions']
             today.session = session
             today.save()
-            return redirect('coach_weighted_hangs')
+            return redirect('coach_max_conditioning')
     else:
-        form = FullWeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'form': form, 'date': DATE})
+        form = CoachMaxConditioningForm()
+    return render(request, 'add_max_conditioning.html', {'form': form, 'date': DATE})
 
 @login_required
 def practice_schedule(request):
@@ -315,3 +380,9 @@ def practice_schedule(request):
     assigned_practice = athlete.get_assigned_practice()
 
     return render(request, 'practice_schedule.html', {'athlete': athlete, 'assigned_practice': assigned_practice, 'practice': schedule, 'date': DATE})
+
+@login_required
+def exercise_description(request, exercise_name):
+    print exercise_name
+    exercise = get_object_or_404(RefExercise, pk=exercise_name)
+    return render(request, 'exercise_description.html', {'exercise': exercise})

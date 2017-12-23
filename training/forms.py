@@ -1,6 +1,6 @@
 from django.forms import inlineformset_factory
 from django import forms
-from .models import Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs
+from .models import Top3Sends, Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs, MaxConditioning
 
 
 class AthleteConditioningForm(forms.Form):
@@ -77,3 +77,31 @@ class FullWeightedHangsForm(WeightedHangsForm):
     # def __init__(self, *args, **kwargs):
     #     super(FullWeightedHangsForm, self).__init__(*args, **kwargs)
     #     self.fields.keyOrder = ['Athlete', 'hang', 'seconds', 'weight']
+
+class MaxConditioningForm(forms.ModelForm):
+    class Meta:
+        model = MaxConditioning
+        fields = ['exercise', 'repetitions']
+
+    def __init__(self, *args, **kwargs):
+        super(MaxConditioningForm, self).__init__(*args, **kwargs)
+        self.fields['exercise'].queryset =RefExercise.objects.filter(category__id=7)
+
+class CoachMaxConditioningForm(MaxConditioningForm):
+    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(CoachMaxConditioningForm, self).__init__(*args, **kwargs)
+        self.fields.keyOrder = ['Athlete', ]
+
+class Top3SendsForm(forms.ModelForm):
+    class Meta:
+        model = Top3Sends
+        fields = ['first', 'second', 'third']
+
+class CoachTop3SendsForm(Top3SendsForm):
+    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
+
+    def __init__(self, *args, **kwargs):
+        super(CoachTop3SendsForm, self).__init__(*args, **kwargs)
+        self.fields.keyOrder = ['Athlete', ]

@@ -7,7 +7,12 @@ from datetime import date
 # Create your models here.
 DATE = date.today()
 
-
+V_GRADES = (
+        (1, 'V0'),
+        (2, 'V1'),
+        (3, 'V2'),
+        (4, 'V3'),
+)
 class Athlete(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthdate = models.DateField(null=True, blank=True)
@@ -144,6 +149,13 @@ class RefExercise(models.Model):
     def __str__(self):
         return self.exercise
 
+class MaxConditioning(models.Model):
+    session = models.ForeignKey(Session, related_name='max_conditioning_sets')
+    exercise = models.ForeignKey(RefExercise, related_name='max_conditioning_sets')
+    repetitions = models.IntegerField()
+
+    class Meta:
+        unique_together = ('session', 'exercise')
 
 class Conditioning(models.Model):
     SETS = (
@@ -279,3 +291,11 @@ class AssignedPractice(models.Model):
 
     def __str__(self):
         return str(self.athlete) + " " + str(self.practice.date)
+
+
+class Top3Sends(models.Model):
+
+    session = models.ForeignKey(Session, related_name='top_3_sends')
+    first = models.CharField(max_length = 4, choices=V_GRADES)
+    second = models.CharField(max_length = 4, choices=V_GRADES)
+    third = models.CharField(max_length = 4, choices=V_GRADES)

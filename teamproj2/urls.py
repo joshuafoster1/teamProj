@@ -51,11 +51,14 @@ urlpatterns = [
 
     url(r'^admin/', admin.site.urls),
     url(r'^AthletePage/$', views.athletePage, name='athletePage'),
+    url(r'^AthleteMetrics/$', views.athleteMetrics, name='athleteMetrics'),
+
     url(r'^AthleteInfo/$', views.athleteInfo, name='athleteInfo'),
     url(r'^AthleteInfo/update/(?P<pk>\d+)/$', views.UpdateAthlete.as_view(), name='update_athleteInfo'),
     url(r'^AthleteInfo/update/Bday/(?P<pk>\d+)/$', views.UpdateAthleteBday.as_view(), name='update_athleteBdayInfo'),
 
     url(r'^AthletePage/new/$', views.newConditioning, name='newConditioning'),
+
     url(r'^ccform/add/$', views.coachNewConditioning, name='ccform'),
 
     url(r'^PinchBlocks/add/$', views.pinch_blocks, name='pinch_blocks'),
@@ -66,6 +69,13 @@ urlpatterns = [
     url(r'^coachWeightedHangs/add/$', views.coach_weighted_hangs, name='coach_weighted_hangs'),
 
     url(r'^coachmaxconditioning/add/$', views.coach_max_conditioning, name='coach_max_conditioning'),
+    url(r'^maxconditioning/add/$', views.max_conditioning, name='max_conditioning'),
 
-    url(r'^schedule/$', views.practice_schedule, name='practice_schedule')
+    url(r'^top3sends/add/$', views.top_3_sends, name='top_3_sends'),
+    url(r'^coachtop3sends/add/$', views.coach_top_3_sends, name='coach_top_3_sends'),
+
+
+    url(r'^schedule/$', views.practice_schedule, name='practice_schedule'),
+
+    url(r'^exercise/description/(?P<exercise_name>[\w.@+-]+)$', views.exercise_description, name='exercise_description'),
 ]

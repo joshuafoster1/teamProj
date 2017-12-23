@@ -27,12 +27,16 @@
   {% for condition in conditioning %}
   <tr>
     {% if condition.object.repetitions >= condition.object.exercise.goal %}
-    <td class="align-middle table-success">{{ condition.object.exercise }}
-      <div>  <small class="text-right">BUMP UP!</small></div>
+    <td class="align-middle table-success"><a href='{% url 'exercise_description' condition.object.exercise.pk %}'>
+                                            {{ condition.object.exercise }}
+                                          </a>
+      <div>  <small class="text-right">GET CHECKED OFF BY COACH!</small></div>
     </td>
 
       {% else %}
-      <td class="align-middle">{{ condition.object.exercise }}</td>
+      <td class="align-middle"><a href='{% url 'exercise_description' condition.object.exercise.pk %}'>
+                                              {{ condition.object.exercise }}
+                                            </a></td>
 {% endif %}
 
     {% if condition.object.repetitions == condition.average %}

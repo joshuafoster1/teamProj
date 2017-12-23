@@ -5,55 +5,27 @@ from django.contrib import admin
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, PinchBlocks, WeightedHangs, Calendar, Practice, AssignedPractice
 # Register your models here.
 
-# class adminTable(admin.ModelAdmin):
-#     model = Athlete
-#     list_display = ('user', 'birthdate', 'guardian1', 'guardian2')
-#     list_filter = ['birthdate']
-#     search_fields = ['guardian1']
+class AthleteTable(admin.ModelAdmin):
+    model = Athlete
+    list_display = ('user', 'birthdate', 'get_category', 'guardian2')
+    list_filter = ['birthdate']
+    search_fields = ['user__first_name', 'user__last_name', 'user__username']
 
-admin.site.register(Athlete)
-# admin.site.register(Conditioning)
-# admin.site.register(RefCategory)
-# admin.site.register(RefExercise)
-# admin.site.register(Session)
-class ConditionInline2(forms.ModelForm):
-    class Meta:
-        model = Conditioning
-        fields = ['exercise', 'repetitions', 'setNum']
-    def __init__(self, *args, **kwargs):
-        super(ConditionInline2, self).__init__(*args, **kwargs)
-        self.fields['exercise'].queryset =RefExercise.objects.filter(category__id=2)
-        # self.fields['repetitions'].queryset =RefExercise.objects.filter(category__id=3)
-class ConditionInline1(forms.ModelForm):
-    class Meta:
-        model = Conditioning
-        fields = ['exercise', 'repetitions', 'setNum']
-    def __init__(self, *args, **kwargs):
-        super(ConditionInline1, self).__init__(*args, **kwargs)
-        self.fields['exercise'].queryset =RefExercise.objects.filter(category__id=1)
-class ChoiceInline1(admin.TabularInline):
-    form = ConditionInline1
+class ConditioningAdmin(admin.ModelAdmin):
     model = Conditioning
-    # fields = ['exercise', 'repetitions']
-
-    extra = 1
-
-class ChoiceInline2(admin.TabularInline):
-    form = ConditionInline2
-    model = Conditioning
-    # fields = ['exercise', 'repetitions']
-
-    extra = 1
+    list_display = ('session', 'exercise', 'repetitions', 'setNum')
+    list_filter = ['session__sessionDate', 'session__athlete', 'exercise']
+    search_fields = ['session__athlete__user__first_name', 'session__athlete__user__last_name', 'session__athlete__user__username']
 
 
-class QuestionAdmin(admin.ModelAdmin):
-    # registered to the session model
-    fields = ['athlete']
+class SessionAdmin(admin.ModelAdmin):
+    list_display = ('athlete',)
+    list_filter = ['athlete']
 
-    inlines = [ChoiceInline1, ChoiceInline2]
 
-admin.site.register(Session, QuestionAdmin)
-admin.site.register(Conditioning)
+admin.site.register(Athlete, AthleteTable)
+admin.site.register(Session, SessionAdmin)
+admin.site.register(Conditioning, ConditioningAdmin)
 admin.site.register(RefCategory)
 admin.site.register(RefExercise)
 admin.site.register(PinchBlocks)
