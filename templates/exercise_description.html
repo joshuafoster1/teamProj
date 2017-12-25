@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Add Pinch Training{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">{{date}}</li>
+  <li class="breadcrumb-item"><a href="{% url 'athletePage' %}">{{ athlete.user.username }}</a></li>
+  <li class="breadcrumb-item">{{ exercise.exercise }}</li>
+{% endblock %}
+
+{% block content %}
+<h4>{{ exercise.exercise }}</h4>
+
+    <p>{{ exercise.description }}</p>
+
+{% endblock %}

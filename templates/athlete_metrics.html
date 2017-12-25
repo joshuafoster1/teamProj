@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block breadcrumb %}
+<li class="breadcrumb-item">{{ date }}</li>
+<li class="breadcrumb-item">{{athlete.user.username}}</li>
+<li class="breadcrumb-item active">Metrics</li>
+{% endblock %}
+
+{% block content %}
+
+<a href='{% url 'max_conditioning' %}' class='btn btn-primary'>Add Max Conditioning</a>
+<a href='{% url 'top_3_sends' %}' class='btn btn-primary'>Add Top 3 Boulder Sends</a>
+
+{% endblock %}
