@@ -9,8 +9,6 @@ from .forms import CoachTop3SendsForm, CoachMaxConditioningForm, Top3SendsForm, 
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
-
-
 #view globals
 CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
@@ -223,7 +221,7 @@ def pinch_blocks(request):
             return redirect('pinch_blocks')
     else:
         form = PinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'athlete':athlete, 'form': form,
+    return render(request, 'training/add_pinch_blocks.html', {'athlete':athlete, 'form': form,
             'pinch_training':pinch_training, 'date': DATE})
 
 @login_required
@@ -246,7 +244,7 @@ def coach_pinch_blocks(request):
             return redirect('coach_pinch_blocks')
     else:
         form = FullPinchBlockForm()
-    return render(request, 'add_pinch_blocks.html', {'form': form, 'date':DATE})
+    return render(request, 'training/add_pinch_blocks.html', {'form': form, 'date':DATE})
 
 @login_required
 def weighted_hangs(request):
@@ -264,7 +262,7 @@ def weighted_hangs(request):
             return redirect('weighted_hangs')
     else:
         form = WeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'athlete':athlete, 'form': form,
+    return render(request, 'training/add_weighted_hangs.html', {'athlete':athlete, 'form': form,
                 'weighted_hangs': weighted_hangs, 'date': DATE})
 
 @login_required
@@ -287,12 +285,14 @@ def coach_weighted_hangs(request):
             return redirect('coach_weighted_hangs')
     else:
         form = FullWeightedHangsForm()
-    return render(request, 'add_weighted_hangs.html', {'form': form, 'date':DATE})
+    return render(request, 'training/add_weighted_hangs.html', {'form': form, 'date':DATE})
 
 @login_required
 def max_conditioning(request):
     athlete = get_user(request)
-
+    theForm = request.session.get('theForm', [MaxConditioningForm, Top3SendsForm, MaxConditioningForm])
+    newForm = theForm.pop()
+    request.session.modified = True
     if request.method == 'POST':
         form = MaxConditioningForm(request.POST)
         if form.is_valid():
@@ -302,8 +302,8 @@ def max_conditioning(request):
             max_conditioning.save()
             return redirect('weighted_hangs')
     else:
-        form = MaxConditioningForm()
-    return render(request, 'add_max_conditioning.html', {'athlete':athlete, 'form': form,
+        form = newForm()
+    return render(request, 'training/add_max_conditioning.html', {'athlete':athlete, 'form': form,
                 'date': DATE})
 
 
@@ -318,10 +318,10 @@ def top_3_sends(request):
             max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             max_conditioning.save()
-            return redirect('weighted_hangs')
+            return redirect('athleteMetrics')
     else:
         form = Top3SendsForm()
-    return render(request, 'add_top_3_sends.html', {'athlete':athlete, 'form': form,
+    return render(request, 'training/add_top_3_sends.html', {'athlete':athlete, 'form': form,
                 'date': DATE})
 
 @login_required
@@ -340,10 +340,10 @@ def coach_top_3_sends(request):
             today.weight = hang_form.cleaned_data['weight']
             today.session = session
             today.save()
-            return redirect('coach_max_conditioning')
+            return redirect('add_top_3_sends')
     else:
         form = CoachTop3SendsForm()
-    return render(request, 'add_weighted_hangs.html', {'form': form, 'date': DATE})
+    return render(request, 'training/add_top_3_sends.html', {'form': form, 'date': DATE})
 
 
 
@@ -371,7 +371,7 @@ def coach_max_conditioning(request):
             return redirect('coach_max_conditioning')
     else:
         form = CoachMaxConditioningForm()
-    return render(request, 'add_max_conditioning.html', {'form': form, 'date': DATE})
+    return render(request, 'training/add_max_conditioning.html', {'form': form, 'date': DATE})
 
 @login_required
 def practice_schedule(request):

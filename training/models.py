@@ -8,10 +8,18 @@ from datetime import date
 DATE = date.today()
 
 V_GRADES = (
-        (1, 'V0'),
-        (2, 'V1'),
-        (3, 'V2'),
-        (4, 'V3'),
+        (0, 'V0'),
+        (1, 'V1'),
+        (2, 'V2'),
+        (3, 'V3'),
+        (4, 'V4'),
+        (5, 'V5'),
+        (6, 'V6'),
+        (7, 'V7'),
+        (8, 'V8'),
+        (9, 'V9'),
+        (10, 'V10'),
+        (11, 'V11')
 )
 class Athlete(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -296,6 +304,6 @@ class AssignedPractice(models.Model):
 class Top3Sends(models.Model):
 
     session = models.ForeignKey(Session, related_name='top_3_sends')
-    first = models.CharField(max_length = 4, choices=V_GRADES)
-    second = models.CharField(max_length = 4, choices=V_GRADES)
-    third = models.CharField(max_length = 4, choices=V_GRADES)
+    first = models.IntegerField(choices=V_GRADES)
+    second = models.IntegerField(choices=V_GRADES)
+    third = models.IntegerField(choices=V_GRADES)

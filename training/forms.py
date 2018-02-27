@@ -98,6 +98,7 @@ class Top3SendsForm(forms.ModelForm):
     class Meta:
         model = Top3Sends
         fields = ['first', 'second', 'third']
+        
 
 class CoachTop3SendsForm(Top3SendsForm):
     Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())

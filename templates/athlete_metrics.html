@@ -7,7 +7,39 @@
 
 {% block content %}
 
-<a href='{% url 'max_conditioning' %}' class='btn btn-primary'>Add Max Conditioning</a>
-<a href='{% url 'top_3_sends' %}' class='btn btn-primary'>Add Top 3 Boulder Sends</a>
+<div class="container-fliud">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Power Metrics!</h3>
+            <a href='{% url 'top_3_sends' %}' class='btn btn-primary btn-block mb-2'>Add Top 3 Boulder Sends</a>
+            <a href='{% url 'metric_test' 'fingerpower' %}' class='btn btn-primary btn-block mb-2'>Finger Power</a>
+            <a href='{% url 'metric_test' 'pullandslap' %}' class='btn btn-primary btn-block mb-2'>Pull and Slap</a>
+            <a href='{% url 'metric_test' 'maxweightpullup' %}' class='btn btn-primary btn-block mb-2'>Max Weighted Pull Up</a>
+       </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Power Endurance Metrics!</h3>
+          <a href='{% url 'max_conditioning' %}' class='btn btn-primary btn-block mb-2'>Add Max Conditioning</a>
+          <a href='{% url 'metric_test' 'fingerpowerendurance' %}' class='btn btn-primary btn-block mb-2'>Finger Power Endurnance</a>
+          <a href='{% url 'metric_test' 'maxpullups' %}' class='btn btn-primary btn-block mb-2'>Max Pull Ups</a>
+          <a href='{% url 'metric_test' 'campuspowerendurance' %}' class='btn btn-primary btn-block mb-2'>Campus Power Endurance</a>
+       </div>
+      </div>
+    </div>
 
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Endurance Metrics!</h3>
+            <a href='{% url 'metric_test' 'fingerendurance' %}' class='btn btn-primary btn-block mb-2'>Finger Endurance</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
