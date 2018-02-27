@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+{{ block.super }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">{{ date }}</li>
+<li class="breadcrumb-item active">{{athlete.user.username}}</li>
+{% endblock %}
+
+{% block content %}
+
+
+<a href='{% url 'timer' %}' class='btn btn-primary'>begin Hangboard Workout</a>
+
+
+{% endblock %}
