@@ -16,7 +16,7 @@ DATE = datetime.date.today()
 #view helper function(s)
 def get_user(request):
     pk = request.user.pk
-    setter = get_object_or_404(Setter, user__pk=pk)
+    athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
 
 def is_coach(user):
