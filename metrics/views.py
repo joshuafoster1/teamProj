@@ -15,7 +15,7 @@ def get_user(request):
     pk = request.user.pk
     athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
-
+ 
 
 # Create your views here.
 def metric_test(request, metricform):
