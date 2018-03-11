@@ -300,7 +300,7 @@ def max_conditioning(request):
             max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             max_conditioning.save()
-            return redirect('weighted_hangs')
+            return redirect('max_conditioning')
     else:
         form = newForm()
     return render(request, 'training/add_max_conditioning.html', {'athlete':athlete, 'form': form,

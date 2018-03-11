@@ -7,12 +7,12 @@ import json
 # Create your views here.
 def timer(request):
 
-    hangboard = get_object_or_404(Hangboard, name='Punch')
-    print(hangboard.time_intervals)
-    time = hangboard.time_intervals
-    print(time)
-    activity = hangboard.activity_intervals
-    print(activity)
-    return render(request, 'timers/timer_page.html', {'time':time, 'activity':activity})
+    # hangboard = get_object_or_404(Hangboard, name='Punch')
+    # print(hangboard.time_intervals)
+    # time = hangboard.time_intervals
+    # print(time)
+    # activity = hangboard.activity_intervals
+    # print(activity)
+    return render(request, 'timers/timer_page.html')#, {'time':time, 'activity':activity})
 def timer_home(request):
     return render(request, 'timers/timer_home.html')
