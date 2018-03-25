@@ -279,7 +279,7 @@ class Practice(models.Model):
     routine_1 = models.ForeignKey(RefRoutine, related_name='practice3')
     routine_2 = models.ForeignKey(RefRoutine, blank=True, null=True, related_name='practice4')
     conditioning_1 = models.ForeignKey(RefConditioning, related_name='practice5')
-    Conditioning_2 = models.ForeignKey(RefConditioning, blank=True, null=True, related_name='practice6')
+    conditioning_2 = models.ForeignKey(RefConditioning, blank=True, null=True, related_name='practice6')
     finger_training = models.ForeignKey(RefFingerTraining, blank=True, null=True, related_name='practice7')
     date = models.DateField()
 
@@ -307,3 +307,7 @@ class Top3Sends(models.Model):
     first = models.IntegerField(choices=V_GRADES)
     second = models.IntegerField(choices=V_GRADES)
     third = models.IntegerField(choices=V_GRADES)
+
+class ClimbingQuotes(models.Model):
+    author = models.CharField(max_length=30)
+    quote = models.CharField(max_length=200)
