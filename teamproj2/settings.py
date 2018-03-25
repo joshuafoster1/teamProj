@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'schedule',
     'accounts',
     'widget_tweaks',
-
+    'import_export',
 ]
 
 MIDDLEWARE = [
