@@ -8,7 +8,7 @@ from import_export.admin import ImportExportModelAdmin
 # Register your models here.
 
 metricModels = [FingerPower, FingerEndurance, FingerMuscularEndurance, PullAndSlap,
-    MaxWeightPullUp, MaxPullUps, LateralCore, CampusPowerEndurance, MetricDescription]
+    MaxWeightPullUp, MaxPullUps, LateralCore, CampusPowerEndurance]
 
 for model in metricModels:
     admin.site.register(model)
