@@ -63,6 +63,10 @@ class RefFingerTrainingAdmin(ImportExportModelAdmin):
 class RefConditioningAdmin(ImportExportModelAdmin):
     pass
 
+@admin.register(Calendar)
+class CalendarAdmin(ImportExportModelAdmin):
+    pass
+
 # admin.site.register(Athlete, AthleteTable)
 # admin.site.register(Session, SessionAdmin)
 # admin.site.register(Conditioning, ConditioningAdmin)
@@ -70,7 +74,7 @@ class RefConditioningAdmin(ImportExportModelAdmin):
 # admin.site.register(RefExercise)
 admin.site.register(PinchBlocks)
 admin.site.register(WeightedHangs)
-admin.site.register(Calendar)
+# admin.site.register(Calendar)
 # admin.site.register(Practice)
 # admin.site.register(AssignedPractice)
 # admin.site.register(RefConditioning)
