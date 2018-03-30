@@ -18,6 +18,6 @@ from django.conf.urls import url
 from timers import views
 urlpatterns = [
         url(r'^$', views.timer_home, name='timer_home'),
-        url(r'^timer/$', views.timer, name='timer')
+        url(r'^timer/(?P<timer>[\w \-]+)/$', views.timer, name='timer')
 
 ]

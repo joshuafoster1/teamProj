@@ -29,6 +29,7 @@ def is_coach(user):
 def home(request):
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
+    print(athlete.get_most_recent_metric_test())
     calendar_objs = Calendar.objects.all()
     # populate upcoming events
     calendar = []

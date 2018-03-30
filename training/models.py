@@ -1,12 +1,34 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
+# from metrics.models import MetricTest
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import date
+from datetime import date, timedelta
+
 # Create your models here.
 DATE = date.today()
+ROUTE_GRADES = (
+        (0, '5.8'),
+        (1, '5.9'),
+        (2, '5.10a'),
+        (3, '5.10b'),
+        (4, '5.10c'),
+        (5, '5.10d'),
+        (6, '5.11a'),
+        (7, '5.11b'),
+        (8, '5.11c'),
+        (9, '5.11d'),
+        (10, '5.12a'),
+        (11, '5.12b'),
+        (12, '5.12c'),
+        (13, '5.12d'),
+        (14, '5.13a'),
+        (15, '5.13b'),
+        (16, '5.13c'),
+        (17, '5.13d'),
+        (18, '5.14a'),
 
+)
 V_GRADES = (
         (0, 'V0'),
         (1, 'V1'),
@@ -24,13 +46,38 @@ V_GRADES = (
 class Athlete(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthdate = models.DateField(null=True, blank=True)
+    height = models.IntegerField(null=True, blank=True)
+    wingspan = models.IntegerField(null=True, blank=True)
+    ape_index = models.IntegerField(null=True, blank=True)
+    weight = models.IntegerField(null=True, blank=True)
     guardian1 = models.CharField(max_length=50, blank=True)
     guardian1_email = models.EmailField(max_length=75, blank=True)
     guardian2 = models.CharField(max_length=50, blank=True)
     guardian2_email = models.EmailField(max_length=75, blank=True)
+    eval_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.user.username
+
+    def needs_eval(self):
+        if self.eval_date == None:
+            return True
+        elif self.eval_date + timedelta(days=42) < DATE:
+            return True
+        else:
+            return False
+
+    def get_most_recent_metric_test(self):
+        test = Session.objects.filter(athlete=self).latest('metric_tests__session__sessionDate')
+        return test
+
+    def get_ape_index(self):
+        if self.ape_index:
+            return self.ape_index
+        else:
+            self.ape_index = self.wingspan - self.height
+            self.save()
+            return self.ape_index
 
     def get_assigned_practice(self):
         assigned_practice = AssignedPractice.objects.filter(athlete=self)
