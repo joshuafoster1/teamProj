@@ -1,5 +1,9 @@
 from django import forms
 from .models import *
+class CurrentSendForm(forms.ModelForm):
+    class Meta:
+        model = SendingLevel
+        fields = ['boulder_onsight', 'boulder_redpoint', 'route_onsight', 'route_redpoint']
 
 class FingerPowerForm(forms.ModelForm):
     class Meta:
@@ -8,11 +12,11 @@ class FingerPowerForm(forms.ModelForm):
 class FingerEnduranceForm(forms.ModelForm):
     class Meta:
         model = FingerEndurance
-        fields = ['weight', 'time']
+        fields = [ 'time', 'rung', 'feet_on']
 class FingerMuscularEnduranceForm(forms.ModelForm):
     class Meta:
         model = FingerMuscularEndurance
-        fields = ['weight', 'time']
+        fields = ['time']
 
 class PullAndSlapForm(forms.ModelForm):
     class Meta:
@@ -32,7 +36,7 @@ class MaxPullUpsForm(forms.ModelForm):
 class CampusPowerEnduranceForm(forms.ModelForm):
     class Meta:
         model = CampusPowerEndurance
-        fields = ['moves', 'time']
+        fields = ['moves', 'time', 'rung', 'feet_on']
 
 class LateralCoreForm(forms.ModelForm):
     class Meta:

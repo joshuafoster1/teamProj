@@ -16,3 +16,7 @@ for model in metricModels:
 @admin.register(MetricDescription)
 class MetricDesciptionAdmin(ImportExportModelAdmin):
     pass
+
+@admin.register(MetricTest)
+class MetricTestAdmin(ImportExportModelAdmin):
+    pass

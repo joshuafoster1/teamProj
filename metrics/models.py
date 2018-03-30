@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from training.models import Session, Athlete
+from training.models import Session, Athlete, V_GRADES, ROUTE_GRADES
 from django.db import models
 
 # Create your models here.
@@ -13,11 +13,19 @@ RUNG = (
     (3, "Large"),
 )
 
+
 class MetricTest(models.Model):
     session = models.ForeignKey(Session, related_name='metric_tests')
 
     def __str__(self):
-        return self.session
+        return str(self.session.sessionDate)
+
+class SendingLevel(models.Model):
+    test = models.ForeignKey(MetricTest, related_name='sending_level')
+    boulder_onsight = models.IntegerField(choices=V_GRADES, blank=True, null=True)
+    boulder_redpoint = models.IntegerField(choices=V_GRADES, blank=True, null=True)
+    route_onsight = models.IntegerField(choices=ROUTE_GRADES, blank=True, null=True)
+    route_redpoint = models.IntegerField(choices=ROUTE_GRADES, blank=True, null=True)
 
 class FingerPower(models.Model):
     test = models.ForeignKey(MetricTest, related_name='finger_power_tests')
@@ -30,7 +38,6 @@ class FingerPower(models.Model):
 
 class FingerMuscularEndurance(models.Model):
     test = models.ForeignKey(MetricTest, related_name='finger_muscular_endurance_tests')
-    weight = models.IntegerField()
     time = models.IntegerField()
 
     def __str__(self):
@@ -39,8 +46,9 @@ class FingerMuscularEndurance(models.Model):
 
 class FingerEndurance(models.Model):
     test = models.ForeignKey(MetricTest, related_name='finger_endurance_tests')
-    weight = models.IntegerField()
     time = models.IntegerField()
+    rung = models.IntegerField(choices=RUNG)
+    feet_on = models.BooleanField()
 
     def __str__(self):
         return str(self.weight) + " " + str(self.time)
@@ -104,17 +112,28 @@ class MetricDescription(models.Model):
 '''
 class Metric(models.Model):
     metric = models.CharField(max_length=20)
-    descrition = models.CharField(max_length=500)
+    description = models.CharField(max_length=500)
 
-class Parameter(models.Model):
-    parameter =
+class IntParameter(models.Model):
+    name = models.CharField(max_length=40)
+    measure = models.IntegerField()
 
-class TestParameter(models.Model):
-    parameter
+class BooleanParameter(models.Model):
+    name = models.CharField(max_length=40)
+    check = models.BooleanField()
+
+class TestBooleanParameter(models.Model):
+    test = models.ForeignKey(Test)
+    boolean_parameter = models.ForeignKey(BooleanParameter)
+
+class TestIntParameter(models.Model):
+    test = models.ForeignKey(Test)
+    int_parameter = models.ForeignKey(IntParameter)
 
 class Test(models.Model):
+    test = models.ForeignKey(MetricTest)
     metric = models.ForeignKey(Metric)
-    parameter = models.ManyToManyField(Parameter, through='TestParameter') #for each, we want draw and ac_dc
-
+    parameter = models.ManyToManyField(IntParameter, through='TestIntParameter') #for each, we want draw and ac_dc
+    booleanparameter = models.ManyToManyField(BooleanParameter, through='TestBooleanParameter')
 
 '''
