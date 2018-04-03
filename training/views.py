@@ -310,6 +310,7 @@ def max_conditioning(request):
             max_conditioning = form.save(commit=False)
             max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
+            print(max_conditioning.session, created, athlete, DATE)
             max_conditioning.save()
             return redirect('max_conditioning')
     else:
