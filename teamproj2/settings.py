@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 # From command prompt do 'ifconfig'
 #    probably want 'ifconfig en0'
@@ -128,11 +128,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 ### For production on Python anywhere
-# STATIC_ROOT = "/home/joshuafoster1/teamProj/static/"
+STATIC_ROOT = "/home/joshuafoster1/teamProj/static/"
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 # added elements to settings.py
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'home'
