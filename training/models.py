@@ -68,9 +68,12 @@ class Athlete(models.Model):
             return False
 
     def get_most_recent_metric_test(self):
-        test = Session.objects.filter(athlete=self).latest('metric_tests__session__sessionDate')
-        return test
+        try:
+            test = Session.objects.filter(athlete=self).latest('metric_tests__session__sessionDate')
 
+            return test
+        except:
+            return None
     def get_ape_index(self):
         if self.ape_index:
             return self.ape_index

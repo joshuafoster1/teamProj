@@ -85,7 +85,7 @@ class MaxConditioningForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(MaxConditioningForm, self).__init__(*args, **kwargs)
-        self.fields['exercise'].queryset =RefExercise.objects.filter(category__id=7)
+        self.fields['exercise'].queryset =RefExercise.objects.filter(category__category='Max Conditioning')
 
 class CoachMaxConditioningForm(MaxConditioningForm):
     Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
@@ -98,7 +98,7 @@ class Top3SendsForm(forms.ModelForm):
     class Meta:
         model = Top3Sends
         fields = ['first', 'second', 'third']
-        
+
 
 class CoachTop3SendsForm(Top3SendsForm):
     Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())

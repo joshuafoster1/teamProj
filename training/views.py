@@ -27,6 +27,7 @@ def is_coach(user):
 # home page link to schedule, usaclimbing, show events
 @login_required
 def home(request):
+    print(quote_num)
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
     print(athlete.get_most_recent_metric_test())
