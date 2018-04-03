@@ -8,27 +8,13 @@ var activity = ['Ready', 'Easy', 'Medium', 'Hard', 'Rest', 'Medium', 'Hard', 'Ea
 var routine = [['Ready', 3], ['Easy',25],['Medium',20], ['Hard',15]]
 
 
-
-function timerEvent(time, activity, initial = true){
+// rewite to take [{activity:***, time:***},{activity:***, time:***}]
+function timerEvent(timer_intervals, initial = true){
+    var interval = timer_intervals.shift()
     var timer = new Timer();
-    var currentTime = time.shift()
-    var currentActivity = activity.shift()
+    var currentTime = interval["time"]
+    var currentActivity = interval["activity"]
     var utterance = new SpeechSynthesisUtterance(currentActivity);
-
-    $(timer.start({countdown: true, startValues: {seconds: currentTime}
-    }));
-
-
-    // if (initial == true){
-    //   timer.pause();
-    // };
-
-
-    window.speechSynthesis.speak(utterance);
-
-    $('#timer .current').html(currentActivity + ' ' + currentTime.toString()+' ' + 'seconds');
-    $('#timer .next').html(activity[0] + ' ' + time[0].toString() + ' ' + 'seconds');
-
 
     $('#timer .startButton').click(function () {
         timer.start();
@@ -38,19 +24,36 @@ function timerEvent(time, activity, initial = true){
         timer.pause();
     });
 
+
+
+
+    window.speechSynthesis.speak(utterance);
+    $('#timer .current').html(currentActivity + ' ' + currentTime.toString()+' ' + 'seconds');
+    if (timer_intervals[0]){
+      $('#timer .next').html(timer_intervals[0]["activity"] + ' ' + timer_intervals[0]["time"].toString() + ' ' + 'seconds');
+    }
+    else {
+      $('#timer .next').html("Finished");
+    }
+
+
     timer.addEventListener('secondsUpdated', function (e) {
         $('#timer .values').html(timer.getTimeValues().toString());
     });
 
     timer.addEventListener('targetAchieved', function (e) {
-        console.log(time.length)
-        if(time.length > 0){
-        timerEvent(time, activity, false);
+        if(timer_intervals.length > 0){
+        timerEvent(timer_intervals, false);
 
         }
     });
 
+    $(timer.start({countdown: true, startValues: {seconds: currentTime}
+    }));
 
+    // if (initial == true){
+    //   timer.pause();
+    // };
 };
 
 

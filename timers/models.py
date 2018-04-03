@@ -20,6 +20,7 @@ class Timer(models.Model):
     def get_timer(self):
         intervals = Interval.objects.values('activity', 'time').filter(timer=self).order_by('order')
         json_intervals = json.dumps(list(intervals), cls=DjangoJSONEncoder)
+        print(json_intervals)
         return json_intervals
 
 class Interval(models.Model):
