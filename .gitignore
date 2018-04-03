@@ -3,6 +3,7 @@
 __pycache__
 WebDev
 db.sqlite3
+teamProj.db
 .DS_Store
 .env
 DataCSV

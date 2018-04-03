@@ -301,6 +301,7 @@ def coach_weighted_hangs(request):
 def max_conditioning(request):
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
+    print(DATE, athlete)
     theForm = request.session.get('theForm', [MaxConditioningForm, Top3SendsForm, MaxConditioningForm])
     newForm = theForm.pop()
     request.session.modified = True
