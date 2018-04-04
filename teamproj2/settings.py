@@ -128,11 +128,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 ### For production on Python anywhere
-STATIC_ROOT = "/home/joshuafoster1/teamProj/static/"
+# STATIC_ROOT = "/home/joshuafoster1/teamProj/static/"
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static')
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 # added elements to settings.py
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'home'

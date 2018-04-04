@@ -63,6 +63,13 @@ class RefFingerTrainingAdmin(ImportExportModelAdmin):
 class RefConditioningAdmin(ImportExportModelAdmin):
     pass
 
+@admin.register(Form)
+class FormAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(BoulderingRoutineMetrics)
+class BoulderingRoutineMetricsAdmin(ImportExportModelAdmin):
+    pass
 @admin.register(Calendar)
 class CalendarAdmin(ImportExportModelAdmin):
     pass

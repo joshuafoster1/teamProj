@@ -135,5 +135,21 @@ class Test(models.Model):
     metric = models.ForeignKey(Metric)
     parameter = models.ManyToManyField(IntParameter, through='TestIntParameter') #for each, we want draw and ac_dc
     booleanparameter = models.ManyToManyField(BooleanParameter, through='TestBooleanParameter')
+class MetricTest(model):
+    name
+    description
+
+class MetricData(model):
+    test = ForeignKey(MetricTest)
+    session
+    wieght
+    time
+class MetricData(model):
+    test = ForeignKey(MetricTest)
+    session
+    wieght
+    time
+    RUNG
+    feet_on
 
 '''

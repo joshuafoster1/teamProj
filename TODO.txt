@@ -2,16 +2,9 @@ teamproj2 notes
 
 todo:
 Database model
-  -add fields to exercise model
-     -numbering to order the exercises
-     -number of reps required to move up
-     -add getter to conditioning model to retrieve the last exercise.
-
+  -clean up database information through the google sheet and csv files
 Forms
-  -conditioning form
-     - initialize athlete conditioning form with last exercise input from user.
-  -ccform
-     - finish the form ordering/put the athlete field first
+  -explore subclassing forms to simplify database tables
 
 url
   -createathlete url. decide if this is a page I want to create and utilize.
@@ -19,20 +12,16 @@ url
   -when a new user is created, automatically link them to an athlete instance.
 
 signup/authentication
-  -finish cleaning up the template to implement the background and go back to change the
-   font and add it to the css. (styling from tutorial)
+
 
 Git
-  -create live project
-  -create development branch
+
 
 Additional features
- -Athlete information page
-   -format page to display athlete information
-   -create update form to allow athlete to change information
- -Add competition calendar
- -Add events calendar
- -add pinch block functionality
+ -add routines, technique, warmup
+   relate routines to practice and relate timer to routines
+     practice has a routine, a routine has a description, a form and a timer
+
  -add goals functionality
  -add a climbing video feed/links to videos
  -add techique learning page
@@ -51,10 +40,7 @@ LAUNCH TODO:
         -conditioning page
 
     Conditioning page
-       presents most recent sets of conditioning.
-       link to:
-         -new conditioning
-
+       
 Things to add:
   pinch block page
     present amount of weight needed for workout.

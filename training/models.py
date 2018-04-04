@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, timedelta
-
+from timers.models import Timer
 # Create your models here.
 DATE = date.today()
 ROUTE_GRADES = (
@@ -277,14 +277,27 @@ class Calendar(models.Model):
         else:
             return False
 
-
+class Form(models.Model):
+    name = models.CharField(max_length=30)
+    
 class RefRoutine(models.Model):
     routine = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
-
+    timer = models.ForeignKey(Timer, related_name='routines')
+    form = models.ForeignKey(Form, related_name='routines')
     def __str__(self):
         return self.routine
 
+class BoulderingRoutineMetrics(models.Model):
+    """
+    metrics that apply to all bouldering routines? average points, total points,...
+    """
+    session = models.ForeignKey(Session, related_name='boulder_metrics')
+    routine = models.ForeignKey(RefRoutine, related_name='boulder_metrics')
+    total_points = models.IntegerField()
+    total_climbs = models.IntegerField()
+    max = models.IntegerField(choices=V_GRADES)
+    min = models.IntegerField(choices=V_GRADES)
 
 class RefConditioning(models.Model):
     conditioning = models.CharField(max_length=100)
@@ -296,7 +309,7 @@ class RefConditioning(models.Model):
 class RefFingerTraining(models.Model):
     finger_training = models.CharField(max_length=100)
     description = models.CharField(max_length=150, blank=True)
-
+    timer = models.ForeignKey(Timer, related_name='finger_training')
     def __str__(self):
         return self.finger_training
 
