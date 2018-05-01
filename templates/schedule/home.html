@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">{{ date }}</li>
+<li class="breadcrumb-item active">{{athlete.user.username}}</li>
+{% endblock %}
+
+{% block content %}
+{% for session in sessions %}
+<a href='{% url 'practice' session.id %}' class='btn btn-primary'>{{session.date}}</a>
+{% endfor %}
+{% endblock %}

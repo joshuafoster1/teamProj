@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">{{ date }}</li>
+<li class="breadcrumb-item active">{{athlete.user.username}}</li>
+{% endblock %}
+
+{% block content %}
+<div class="">
+  <h3>{{section}}</h3>
+  <p>{{description}}</p>
+</div>
+
+
+<div class="">
+  {% include 'includes/timer.html' %}
+</div>
+<div class="">
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+
+    <button type="submit" class="btn btn-success">Submit</button>
+    <a class="btn btn-success" href="{% url 'practice_home' %}">Finished</a>
+  </form>
+
+</div>
+{% endblock %}

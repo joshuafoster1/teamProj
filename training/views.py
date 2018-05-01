@@ -27,10 +27,8 @@ def is_coach(user):
 # home page link to schedule, usaclimbing, show events
 @login_required
 def home(request):
-    print(quote_num)
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
-    print(athlete.get_most_recent_metric_test())
     calendar_objs = Calendar.objects.all()
     # populate upcoming events
     calendar = []
@@ -302,7 +300,6 @@ def coach_weighted_hangs(request):
 def max_conditioning(request):
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
-    print(DATE, athlete)
     theForm = request.session.get('theForm', [MaxConditioningForm, Top3SendsForm, MaxConditioningForm])
     newForm = theForm.pop()
     request.session.modified = True
@@ -312,7 +309,6 @@ def max_conditioning(request):
             max_conditioning = form.save(commit=False)
             max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
-            print(max_conditioning.session, created, athlete, DATE)
             max_conditioning.save()
             return redirect('max_conditioning')
     else:
@@ -403,6 +399,5 @@ def practice_schedule(request):
 @login_required
 def exercise_description(request, exercise_name):
     quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    print exercise_name
     exercise = get_object_or_404(RefExercise, pk=exercise_name)
     return render(request, 'exercise_description.html', {'exercise': exercise, 'quote': quote})

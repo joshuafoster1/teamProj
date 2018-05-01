@@ -13,7 +13,7 @@ FORM_DICT = {'Finger Power': FingerPowerForm, 'Finger Endurance': FingerEnduranc
     'Lateral Core': LateralCoreForm, 'Sending Ability': CurrentSendForm}
 
 STANDARD_EVAL = ['Sending Ability', 'Pull and Slap', 'Lateral Core', 'Campus Power Endurance',
-                 'Finger Endurance', 'final']
+                 'Finger Endurance']
 
 def get_user(request):
     pk = request.user.pk
@@ -32,7 +32,6 @@ def metric_test(request, metricform):
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             metrictest, created = MetricTest.objects.get_or_create(session=session)
-            print(metrictest)
             metric_test.test = metrictest
             metric_test.save()
             return redirect('athleteMetrics')
@@ -46,7 +45,7 @@ def evaluation(request):
     if request.session.get('standard_eval')== None:
         request.session['standard_eval'] = STANDARD_EVAL
         eval_form = request.session.get('standard_eval')[0]
-    elif len(request.session['standard_eval']) >1:
+    elif len(request.session['standard_eval']) >=1:
         eval_form = request.session.get('standard_eval')[0]
     else:
         request.session['standard_eval'] = None
@@ -60,7 +59,6 @@ def evaluation(request):
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             metrictest, created = MetricTest.objects.get_or_create(session=session)
-            print(metrictest)
             metric_test.test = metrictest
             metric_test.save()
             eval_form = []

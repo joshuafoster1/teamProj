@@ -1,6 +1,6 @@
 from django.forms import inlineformset_factory
 from django import forms
-from .models import Top3Sends, Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs, MaxConditioning, BoulderingRoutineMetrics
+from .models import Top3Sends, Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs, MaxConditioning
 
 
 class AthleteConditioningForm(forms.Form):
@@ -38,7 +38,6 @@ class ConditioningForm(forms.ModelForm):
 
     z = 2
     def __init__(self, *args, **kwargs):
-        print('start')
         categoryInit = kwargs.pop('categoryInit') # the kargs.pop takes the argument from theviews function and passes it into the from here
         super(ConditioningForm, self).__init__(*args, **kwargs)
         x = RefExercise.objects.filter(category=categoryInit)#id=self.z)
@@ -106,8 +105,3 @@ class CoachTop3SendsForm(Top3SendsForm):
     def __init__(self, *args, **kwargs):
         super(CoachTop3SendsForm, self).__init__(*args, **kwargs)
         self.fields.keyOrder = ['Athlete', ]
-
-class BoulderingRoutineMetricsForm(forms.ModelForm):
-    class Meta:
-        model = BoulderingRoutineMetrics
-        fields = '__all__'

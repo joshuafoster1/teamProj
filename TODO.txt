@@ -1,4 +1,16 @@
 teamproj2 notes
+NOTE: NoSleep.js to keep browser from sleeping during the timer.
+      Speech utterance need to be initiated by user action. Need to debug the timer
+          to get the proper functionality working...
+
+Work on session for assigned practice...
+   --allow individuals to move forward and backward through assigned practice and
+     try to translate this logic to the metric testing
+       -need to get numbering system to work to allow movement forward and backward
+        though each section
+      -when moving backward it needs to pull most recent item for that form and update it.
+      -once updated, move forward to next section.
+
 
 todo:
 Database model
@@ -13,6 +25,20 @@ url
 
 signup/authentication
 
+Evaluations
+  - add metric group "Performance"
+
+Conditioning
+  - on coach page, add reference table for goals of each exercise
+  - add summary page for each conditioning activity
+
+Assigned schedule
+  - setup to move forward and backward through the session
+  - have an interactive overview of the session
+
+Implement
+  - Routines, similar to conditioning and hangboard
+  - Setup Summary pages
 
 Git
 
@@ -36,11 +62,20 @@ LAUNCH TODO:
   first launch layout.
   #keep it simple
     -homepage
-       link to:
-        -conditioning page
+
+    -conditioning page
+      -add summary
+
+    - Metrics page
+      -add summary
+
+    - Hangboard page
+      - get the timer working properly
+      -list all timers
+      
 
     Conditioning page
-       
+
 Things to add:
   pinch block page
     present amount of weight needed for workout.

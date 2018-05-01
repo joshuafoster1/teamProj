@@ -9,9 +9,13 @@
 {% endblock %}
 
 {% block content %}
-
-
-<a href='{% url 'timer' 'Punch' %}' class='btn btn-primary'>begin Hangboard Workout</a>
-
-
+{% for timer in timers %}
+<div>
+  <div>
+    <h3>{{timer.name}}</h3>
+      <p>{{timer.description}}</p>
+      <a href='{% url 'timer' timer.name %}' class='btn btn-primary'>Begin Punch</a>
+  </div>
+</div>
+{% endfor %}
 {% endblock %}

@@ -11,8 +11,22 @@ class Hangboard(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=150)
 
+    def __str__(self):
+        return self.name
+
 class Timer(models.Model):
+    CHOICES = (
+        ("climb routine", "climb routine"),
+        ("hangboard", "hangboard"),
+        ("conditioning", "conditioning"),
+        ("climb routine*2", "climb routine*2"),
+        ("hangboard*2", "hangboard*2"),
+        ("conditioning*2", "conditioning*2"),
+
+    )
     name = models.CharField(max_length=30)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    workout = models.CharField(max_length=20, choices=CHOICES)
 
     def __str__(self):
         return self.name
@@ -20,7 +34,6 @@ class Timer(models.Model):
     def get_timer(self):
         intervals = Interval.objects.values('activity', 'time').filter(timer=self).order_by('order')
         json_intervals = json.dumps(list(intervals), cls=DjangoJSONEncoder)
-        print(json_intervals)
         return json_intervals
 
 class Interval(models.Model):

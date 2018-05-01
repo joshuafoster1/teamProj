@@ -11,5 +11,5 @@ def timer(request, timer):
 
     return render(request, 'timers/timer_page.html', {'timer':mark_safe(live_timer.get_timer())})
 def timer_home(request):
-
-    return render(request, 'timers/timer_home.html')
+    timers = Timer.objects.filter(workout='hangboard')
+    return render(request, 'timers/timer_home.html', {'timers': timers})

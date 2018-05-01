@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django import forms
 from django.contrib import admin
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, PinchBlocks, WeightedHangs, Calendar, Practice, AssignedPractice
 from import_export.admin import ImportExportModelAdmin
@@ -53,7 +52,7 @@ class RefTechniqueDrillAdmin(ImportExportModelAdmin):
 
 @admin.register(RefTechnique)
 class RefTechniqueAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ['technique']
 
 @admin.register(RefFingerTraining)
 class RefFingerTrainingAdmin(ImportExportModelAdmin):
@@ -63,24 +62,36 @@ class RefFingerTrainingAdmin(ImportExportModelAdmin):
 class RefConditioningAdmin(ImportExportModelAdmin):
     pass
 
-@admin.register(Form)
-class FormAdmin(ImportExportModelAdmin):
-    pass
 
-@admin.register(BoulderingRoutineMetrics)
-class BoulderingRoutineMetricsAdmin(ImportExportModelAdmin):
-    pass
 @admin.register(Calendar)
 class CalendarAdmin(ImportExportModelAdmin):
-    pass
+    list_display = ['event_date', 'event_location', 'event_title', 'event_format']
+
+@admin.register(PinchBlocks)
+class PinchBlocksAdmin(ImportExportModelAdmin):
+    list_display = ['session', 'pinch', 'weight', 'seconds']
+    list_filter = ['session', 'pinch']
+
+@admin.register(WeightedHangs)
+class WeightedHangsAdmin(ImportExportModelAdmin):
+    list_display = ['session', 'hang', 'weight', 'seconds']
+    list_filter = ['session__athlete', 'hang']
+
+@admin.register(MaxConditioning)
+class MaxConditioningAdmin(ImportExportModelAdmin):
+    list_display = ['session', 'exercise', 'repetitions']
+    list_filter = ['session__athlete', 'exercise']
+
+
+
 
 # admin.site.register(Athlete, AthleteTable)
 # admin.site.register(Session, SessionAdmin)
 # admin.site.register(Conditioning, ConditioningAdmin)
 # admin.site.register(RefCategory)
 # admin.site.register(RefExercise)
-admin.site.register(PinchBlocks)
-admin.site.register(WeightedHangs)
+# admin.site.register(PinchBlocks)
+# admin.site.register(WeightedHangs)
 # admin.site.register(Calendar)
 # admin.site.register(Practice)
 # admin.site.register(AssignedPractice)
@@ -90,4 +101,4 @@ admin.site.register(WeightedHangs)
 admin.site.register(RefWarmup)
 # admin.site.register(RefFingerTraining)
 admin.site.register(RefRoutine)
-admin.site.register(MaxConditioning)
+# admin.site.register(MaxConditioning)
