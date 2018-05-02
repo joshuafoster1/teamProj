@@ -9,3 +9,8 @@ class RopeRoutineMetricsForm(forms.ModelForm):
     class Meta:
         model = BoulderingRoutineMetrics
         fields = ['total_climbs', 'max', 'min']
+
+class HangboardMetrics(forms.ModelForm):
+    class Meta:
+        model = HangboardMetrics
+        fields = ['complete']

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Training</li>
+<li class="breadcrumb-item active">{{protocol_type}}</li>
+{% endblock %}
+
+{% block content %}
+
+{% for protocol in protocols %}
+<a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
+<p>{{protocol.description}}</p>
+{% endfor %}
+{% endblock %}

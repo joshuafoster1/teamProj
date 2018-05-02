@@ -51,7 +51,10 @@
                     </a>
                     <div class='dropdown-menu dropdown-menu-right' aria-labelledby="userMenu">
                       <a class="dropdown-item" href="{% url 'athletePage' %}">Conditioning</a>
-                      <a class="dropdown-item" href="{% url 'timer_home' %}">Hangboard</a>
+                      <!-- <a class="dropdown-item" href="{% url 'timer_home' %}">Hangboard</a> -->
+                      <a class="dropdown-item" href="{% url 'protocol_display' 'Hangboard' %}">Hangboard</a>
+                      <a class="dropdown-item" href="{% url 'protocol_display' 'Boulder Routine' %}">Boulder Routines</a>
+                      <a class="dropdown-item" href="{% url 'protocol_display' 'Rope Routine' %}">Rope Routines</a>
                     </div>
                   </li>
 

@@ -21,14 +21,19 @@ class RopeRoutineMetricsAdmin(ImportExportModelAdmin):
 class PracticeSectionAdmin(ImportExportModelAdmin):
     pass
 
-@admin.register(RefSection)
-class RefSectionAdmin(ImportExportModelAdmin):
-    list_display = ['type', 'name']
+@admin.register(Protocol)
+class ProtocolAdmin(ImportExportModelAdmin):
+    list_display = ['routine_type', 'name', 'goal']
+    list_filter = ['routine_type', 'intensity__metabolic_focus']
 
-@admin.register(RefSectionType)
-class RefSectionTypeAdmin(ImportExportModelAdmin):
+@admin.register(RoutineType)
+class RoutineTypeAdmin(ImportExportModelAdmin):
     list_display = ['name']
 
 @admin.register(AssignedPractice)
 class AssignedPracticeAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(RefIntensity)
+class RefIntensityAdmin(ImportExportModelAdmin):
     pass
