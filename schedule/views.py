@@ -5,30 +5,66 @@ from django.shortcuts import render, redirect
 from .models import *
 from timers.models import Timer
 from django.utils.safestring import mark_safe
-from .forms import *# Create your views here.
+from .forms import *
+from django.contrib.auth.decorators import login_required, user_passes_test
+
+
+
+# Create your views here.
 
 forms ={'BoulderingRoutineMetrics': BoulderingRoutineMetricsForm, 'RopeRoutineMetrics': RopeRoutineMetricsForm,
-        'HangboardMetrics':HangboardMetrics}
+        'HangboardMetrics':HangboardMetrics, 'RouteRedpointFormset':RouteRedpointFormset, 'BoulderRedpointFormset': BoulderRedpointFormset,
+        'BoulderingFormset':BoulderingFormset, 'Top3RopeSendsForm': Top3RopeSendsForm, 'Top3BoulderSendsForm':Top3RopeSendsForm}
+
 def protocol_home(request, protocol_type):
     """
     Display either conditioning, hangboard, routine or other type of workouts
     """
-    protocols = Protocol.objects.values('name', 'description').filter(routine_type__name = protocol_type)
+    power_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity= "Power", routine_type__name = protocol_type)
+    power_endurance_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity = "Power Endurance", routine_type__name = protocol_type)
+    endurance_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity = "Endurance", routine_type__name = protocol_type)
     print(protocol_type)
-    return render(request, 'schedule/protocol_display.html', {'protocols': protocols, 'protocol_type': protocol_type})
+    return render(request, 'schedule/protocol_display.html', {'power_protocols': power_protocols,'power_endurance_protocols': power_endurance_protocols,'endurance_protocols': endurance_protocols, 'protocol_type': protocol_type})
 
+@login_required
 def protocol(request, protocol):
     athlete = get_user(request)
     protocol_object = Protocol.objects.get(name=protocol)
-    form = protocol_object.form.get_form(forms)()
-    print(form)
+    formset = protocol_object.form.formset
+    print(formset)
+    if request.method == "POST":
+        print("POST")
+        form = protocol_object.form.get_form(forms)(request.POST)
+        if formset:
+            if form.is_valid():
+                for set in form:
+                    protocol_data = set.save(commit=False)
+                    protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                        athlete=athlete)
+                    protocol_data.routine = protocol_object
+                    protocol_data.save()
+                    return redirect('home')
+
+        elif form.is_valid():
+            print("VALID")
+            protocol_data = form.save(commit=False)
+            protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            protocol_data.routine = protocol_object
+            protocol_data.save()
+            return redirect('home')
+    else:
+        if formset:
+            form = protocol_object.form.get_form(forms)()#queryset = BoulderingRoutineMetrics.objects.none())
+        else:
+            form = protocol_object.form.get_form(forms)()
     timer = protocol_object.timer
     description = protocol_object.description
     if timer:
-        return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
-            'timer':mark_safe(timer.get_timer()), 'section':protocol_object})
-    else:
-        return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
+        return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
+                'timer':mark_safe(timer.get_timer()), 'section':protocol_object})
+
+    return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'description': description,
              'section':protocol_object})
 
 

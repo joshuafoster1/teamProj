@@ -11,18 +11,25 @@
   <p>{{description}}</p>
 </div>
 
-
+{% if timer %}
 <div class="">
   {% include 'includes/timer.html' %}
 </div>
+{% endif %}
 <div class="">
   <form method="post" novalidate>
     {% csrf_token %}
-    {% include 'includes/form.html' %}
+
+    {% if formset %}
+        {% include 'includes/formset.html' %}
+    {% else %}
+        {% include 'includes/form.html' %}
+    {% endif %}
 
     <button type="submit" class="btn btn-success">Submit</button>
-    <a class="btn btn-success" href="{% url 'practice_home' %}">Finished</a>
+    <a class="btn btn-success" href="{% url 'home' %}">Finished</a>
   </form>
+
 
 </div>
 {% endblock %}

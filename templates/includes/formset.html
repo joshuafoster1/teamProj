@@ -1,0 +1,50 @@
+{% load widget_tweaks %}
+{{ form.management_form }}
+<div class="table-container table-responsive">
+<table class="table">
+  <thead>
+
+
+{% for a_form in form%}
+
+{% if a_form.non_field_errors %}
+  <div class="alert alert-danger" role="alert">
+    {% for error in a_form.non_field_errors %}
+      <p>{% if forloop.last %} class="mb-0"{% endif %}{{ error }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+<tr>
+  <td> <h4>Set</h4> </td>
+{% for field in a_form %}
+<td>
+<div class="form-group">
+  {{ field.label_tag }}
+
+    {% if a_form.is_bound %}
+      {% if field.errors %}
+        {% render_field field class="form-control is-invalid" %}
+        {% for error in field.errors %}
+          <div class="invalid-feedback">
+            {{ error }}
+          </div>
+        {% endfor %}
+      {% else %}
+        {% render_field field class="form-control is-valid" %}
+      {% endif %}
+    {% else %}
+      {% render_field field class="form-control" %}
+    {% endif %}
+
+    {% if field.help_text %}
+      <small class="form-text text-muted">
+        {{ field.help_text|safe }}
+      </small>
+    {% endif %}
+  </div>
+</td>
+{% endfor %}
+</tr>
+{% endfor%}
+</table>
+</div>

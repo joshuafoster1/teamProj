@@ -13,7 +13,7 @@ class TrainingPlan(models.Model):
     end = models.DateField(blank=True, null=True)
 
     # def create_training_plan(self):
-    #     if Metrics.objects.filter(athlete = self.athlete, date__gt=date-2weeks).exists():
+    #     if self.athlete.eval_date > two weeks old
 
 class AssignedPractice(models.Model):
     complete = models.DateField(blank=True, null = True)
@@ -28,6 +28,7 @@ class Form(models.Model):
     """Form objects must match the metric form class"""
     name = models.CharField(max_length=30)
     instance = models.CharField(null=True, blank=True, max_length=40)
+    formset = models.BooleanField()
     def __str__(self):
         return self.name
 
@@ -43,8 +44,11 @@ class RefIntensity(models.Model):
     Project = 1 above Redpoint, Redpoint = Hardest grade sent, Onsight = hardest send first try >%60,
     1 below Onsight, 2 below Onsight
     """
-    hi = models.CharField(max_length=30)
-    metabolic_focus = models.CharField(max_length=30)
+    # level = models.CharField(max_length=30) # Project, Redpoint, Onsight, 1 below, 2 below
+    intensity = models.CharField(max_length=30) # Power, power endurance, endurance
+
+    def __str__(self):
+        return self.intensity
 
 class RoutineType(models.Model):
     name = models.CharField(max_length=30)
@@ -101,4 +105,37 @@ class RopeRoutineMetrics(models.Model):
 class HangboardMetrics(Metrics):
     complete = models.BooleanField()
 
-# class WeightedMetrics
+class RouteProjectMetrics(Metrics):
+    name = models.CharField(max_length=30)
+    grade =  models.IntegerField(choices=ROUTE_GRADES)
+    hangs = models.IntegerField()
+    top = models.BooleanField()
+    sent = models.BooleanField()
+
+class BoulderProjectMetrics(Metrics):
+    name = models.CharField(max_length=30)
+    grade =  models.IntegerField(choices=V_GRADES)
+    number_of_moves = models.IntegerField()
+    moves_completed = models.IntegerField()
+    sent = models.BooleanField()
+
+class Top3BoulderSends(Metrics):
+    send_1 =  models.IntegerField(choices=V_GRADES)
+    send_2 =  models.IntegerField(choices=V_GRADES)
+    send_3 =  models.IntegerField(choices=V_GRADES)
+
+class Top3RopeSends(Metrics):
+    send_1 =  models.IntegerField(choices=ROUTE_GRADES)
+    send_2 =  models.IntegerField(choices=ROUTE_GRADES)
+    send_3 =  models.IntegerField(choices=ROUTE_GRADES)
+
+class Completion(Metrics):
+    complete = models.BooleanField()
+
+class BoulderRedpoint(Metrics):
+    grade = models.IntegerField(choices=V_GRADES)
+    sent = models.BooleanField()
+
+class RouteRedpoint(Metrics):
+    grade = models.IntegerField(choices=ROUTE_GRADES)
+    sent = models.BooleanField()

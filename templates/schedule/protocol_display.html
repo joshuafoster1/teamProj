@@ -7,8 +7,49 @@
 
 {% block content %}
 
-{% for protocol in protocols %}
-<a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
-<p>{{protocol.description}}</p>
-{% endfor %}
+<div class="container-fliud">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Power Routines!</h3>
+          {% for protocol in power_protocols %}
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
+          <p>{{protocol.description}}</p>
+          {% endfor %}
+
+
+       </div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Power Endurance Routines!</h3>
+          {% for protocol in power_endurance_protocols %}
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
+          <p>{{protocol.description}}</p>
+          {% endfor %}
+
+
+       </div>
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Endurance Routines!</h3>
+          {% for protocol in endurance_protocols %}
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
+          <p>{{protocol.description}}</p>
+          {% endfor %}
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

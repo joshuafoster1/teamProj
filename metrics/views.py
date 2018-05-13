@@ -37,7 +37,7 @@ def metric_test(request, metricform):
             return redirect('athleteMetrics')
     else:
         form = FORM_DICT[metricform]()
-        metric_description = MetricDescription.objects.get(metric=metricform)
+    metric_description = MetricDescription.objects.get(metric=metricform)
 
     return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric_description})
 def evaluation(request):

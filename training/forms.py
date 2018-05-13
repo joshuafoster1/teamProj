@@ -58,7 +58,7 @@ class FullPinchBlockForm(PinchBlockForm):
 
     def __init__(self, *args, **kwargs):
         super(FullPinchBlockForm, self).__init__(*args, **kwargs)
-        self.fields.keyOrder = ['Athlete', 'pinch', 'seconds', 'weight']
+        self.fields.keyOrder = ['athlete', 'pinch', 'seconds', 'weight']
 
 class WeightedHangsForm(forms.ModelForm):
     class Meta:

@@ -24,7 +24,7 @@ class PracticeSectionAdmin(ImportExportModelAdmin):
 @admin.register(Protocol)
 class ProtocolAdmin(ImportExportModelAdmin):
     list_display = ['routine_type', 'name', 'goal']
-    list_filter = ['routine_type', 'intensity__metabolic_focus']
+    list_filter = ['routine_type', 'intensity__intensity']
 
 @admin.register(RoutineType)
 class RoutineTypeAdmin(ImportExportModelAdmin):
