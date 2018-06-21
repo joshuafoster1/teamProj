@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^timer/', include('timers.urls')),
     url(r'^metrics/', include('metrics.urls')),
     url(r'^schedule/', include('schedule.urls')),
+    url(r'^chart/', include('charts.urls')),
 
     url(r'^admin/', admin.site.urls),
     url(r'^AthletePage/$', views.athletePage, name='athletePage'),

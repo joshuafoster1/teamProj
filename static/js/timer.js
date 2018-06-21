@@ -5,8 +5,8 @@
 function timerEvent(timer_intervals, initial = true){
   if (initial == true){
     var timer = new Timer();
-    var currentTime = 4
-    var currentActivity = 'Start in'
+    var currentTime = 1
+    var currentActivity = ''
     var utterance = new SpeechSynthesisUtterance(currentActivity);
   } else{
 
@@ -28,9 +28,9 @@ function timerEvent(timer_intervals, initial = true){
     $(timer.start({countdown: true, startValues: {seconds: currentTime}
     }));
 
-    // if (initial == true){
-    //   timer.pause();
-    // };
+    $(if (initial == true){
+      timer.pause();
+    });
 
     window.speechSynthesis.speak(utterance);
     $('#timer .current').html(currentActivity + ' ' + currentTime.toString()+' ' + 'seconds');

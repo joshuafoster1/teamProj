@@ -4,6 +4,7 @@ from .models import Top3Sends, Conditioning, RefExercise, Athlete, PinchBlocks, 
 
 
 class AthleteConditioningForm(forms.Form):
+    Set = forms.IntegerField(min_value=1, max_value=3)
     Pulls = forms.ModelChoiceField(queryset=RefExercise.objects.filter(category__id=1))
     Pull_Reps = forms.IntegerField(min_value=1, max_value=12)
     Core = forms.ModelChoiceField(queryset=None)
@@ -12,7 +13,6 @@ class AthleteConditioningForm(forms.Form):
     Push_Reps = forms.IntegerField(min_value=1, max_value=12)
     Triceps = forms.ModelChoiceField(queryset=None)
     Tricep_Reps = forms.IntegerField(min_value=1, max_value=12)
-    Set = forms.IntegerField(min_value=1, max_value=3)
 
     def __init__(self, *args, **kwargs):
         super(AthleteConditioningForm, self).__init__(*args, **kwargs)

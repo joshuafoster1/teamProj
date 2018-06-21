@@ -43,6 +43,8 @@ V_GRADES = (
         (10, 'V10'),
         (11, 'V11')
 )
+
+
 class Athlete(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birthdate = models.DateField(null=True, blank=True)

@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'import_export',
+    'django_pandas',
+    'pandas_highcharts',
+
 ]
 
 MIDDLEWARE = [

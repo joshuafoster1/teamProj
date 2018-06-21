@@ -4,6 +4,9 @@
         {% endblock %}
 
       {% block content %}
+      <a href="{% url 'protocol_summary' %}">Test</a>
+      <a href="{% url 'json_example' %}">Test2</a>
+
       {% if athlete.needs_eval %}
       <div class='mb-4'>
         <div class="jumbotron jumbotron-fluid text-center">
@@ -14,13 +17,12 @@
         </div>
       </div>
       {% endif %}
-      <h4>Welcome to the Sacramento Pipeworks Competitive Team page.</h4>
+      <h4>Welcome to the competitive edge!</h4>
 <div class="my-4">
-<p>This pAGe iS a work in pROGRess...</p>
+<p>It's time to put the work in!</p>
   <a href="http://www.usaclimbing.org/Disciplines/Bouldering/2017-2018_Season_Schedule___Results.htm" target="_blank">
     USAClimbing Schedule
   </a>
-
 <div class="container">
 <table class="table">
   <thead>Team Event Calendar</thead>

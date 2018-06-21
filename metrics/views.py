@@ -40,6 +40,8 @@ def metric_test(request, metricform):
     metric_description = MetricDescription.objects.get(metric=metricform)
 
     return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric_description})
+
+
 def evaluation(request):
     athlete = get_user(request)
     if request.session.get('standard_eval')== None:
@@ -70,6 +72,7 @@ def evaluation(request):
         metric_description = MetricDescription.objects.get(metric=eval_form)
 
     return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric_description})
+
 
 def eval_summary(request):
     athlete = get_user(request)
