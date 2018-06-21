@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'import_export',
+    'challenge',
+    'django_tables2',
 ]
 
 MIDDLEWARE = [
