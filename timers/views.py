@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.utils.safestring import mark_safe
 
 from django.shortcuts import render, get_object_or_404, redirect
-from models import Hangboard, Timer, Interval
+from .models import Hangboard, Timer, Interval
 import json
 # Create your views here.
 def timer(request, timer):

@@ -8,11 +8,15 @@ from .models import *
 from .tables import *
 # Create your views here.
 def categories(request):
-    categories = Category.objects.all()
+    athlete = Athlete.objects.get(user = request.user)
 
+    categories = Category.objects.all()
+    athChall = AthleteChallenge.objects.values('challenge__category__name').filter(athlete = athlete).annotate(num=models.Count('challenge'))
+    table = CategoryCountTable(athChall)
+    RequestConfig(request).configure(table)
     return render(request,
         'challenge/categories.html',
-        {'categories':categories})
+        {'categories':categories, 'table':table})
 
 
 def home(request):
@@ -25,8 +29,10 @@ def home(request):
 
 
 def list(request, category):
+    athlete = Athlete.objects.get(user = request.user)
+
     challenges = Challenge.objects.filter(category__name=category)
-    athChall = AthleteChallenge.objects.filter(challenge__category__name = category)
+    athChall = AthleteChallenge.objects.filter(challenge__category__name = category, athlete=athlete)
     table = ChallengeCategoryTable(athChall)
     RequestConfig(request).configure(table)
 
