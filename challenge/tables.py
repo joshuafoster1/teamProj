@@ -10,3 +10,8 @@ class ChallengeCategoryTable(tables.Table):
         model = AthleteChallenge
         template_name = 'django_tables2/bootstrap-responsive.html'
         fields = ['challenge', 'date']
+class CategoryCountTable(tables.Table):
+    challenge__category__name = tables.Column()
+    num = tables.Column()
+    class Meta:
+        template_name = 'django_tables2/bootstrap-responsive.html'
