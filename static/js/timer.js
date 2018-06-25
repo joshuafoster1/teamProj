@@ -3,19 +3,13 @@
 
 // rewite to take [{activity:***, time:***},{activity:***, time:***}]
 function timerEvent(timer_intervals, initial = true){
-  if (initial == true){
-    var timer = new Timer();
-    var currentTime = 1
-    var currentActivity = ''
-    var utterance = new SpeechSynthesisUtterance(currentActivity);
-  } else{
+
 
     var interval = timer_intervals.shift();
     var timer = new Timer();
     var currentTime = interval["time"];
     var currentActivity = interval["activity"];
     var utterance = new SpeechSynthesisUtterance(currentActivity);
-  }
 
     $('#timer .startButton').click(function () {
         timer.start();
@@ -24,18 +18,19 @@ function timerEvent(timer_intervals, initial = true){
     $('#timer .pauseButton').click(function () {
         timer.pause();
     });
-
     $(timer.start({countdown: true, startValues: {seconds: currentTime}
     }));
 
-    $(if (initial == true){
+    if (initial == true){
       timer.pause();
-    });
+    };
+
 
     window.speechSynthesis.speak(utterance);
-    $('#timer .current').html(currentActivity + ' ' + currentTime.toString()+' ' + 'seconds');
+    $('#timer .current').html(currentActivity);
+
     if (timer_intervals[0]){
-      $('#timer .next').html(timer_intervals[0]["activity"] + ' ' + timer_intervals[0]["time"].toString() + ' ' + 'seconds');
+      $('#timer .next').html(timer_intervals[0]["activity"]);
     }
     else {
       $('#timer .next').html("Finished");

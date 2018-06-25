@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load django_tables2 %}
 
 {% block title %} Metrics{% endblock %}
 
@@ -6,32 +7,54 @@
   <li class="breadcrumb-item active">{{date}}</li>
   <li class="breadcrumb-item"><a href="{% url 'athletePage' %}">{{ athlete.user.username }}</a></li>
   <li class="breadcrumb-item">Metrics</li>
+  <li class="breadcrumb-item">{{metricdescription.metric}}</li>
 {% endblock %}
 
 {% block content %}
 <div class="container">
   <div class="row">
+
+    <div class="col-sm-6">
+      <div class = 'row'>
+        <div class="col-sm-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{ metricdescription.metric}}</h3>
+            <h4>Description</h4>
+            <p>{{ metricdescription.description }}</p>
+         </div>
+       </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Records for <br>{{metricdescription.metric}}</h3>
+            {% if table is not None %}
+              {% render_table table %}
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h3 class="card-title">Log Entry</h3>
+          <h3 class="card-title">Log {{metricdescription.metric}} for Today!</h3>
           <form method="post" novalidate>
             {% csrf_token %}
             {% include 'includes/form.html' %}
 
             <button type="submit" class="btn btn-success">Submit</button>
-            <a class="btn btn-success" href="{% url 'athletePage' %}">Finished</a>
+            <a class="btn btn-success" href="{% url 'home' %}">Cancel</a>
 
           </form>
 
-       </div>
-      </div>
-    </div>
-    <div class="col-sm-6">
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">{{ metricdescription.metric}}</h3>
-          <p>{{ metricdescription.description }}</p>
        </div>
       </div>
     </div>
