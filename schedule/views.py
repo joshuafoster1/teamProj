@@ -60,11 +60,13 @@ def protocol(request, protocol):
             form = protocol_object.form.get_form(forms)()
     timer = protocol_object.timer
     description = protocol_object.description
+    goal = protocol_object.goal
     if timer:
         return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
                 'timer':mark_safe(timer.get_timer()), 'section':protocol_object})
 
-    return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'description': description,
+    return render(request, 'schedule/practice.html',
+        {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'goal': goal, 'description': description,
              'section':protocol_object})
 
 
@@ -114,7 +116,8 @@ def practice_form(request, id):
         description = session_attributes['section__description']
         timer = Timer.objects.get(id=session_attributes['section__timer__id'])
         section = session_attributes['section__name']
-    return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
+    return render(request, 'schedule/practice.html',
+        {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
             'timer':mark_safe(timer.get_timer()), 'section':section})
 
 

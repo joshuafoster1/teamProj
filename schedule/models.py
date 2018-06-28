@@ -12,6 +12,8 @@ class TrainingPlan(models.Model):
     start = models.DateField(blank=True, null = True)
     end = models.DateField(blank=True, null=True)
 
+    # general training plan goal ie. power, endurance, improve technique, improve body strength, finger strength
+    ## can use general goal to format training plan
     # def create_training_plan(self):
     #     if self.athlete.eval_date > two weeks old
 
@@ -23,6 +25,11 @@ class AssignedPractice(models.Model):
     def __str__(self):
         return str(self.athlete.user.username) + ' ' + str(self.week)
 
+    def practice_length(self):
+        length = 0
+        sections = PracticeSection.objects.filter(practice = self)
+        length += section.length
+        return length
 
 class Form(models.Model):
     """Form objects must match the metric form class"""
@@ -44,9 +51,20 @@ class RefIntensity(models.Model):
     Project = 1 above Redpoint, Redpoint = Hardest grade sent, Onsight = hardest send first try >%60,
     1 below Onsight, 2 below Onsight
     """
-    # level = models.CharField(max_length=30) # Project, Redpoint, Onsight, 1 below, 2 below
-    intensity = models.CharField(max_length=30) # Power, power endurance, endurance
-
+    CHOICES = (
+        (1, '2 above redpoint'),
+        (2, '1 above redpoint'),
+        (3, 'Redpoint'),
+        (4, 'Between Onsight and Redpoint'),
+        (5, 'Onsight'),
+        (6, '1 below onsight'),
+        (7, '2 below onsight'),
+        (8, 'Warmup'),
+        (9, 'Resting on Wall'),
+        (10, 'Rest')
+    )
+    # intensity = models.IntegerField(choices = CHOICES)
+    intensity = models.CharField(max_length=30) # one above redpoint, redpoint, onsight, one below onsight, 2 below onsight
     def __str__(self):
         return self.intensity
 
@@ -64,6 +82,7 @@ class Protocol(models.Model):
     intensity = models.ForeignKey(RefIntensity, null=True, blank=True, related_name='practice_sections')
     timer = models.ForeignKey(Timer, null=True, blank=True, related_name='practice_sections')
     form = models.ForeignKey(Form, null=True, blank=True, related_name='practice_sections')
+    # length of time to complete?
 
     def __str__(self):
         return self.name
@@ -75,10 +94,6 @@ class PracticeSection(models.Model):
 
     def __str__(self):
         return self.section.name
-
-class IsolatedProtocol(models.Model):
-    protocol = models.ForeignKey(Protocol, related_name='isolated_protocols')
-    session = models.ForeignKey(Session, related_name='isolated_protocols')
 
 class Metrics(models.Model):
     session = models.ForeignKey(Session, related_name='metrics')
