@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from timers.models import Timer
 from training.models import Athlete, Session, V_GRADES, ROUTE_GRADES
 from django.db import models
+from django.apps import apps
 
 class TrainingPlan(models.Model):
     athlete = models.ForeignKey(Athlete, related_name='assigned_practice_sessions')
@@ -36,6 +37,7 @@ class Form(models.Model):
     name = models.CharField(max_length=30)
     instance = models.CharField(null=True, blank=True, max_length=40)
     formset = models.BooleanField()
+
     def __str__(self):
         return self.name
 
@@ -45,6 +47,19 @@ class Form(models.Model):
         '''
 
         return forms[self.name]
+
+    def retrieve_model(self):
+        if self.formset:
+            if self.name == 'BoulderingFormset':
+                model = 'BoulderingRoutineMetrics'
+            elif self.name =='RouteRedpointFormset':
+                model = 'RouteRedpoint'
+            elif self.name == 'BoulderRedpointFormset':
+                model = 'BoulderRedpoint'
+        else:
+            model = self.name
+
+        return apps.get_model('schedule', model)
 
 class RefIntensity(models.Model):
     """

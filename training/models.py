@@ -178,7 +178,7 @@ class Session(models.Model):
 
 
     def __str__(self):
-        return str(self.sessionDate) + str(self.athlete.user.username)
+        return str(self.athlete.user.username) + ' '+str(self.sessionDate) 
 
 
 class RefCategory(models.Model):
@@ -351,12 +351,6 @@ class AssignedPractice(models.Model):
     def __str__(self):
         return str(self.athlete) + " " + str(self.practice.date)
 
-
-class Top3Sends(models.Model):
-    session = models.ForeignKey(Session, related_name='top_3_sends')
-    first = models.IntegerField(choices=V_GRADES)
-    second = models.IntegerField(choices=V_GRADES)
-    third = models.IntegerField(choices=V_GRADES)
 
 class ClimbingQuotes(models.Model):
     author = models.CharField(max_length=30)

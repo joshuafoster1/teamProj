@@ -1,5 +1,8 @@
 from django import forms
 from .models import *
+from django.apps import apps
+
+
 class BoulderingRoutineMetricsForm(forms.ModelForm):
     class Meta:
         model = BoulderingRoutineMetrics

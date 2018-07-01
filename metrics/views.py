@@ -25,8 +25,8 @@ def get_user(request):
     athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
 
-def create_metric_data_table(metric_data, athlete):
-    alt = read_frame(metric_data.retrieve_model().objects.filter(test__session__athlete=athlete).order_by('-test__session__sessionDate')[:5]).drop(['id'], axis=1).rename(columns={'test':'date'}).to_dict('records')
+def create_metric_data_table(metric, athlete):
+    alt = read_frame(metric.retrieve_model().objects.filter(test__session__athlete=athlete).order_by('-test__session__sessionDate')[:5]).drop(['id'], axis=1).rename(columns={'test':'date'}).to_dict('records')
     if len(alt) >= 1:
         table = EvalTable(alt, extra_columns=[(str(key), tables.Column()) for key in alt[0].keys()])
     else:

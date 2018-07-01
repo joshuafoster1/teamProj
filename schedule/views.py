@@ -7,15 +7,31 @@ from timers.models import Timer
 from django.utils.safestring import mark_safe
 from .forms import *
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django_pandas.io import read_frame
 from pandas_highcharts.core import serialize
 from django.http import JsonResponse
+from metrics.tables import EvalTable
+from django_tables2 import RequestConfig, Column
+from django_pandas.io import read_frame
+
+
 # Create your views here.
 
 forms ={'BoulderingRoutineMetrics': BoulderingRoutineMetricsForm, 'RopeRoutineMetrics': RopeRoutineMetricsForm,
         'HangboardMetrics':HangboardMetrics, 'RouteRedpointFormset':RouteRedpointFormset, 'BoulderRedpointFormset': BoulderRedpointFormset,
         'BoulderingFormset':BoulderingFormset, 'Top3RopeSendsForm': Top3RopeSendsForm, 'Top3BoulderSendsForm':Top3RopeSendsForm}
 
+def create_metric_data_table(protocal, athlete, routine):
+    alt = read_frame(protocal.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+            .order_by('-session__sessionDate')[:2]) \
+            .rename(columns={'session':'date'}) \
+            .drop(['id', 'routine'], axis=1).to_dict('records')
+    if len(alt) >= 1:
+        table = EvalTable(alt, extra_columns=[(str(key), Column()) for key in alt[0].keys()])
+    else:
+        table = EvalTable([{'date':DATE}])
+    RequestConfig(table)
+
+    return table
 def protocol_home(request, protocol_type):
     """
     Display either conditioning, hangboard, routine or other type of workouts
@@ -30,6 +46,7 @@ def protocol_home(request, protocol_type):
 def protocol(request, protocol):
     athlete = get_user(request)
     protocol_object = Protocol.objects.get(name=protocol)
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
     formset = protocol_object.form.formset
     print(formset)
     if request.method == "POST":
@@ -38,12 +55,16 @@ def protocol(request, protocol):
         if formset:
             if form.is_valid():
                 for set in form:
+
                     protocol_data = set.save(commit=False)
                     protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
                         athlete=athlete)
                     protocol_data.routine = protocol_object
-                    protocol_data.save()
-                    return redirect('home')
+                    try:
+                        protocol_data.save()
+                    except:
+                        continue
+                return redirect('home')
 
         elif form.is_valid():
             print("VALID")
@@ -63,11 +84,11 @@ def protocol(request, protocol):
     goal = protocol_object.goal
     if timer:
         return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
-                'timer':mark_safe(timer.get_timer()), 'section':protocol_object})
+                'timer':mark_safe(timer.get_timer()), 'section':protocol_object, 'table':table})
 
     return render(request, 'schedule/practice.html',
         {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'goal': goal, 'description': description,
-             'section':protocol_object})
+             'section':protocol_object, "table": table})
 
 
 def practice_home(request):
