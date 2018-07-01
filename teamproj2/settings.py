@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'import_export',
     'django_pandas',
     'pandas_highcharts',
-    'django_tables2'
+    'django_tables2',
+    'challenge',
 
 ]
 
