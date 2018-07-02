@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from timers.models import Timer
+from metrics.models import SendingLevel
 from training.models import Athlete, Session, V_GRADES, ROUTE_GRADES
 from django.db import models
 from django.apps import apps
@@ -13,7 +14,8 @@ class TrainingPlan(models.Model):
     start = models.DateField(blank=True, null = True)
     end = models.DateField(blank=True, null=True)
 
-    # general training plan goal ie. power, endurance, improve technique, improve body strength, finger strength
+    # general training plan goal ie. power, endurance, improve technique,
+     # improve body strength, finger strength
     ## can use general goal to format training plan
     # def create_training_plan(self):
     #     if self.athlete.eval_date > two weeks old
@@ -63,44 +65,68 @@ class Form(models.Model):
 
 class RefIntensity(models.Model):
     """
-    Project = 1 above Redpoint, Redpoint = Hardest grade sent, Onsight = hardest send first try >%60,
-    1 below Onsight, 2 below Onsight
+    Metabolic system
     """
-    CHOICES = (
-        (1, '2 above redpoint'),
-        (2, '1 above redpoint'),
-        (3, 'Redpoint'),
-        (4, 'Between Onsight and Redpoint'),
-        (5, 'Onsight'),
-        (6, '1 below onsight'),
-        (7, '2 below onsight'),
-        (8, 'Warmup'),
-        (9, 'Resting on Wall'),
-        (10, 'Rest')
-    )
-    # intensity = models.IntegerField(choices = CHOICES)
-    intensity = models.CharField(max_length=30) # one above redpoint, redpoint, onsight, one below onsight, 2 below onsight
+
+    intensity = models.CharField(max_length=30)
     def __str__(self):
         return self.intensity
 
 class RoutineType(models.Model):
+    """
+    Boulder, Rope, hangboard, conditioning, warmup, technique
+    """
     name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
 
+class GradeLevel(models.Model):
+    reference = models.CharField(max_length=20)
+    relative_to_onsight = models.IntegerField()
+
+    def __str__(self):
+        return self.reference
+
 class Protocol(models.Model):
-    routine_type = models.ForeignKey(RoutineType, related_name='practice_sections')#warmup, climb routine, technique, hangboard, etc
+    routine_type = models.ForeignKey(RoutineType, related_name='practice_sections')
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=150, blank=True)
     goal = models.CharField(max_length=150, blank = True)
     intensity = models.ForeignKey(RefIntensity, null=True, blank=True, related_name='practice_sections')
     timer = models.ForeignKey(Timer, null=True, blank=True, related_name='practice_sections')
     form = models.ForeignKey(Form, null=True, blank=True, related_name='practice_sections')
+    grade_level = models.ForeignKey(GradeLevel, related_name='practice_sessions')
     # length of time to complete?
 
     def __str__(self):
         return self.name
+
+    def get_grade_level(self, athlete):
+        if SendingLevel.objects.filter(test__session__athlete=athlete).exists():
+            ### Need to pull most recent sending level eval###
+            sendinglevel = SendingLevel.objects.filter(test__session__athlete=athlete)[0]#.latest('test')
+
+            if self.routine_type.name == 'Rope Routine':
+                grade_level = sendinglevel.route_onsight + self.grade_level.relative_to_onsight
+                grades = dict(ROUTE_GRADES)
+
+                if grade_level<= 0:
+                    return grades['0']
+                else:
+                    return grades[grade_level]
+
+            elif self.routine_type.name == 'Boulder Routine':
+                grade_level = sendinglevel.boulder_onsight + self.grade_level.relative_to_onsight
+                grades = dict(V_GRADES)
+
+                if grade_level<= 0:
+                    return grades['0']
+                else:
+                    return grades[grade_level]
+
+        else:
+            return 'Fill out the metric form for Sending Level'
 
 class PracticeSection(models.Model):
     order = models.IntegerField()
@@ -114,6 +140,10 @@ class Metrics(models.Model):
     session = models.ForeignKey(Session, related_name='metrics')
     routine = models.ForeignKey(Protocol, related_name='metrics')
 
+    def __str__(self):
+        return self.routine.name
+
+
 class BoulderingRoutineMetrics(models.Model):
     """
     metrics that apply to all bouldering routines? average points, total points,...
@@ -125,12 +155,20 @@ class BoulderingRoutineMetrics(models.Model):
     max = models.IntegerField(choices=V_GRADES)
     min = models.IntegerField(choices=V_GRADES)
 
+    def __str__(self):
+        return self.routine.name
+
+
 class RopeRoutineMetrics(models.Model):
     session = models.ForeignKey(Session, related_name='route_metrics')
     routine = models.ForeignKey(Protocol, related_name='route_metrics')
     total_climbs = models.IntegerField()
     max = models.IntegerField(choices=ROUTE_GRADES)
     min = models.IntegerField(choices=ROUTE_GRADES)
+
+    def __str__(self):
+        return self.routine.name
+
 
 class HangboardMetrics(Metrics):
     complete = models.BooleanField()

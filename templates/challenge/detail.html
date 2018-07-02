@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Challenge</li>
+<li class="breadcrumb-item active">{{name}}</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fliud">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">{{category}}: {{name}}</h3>
+          <p>{{description}}</p>
+          <a href='{% url 'challenge_complete' name category %}' class='btn btn-primary'>Complete!</a>
+
+
+
+
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

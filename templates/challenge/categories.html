@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Challenge</li>
+<li class="breadcrumb-item active">Summer Challenges</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fliud">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">Summer Challenge Categories</h3>
+          {% for category in categories %}
+          <div class = 'mb-2'>
+          <a href='{% url 'challenge_list' category.name %}' class='btn btn-primary btn-block'>{{category.name}}</a>
+          </div>
+
+          {% endfor %}
+
+                 </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h3 class="card-title">{{category}}</h3>
+                    {% render_table table %}
+
+
+
+                 </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+{% endblock %}

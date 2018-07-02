@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">Challenge</li>
+<li class="breadcrumb-item active">{{category}}</li>
+{% endblock %}
+
+{% block content %}
+<a href='{% url 'challenge_categories' %}' class='mb-4 btn btn-success'>Back to Categories</a>
+
+<div class="container-fliud">
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">{{category}}</h3>
+          {% for challenge in challenges %}
+          <div class = 'mb-2'>
+          <a href='{% url 'challenge_description' challenge.name category %}' class='btn btn-primary btn-block'>{{challenge.name}}</a>
+        </div>
+
+          {% endfor %}
+
+
+       </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">{{category}}</h3>
+          {% render_table table %}
+
+
+
+       </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

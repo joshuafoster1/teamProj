@@ -53,6 +53,16 @@ class BaseBoulderRedpointFormset(forms.BaseModelFormSet):
         super(BaseBoulderRedpointFormset, self).__init__(*args, **kwargs)
         self.queryset = BoulderRedpoint.objects.none()
 
+class BoulderProjectForm(forms.ModelForm):
+    class Meta:
+        model = BoulderProjectMetrics
+        fields = ['name', 'grade', 'number_of_moves', 'moves_completed', 'sent']
+
+class RouteProjectForm(forms.ModelForm):
+    class Meta:
+        model = RouteProjectMetrics
+        fields = ['name', 'grade', 'hangs', 'top', 'sent']
+
 BoulderingFormset = forms.modelformset_factory(BoulderingRoutineMetrics, form = BoulderingRoutineMetricsForm, formset = BaseBoulderingFormset, extra = 6)
 RouteRedpointFormset = forms.modelformset_factory(RouteRedpoint, form = RouteRedpointForm, formset = BaseRouteRedpointFormset, extra = 6)
 BoulderRedpointFormset = forms.modelformset_factory(BoulderRedpoint, form = BoulderRedpointForm, formset = BaseBoulderRedpointFormset, extra = 6)

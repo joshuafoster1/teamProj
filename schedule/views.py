@@ -1,61 +1,78 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from training.views import get_user, DATE
 from django.shortcuts import render, redirect
-from .models import *
-from timers.models import Timer
 from django.utils.safestring import mark_safe
-from .forms import *
 from django.contrib.auth.decorators import login_required, user_passes_test
-from pandas_highcharts.core import serialize
 from django.http import JsonResponse
-from metrics.tables import EvalTable
+
 from django_tables2 import RequestConfig, Column
 from django_pandas.io import read_frame
+from pandas_highcharts.core import serialize
 
+from .models import *
+from .forms import *
+from metrics.tables import EvalTable
+from timers.models import Timer
+from training.views import get_user, DATE
 
 # Create your views here.
 
 forms ={'BoulderingRoutineMetrics': BoulderingRoutineMetricsForm, 'RopeRoutineMetrics': RopeRoutineMetricsForm,
-        'HangboardMetrics':HangboardMetrics, 'RouteRedpointFormset':RouteRedpointFormset, 'BoulderRedpointFormset': BoulderRedpointFormset,
-        'BoulderingFormset':BoulderingFormset, 'Top3RopeSendsForm': Top3RopeSendsForm, 'Top3BoulderSendsForm':Top3RopeSendsForm}
+        'HangboardMetrics':HangboardMetrics, 'RouteRedpointFormset':RouteRedpointFormset,
+        'BoulderRedpointFormset': BoulderRedpointFormset,
+        'BoulderingFormset':BoulderingFormset, 'Top3RopeSends': Top3RopeSendsForm, 'Top3BoulderSends':Top3RopeSendsForm,
+        'BoulderProjectMetrics':BoulderProjectForm, 'RouteProjectMetrics': RouteProjectForm}
 
-def create_metric_data_table(protocal, athlete, routine):
-    alt = read_frame(protocal.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+
+def create_metric_data_table(protocol, athlete, routine):
+    """
+    Dynamically render a table for given protocol
+    """
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
             .order_by('-session__sessionDate')[:2]) \
             .rename(columns={'session':'date'}) \
             .drop(['id', 'routine'], axis=1).to_dict('records')
-    if len(alt) >= 1:
-        table = EvalTable(alt, extra_columns=[(str(key), Column()) for key in alt[0].keys()])
+
+    if len(data) >= 1:
+        table = EvalTable(data, extra_columns=[(str(key), Column()) for key in data[0].keys()])
     else:
         table = EvalTable([{'date':DATE}])
+
     RequestConfig(table)
 
     return table
+
+
 def protocol_home(request, protocol_type):
     """
     Display either conditioning, hangboard, routine or other type of workouts
     """
-    power_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity= "Power", routine_type__name = protocol_type)
-    power_endurance_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity = "Power Endurance", routine_type__name = protocol_type)
-    endurance_protocols = Protocol.objects.values('name', 'description').filter(intensity__intensity = "Endurance", routine_type__name = protocol_type)
-    print(protocol_type)
-    return render(request, 'schedule/protocol_display.html', {'power_protocols': power_protocols,'power_endurance_protocols': power_endurance_protocols,'endurance_protocols': endurance_protocols, 'protocol_type': protocol_type})
+    power_protocols = Protocol.objects.values('name', 'description')\
+        .filter(intensity__intensity= "Power", routine_type__name = protocol_type)
+
+    power_endurance_protocols = Protocol.objects.values('name', 'description')\
+        .filter(intensity__intensity = "Power Endurance", routine_type__name = protocol_type)
+
+    endurance_protocols = Protocol.objects.values('name', 'description')\
+        .filter(intensity__intensity = "Endurance", routine_type__name = protocol_type)
+
+    return render(request, 'schedule/protocol_display.html',
+        {'power_protocols': power_protocols,'power_endurance_protocols': power_endurance_protocols,
+        'endurance_protocols': endurance_protocols, 'protocol_type': protocol_type})
+
 
 @login_required
 def protocol(request, protocol):
     athlete = get_user(request)
     protocol_object = Protocol.objects.get(name=protocol)
-    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
     formset = protocol_object.form.formset
-    print(formset)
+
     if request.method == "POST":
-        print("POST")
         form = protocol_object.form.get_form(forms)(request.POST)
+
         if formset:
             if form.is_valid():
                 for set in form:
-
                     protocol_data = set.save(commit=False)
                     protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
                         athlete=athlete)
@@ -64,61 +81,72 @@ def protocol(request, protocol):
                         protocol_data.save()
                     except:
                         continue
+
                 return redirect('home')
 
         elif form.is_valid():
-            print("VALID")
             protocol_data = form.save(commit=False)
             protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             protocol_data.routine = protocol_object
             protocol_data.save()
+
             return redirect('home')
+
     else:
         if formset:
-            form = protocol_object.form.get_form(forms)()#queryset = BoulderingRoutineMetrics.objects.none())
+            form = protocol_object.form.get_form(forms)()
         else:
             form = protocol_object.form.get_form(forms)()
+
+    grade = protocol_object.get_grade_level(athlete)
     timer = protocol_object.timer
     description = protocol_object.description
     goal = protocol_object.goal
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+
     if timer:
-        return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
-                'timer':mark_safe(timer.get_timer()), 'section':protocol_object, 'table':table})
+        return render(request, 'schedule/practice.html',
+            {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
+                'timer':mark_safe(timer.get_timer()), 'section':protocol_object, 'table':table, 'grade': grade})
 
     return render(request, 'schedule/practice.html',
         {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'goal': goal, 'description': description,
-             'section':protocol_object, "table": table})
+             'section':protocol_object, "table": table, 'grade': grade})
 
 
 def practice_home(request):
     athlete = get_user(request)
     sessions = AssignedPractice.objects.filter(athlete=athlete)[:3]
     test = 1
+
     return render(request, 'schedule/home.html', {'athlete':athlete, 'sessions':sessions, 'date':DATE})
+
 
 def practice_form(request, id):
     """
     need athlete, practice id,
     """
-    # session = PracticeSection.objects.filter(practice__id=id).order_by('order')
-    session_elements = list(PracticeSection.objects.values('section__form__name', 'section__timer__id', 'section__name', 'section__description', 'id').filter(practice__id=id).order_by('order'))
+    session_elements = list(PracticeSection.objects.values('section__form__name',
+            'section__timer__id', 'section__name', 'section__description', 'id')
+            .filter(practice__id=id).order_by('order'))
     athlete = get_user(request)
-    print(request.session.get('practice_session'))
+
     if request.session.get('practice_session')== None:
-        print('reset')
         request.session['practice_session'] = session_elements
         session_attributes = request.session.get('practice_session')[0]
+
     elif len(request.session['practice_session']) >=1:
-        print('set')
         session_attributes= request.session.get('practice_session')[0]
+
     else:
-        print('redirect')
         request.session['practice_session'] = None
+
         return redirect('practice_home')
 
     if request.method == 'POST':
         form = Form.objects.get(name=session_attributes['section__form__name']).get_form(forms)(request.POST)
+
         if form.is_valid():
             practice_section = form.save(commit=False)
             practice_section.session, created = Session.objects.get_or_create(sessionDate=DATE,
@@ -127,28 +155,27 @@ def practice_form(request, id):
             practice_section.save()
             eval_form = []
             request.session['practice_session']= list(request.session['practice_session'][1:])
-            print("form", request.session['practice_session'])
+
             return redirect('practice', '1')
-            # return render(request, 'schedule/practice.html', {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
-            #         'timer':mark_safe(timer.get_timer()), 'section':section})
 
     else:
         form = Form.objects.get(name=session_attributes['section__form__name']).get_form(forms)()
-        description = session_attributes['section__description']
-        timer = Timer.objects.get(id=session_attributes['section__timer__id'])
-        section = session_attributes['section__name']
+    description = session_attributes['section__description']
+    timer = Timer.objects.get(id=session_attributes['section__timer__id'])
+    section = session_attributes['section__name']
+
     return render(request, 'schedule/practice.html',
         {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
             'timer':mark_safe(timer.get_timer()), 'section':section})
 
 
 def protocol_summary(request):
-    '''Relies on django_highcharts for serializing data. Makes multiple chart
+    '''
+    Relies on django_highcharts for serializing data. Makes multiple chart
     rendering on a page more simple, however it doesn't appear to allow much
     in they way of customization.
+    define a range, avg, diplay max and min
     '''
-    '''define a range, avg, diplay max and min'''
-
     athlete = get_user(request)
     data = BoulderingRoutineMetrics.objects.filter(session__athlete = athlete)
     test = BoulderingRoutineMetrics.objects.values('min', 'max').filter(session__athlete = athlete)
@@ -165,7 +192,6 @@ def protocol_summary(request):
                    # .drop(['total_points', 'total_climbs'])
 
     df4 = df2.merge(df3, how='left', left_index=True, right_index=True)
-    print(df4)
     df4['avg']=df4['total_points']/df4['total_climbs']
     df4['range']=df4['max value']-df4['min value']
     chart = serialize(df4, render_to='my-chart', kind="bar", output_type='json')
