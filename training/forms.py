@@ -1,9 +1,9 @@
 from django.forms import inlineformset_factory
 from django import forms
-from .models import Top3Sends, Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs, MaxConditioning
-
+from .models import Conditioning, RefExercise, Athlete, PinchBlocks, WeightedHangs, MaxConditioning
 
 class AthleteConditioningForm(forms.Form):
+    Set = forms.IntegerField(min_value=1, max_value=3)
     Pulls = forms.ModelChoiceField(queryset=RefExercise.objects.filter(category__id=1))
     Pull_Reps = forms.IntegerField(min_value=1, max_value=12)
     Core = forms.ModelChoiceField(queryset=None)
@@ -12,7 +12,6 @@ class AthleteConditioningForm(forms.Form):
     Push_Reps = forms.IntegerField(min_value=1, max_value=12)
     Triceps = forms.ModelChoiceField(queryset=None)
     Tricep_Reps = forms.IntegerField(min_value=1, max_value=12)
-    Set = forms.IntegerField(min_value=1, max_value=3)
 
     def __init__(self, *args, **kwargs):
         super(AthleteConditioningForm, self).__init__(*args, **kwargs)
@@ -91,17 +90,4 @@ class CoachMaxConditioningForm(MaxConditioningForm):
 
     def __init__(self, *args, **kwargs):
         super(CoachMaxConditioningForm, self).__init__(*args, **kwargs)
-        self.fields.keyOrder = ['Athlete', ]
-
-class Top3SendsForm(forms.ModelForm):
-    class Meta:
-        model = Top3Sends
-        fields = ['first', 'second', 'third']
-
-
-class CoachTop3SendsForm(Top3SendsForm):
-    Athlete = forms.ModelChoiceField(queryset=Athlete.objects.all())
-
-    def __init__(self, *args, **kwargs):
-        super(CoachTop3SendsForm, self).__init__(*args, **kwargs)
         self.fields.keyOrder = ['Athlete', ]

@@ -1,13 +1,21 @@
-<script>
-$( window ).on("load", timerEvent({{ timer }}));
-</script>
 
-  <div class="jumbotron" id="timer">
-      <div class="current"></div>
-      <div class="values">00:00:00</div>
+  <div class="jumbotron text-center" id="timer">
+      <div> Current Interval</div>
+      <div>
+        <h4 class='current'></h4>
+      </div>
+      <div>
+        <h3 class = 'values'>00:00:00</h3>
+      </div>
+      <div>Next Interval</div>
       <div class='next'></div>
       <div>
-          <button class="startButton">Start</button>
-          <button class="pauseButton" >Pause</button>
+          <button class="startButton btn btn-success">Start</button>
+          <button class="pauseButton btn btn-danger" >Pause</button>
       </div>
   </div>
+
+
+  <script>
+  $( window ).on("load", timerEvent({{ timer }}));
+  </script>

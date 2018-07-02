@@ -37,3 +37,39 @@ class AssignedPracticeAdmin(ImportExportModelAdmin):
 @admin.register(RefIntensity)
 class RefIntensityAdmin(ImportExportModelAdmin):
     pass
+
+@admin.register(GradeLevel)
+class GradeLevelAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Metrics)
+class MetricsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(HangboardMetrics)
+class HangboardMetricsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(RouteProjectMetrics)
+class RouteProjectMetricsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(BoulderProjectMetrics)
+class BoulderProjectMetricsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Top3BoulderSends)
+class Top3BoulderSendsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(Top3RopeSends)
+class Top3RopeSendsAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(BoulderRedpoint)
+class BoulderRedpointAdmin(ImportExportModelAdmin):
+    pass
+
+@admin.register(RouteRedpoint)
+class RouteRedpointAdmin(ImportExportModelAdmin):
+    pass

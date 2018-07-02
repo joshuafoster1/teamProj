@@ -14,8 +14,7 @@
         <div class="card-body">
           <h3 class="card-title">Power Routines!</h3>
           {% for protocol in power_protocols %}
-          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
-          <p>{{protocol.description}}</p>
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary btn-block mb-2'>{{protocol.name}}</a>
           {% endfor %}
 
 
@@ -27,8 +26,7 @@
         <div class="card-body">
           <h3 class="card-title">Power Endurance Routines!</h3>
           {% for protocol in power_endurance_protocols %}
-          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
-          <p>{{protocol.description}}</p>
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary btn-block mb-2'>{{protocol.name}}</a>
           {% endfor %}
 
 
@@ -41,8 +39,7 @@
         <div class="card-body">
           <h3 class="card-title">Endurance Routines!</h3>
           {% for protocol in endurance_protocols %}
-          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary'>{{protocol.name}}</a>
-          <p>{{protocol.description}}</p>
+          <a href='{% url 'protocol' protocol.name %}' class='btn btn-primary btn-block mb-2'>{{protocol.name}}</a>
           {% endfor %}
 
 

@@ -45,8 +45,16 @@ INSTALLED_APPS = [
     'accounts',
     'widget_tweaks',
     'import_export',
+<<<<<<< HEAD
     'challenge',
     'django_tables2',
+=======
+    'django_pandas',
+    'pandas_highcharts',
+    'django_tables2',
+    'challenge',
+
+>>>>>>> pandas
 ]
 
 MIDDLEWARE = [

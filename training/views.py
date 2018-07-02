@@ -5,48 +5,56 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponse
 from .models import * #Athlete, Session, Conditioning, RefCategory, RefExercise, WeightedHangs, PinchBlocks
-from .forms import CoachTop3SendsForm, CoachMaxConditioningForm, Top3SendsForm, MaxConditioningForm, FullConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
+from .forms import CoachMaxConditioningForm, MaxConditioningForm, FullConditioningForm, AthleteConditioningForm, PinchBlockForm, WeightedHangsForm, FullPinchBlockForm, FullWeightedHangsForm
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
+
+
 #view globals
 CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
 quote_num = ClimbingQuotes.objects.count()
 #view helper function(s)
 def get_user(request):
-    pk = request.user.pk
-    athlete = get_object_or_404(Athlete, user__pk=pk)
+    user = request.user
+    athlete = get_object_or_404(Athlete, user=user)
     return athlete
 
 def is_coach(user):
     return user.groups.filter(name='Coach').exists()
 
+def standard_content(request):
+    '''base contents: date, athlete, quote'''
+
+    return {'date': DATE, 'athlete': get_user(request), 'quote': ClimbingQuotes.objects.get(id=random.randint(1, quote_num))}
 
 ###Views
-# home page link to schedule, usaclimbing, show events
 @login_required
 def home(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    athlete = get_user(request)
+    """# home page link to schedule, usaclimbing, show events"""
+    content = standard_content(request)
     calendar_objs = Calendar.objects.all()
+
     # populate upcoming events
     calendar = []
     for item in calendar_objs:
         if item.is_valid(DATE):
             calendar.append(item)
 
-    return render(request, 'home.html', {'athlete': athlete, 'calendar': calendar, 'quote':quote})
+    content['calendar'] = calendar
+
+    return render(request, 'home.html', content)
 
 
-
-# Training log. present recent conditioning, goals, sends, button to add conditioning
 @login_required
 def athletePage(request):
+    """ Page for conditioning, pinch blocks and weighted hangs"""
+
     athlete = get_user(request)
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
 
-
+    # compile conditioning
     conditioning = []
     for key in CATEGORY_ID:
         exercise_obj = athlete.get_conditioning(CATEGORY_ID[key], True)
@@ -54,24 +62,23 @@ def athletePage(request):
         if exercise_obj is not None:
             conditioning.append(exercise_obj)
 
-    weighted_hangs = athlete.get_weighted_training(WeightedHangs)
-    pinch_training = athlete.get_weighted_training(PinchBlocks)
+    content['weighted_hangs'] = athlete.get_weighted_training(WeightedHangs)
+    content['pinch_training'] = athlete.get_weighted_training(PinchBlocks)
+    content['max_weighted_hangs'] = athlete.get_weighted_training(WeightedHangs, max_weight=True)
+    content['max_weighted_pinch'] = athlete.get_weighted_training(PinchBlocks, max_weight=True)
+    content['conditioning'] = conditioning
 
-    max_weighted_hangs = athlete.get_weighted_training(WeightedHangs, max_weight=True)
-    max_weighted_pinch = athlete.get_weighted_training(PinchBlocks, max_weight=True)
-
-    return render(request, 'athlete_page.html', {'athlete': athlete, 'date': DATE, 'quote': quote,
-              'conditioning': conditioning,'max_weighted_pinch':max_weighted_pinch, 'max_weighted_hangs': max_weighted_hangs, 'weighted_hangs': weighted_hangs,
-              'pinch_training':pinch_training})
+    return render(request, 'athlete_page.html', content)
 
 # display athletes current information and provide links to change information if incorrect
 @login_required
 def athleteInfo(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    athlete = get_user(request)
-    info = athlete.get_user_info()
+    """ Content for athlete information page (template links to update for birthdate and info)"""
 
-    return render(request, 'athleteInfo.html', {'athlete': athlete, 'info': info, 'quote':quote})
+    content = standard_content(request)
+    content['info'] = content['athlete'].get_user_info()
+
+    return render(request, 'athleteInfo.html', content)
 
 class UpdateAthleteBday(UpdateView):
     model = Athlete
@@ -91,7 +98,7 @@ class UpdateAthlete(UpdateView):
 
 @login_required
 def newConditioning(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     athlete = get_user(request)
 
     # retrive last exercise from prior session to prepopulate form
@@ -99,8 +106,6 @@ def newConditioning(request):
     core = RefCategory.objects.get(pk=CATEGORY_ID['core']).get_last_exercise(athlete)
     push = RefCategory.objects.get(pk=CATEGORY_ID['push']).get_last_exercise(athlete)
     triceps = RefCategory.objects.get(pk=CATEGORY_ID['triceps']).get_last_exercise(athlete)
-
-    # date = datetime.date.today()
 
     if request.method == 'POST':
         form = AthleteConditioningForm(request.POST)
@@ -142,31 +147,21 @@ def newConditioning(request):
 
             return redirect('athletePage')
     else:
-        form = AthleteConditioningForm(initial={'Pulls': pulls, 'Core': core, 'Push': push,
+        content['form'] = AthleteConditioningForm(initial={'Pulls': pulls, 'Core': core, 'Push': push,
                 'Triceps': triceps })
-        # form = ConditioningForm(categoryInit=CoreCategory)
-    return render(request, 'new_conditioning.html', {'athlete': athlete, 'form': form, 'date': DATE, 'quote': quote})
 
-# def is_coach(user):
-#     return user.group == 'Coach'
-#
+    return render(request, 'new_conditioning.html', content)
+
+
 @login_required
 @user_passes_test(is_coach)
 def coachNewConditioning(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     athlete = get_object_or_404(Athlete, pk=1)
 
-    # modelform code below. saving for modelform exploration
-    # CoreCategory = get_object_or_404(RefCategory, pk=3)
-    # PushCategory = get_object_or_404(RefCategory, pk=1)
-    # PullCategory = get_object_or_404(RefCategory, pk=2)
-    # TriCategory = get_object_or_404(RefCategory, pk=4)
-
-    # date = datetime.date.today()
 
     if request.method == 'POST':
         form = FullConditioningForm(request.POST)
-        # form = ConditioningForm(request.POST, categoryInit=category)
         if form.is_valid():
             conditioning = form #save(commit=False)
             athlete = conditioning.cleaned_data['Athlete']
@@ -206,16 +201,14 @@ def coachNewConditioning(request):
 
             return redirect('ccform')
     else:
-        form = FullConditioningForm()
-        # form = ConditioningForm(categoryInit=CoreCategory)
-    return render(request, 'coach_conditioning_entry.html', {'athlete': athlete, 'form': form, 'date': DATE, 'quote': quote})
+        content['form'] = FullConditioningForm()
+
+    return render(request, 'coach_conditioning_entry.html', content)
 
 @login_required
 def pinch_blocks(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
     athlete = get_user(request)
-
-    pinch_training = athlete.get_weighted_training(PinchBlocks)
+    content = standard_content(request)
 
     if request.method == 'POST':
         form = PinchBlockForm(request.POST)
@@ -226,14 +219,16 @@ def pinch_blocks(request):
             pinch_training.save()
             return redirect('pinch_blocks')
     else:
-        form = PinchBlockForm()
-    return render(request, 'training/add_pinch_blocks.html', {'athlete':athlete, 'form': form,
-            'pinch_training':pinch_training, 'date': DATE, 'quote': quote})
+        content['form'] = PinchBlockForm()
+
+    content['pinch_training'] = athlete.get_weighted_training(PinchBlocks)
+
+    return render(request, 'training/add_pinch_blocks.html', content)
 
 @login_required
 @user_passes_test(is_coach)
 def coach_pinch_blocks(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
 
     if request.method == 'POST':
         form = FullPinchBlockForm(request.POST)
@@ -250,15 +245,14 @@ def coach_pinch_blocks(request):
             today.save()
             return redirect('coach_pinch_blocks')
     else:
-        form = FullPinchBlockForm()
-    return render(request, 'training/add_pinch_blocks.html', {'form': form, 'date':DATE, 'quote': quote})
+        content['form'] = FullPinchBlockForm()
+
+    return render(request, 'training/add_pinch_blocks.html', content)
 
 @login_required
 def weighted_hangs(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     athlete = get_user(request)
-
-    weighted_hangs = athlete.get_weighted_training(WeightedHangs)
 
     if request.method == 'POST':
         form = WeightedHangsForm(request.POST)
@@ -269,14 +263,16 @@ def weighted_hangs(request):
             weighted_hang.save()
             return redirect('weighted_hangs')
     else:
-        form = WeightedHangsForm()
-    return render(request, 'training/add_weighted_hangs.html', {'athlete':athlete, 'form': form,
-                'weighted_hangs': weighted_hangs, 'date': DATE, 'quote': quote})
+        content['form'] = WeightedHangsForm()
+
+    content['weighted_hangs'] = athlete.get_weighted_training(WeightedHangs)
+
+    return render(request, 'training/add_weighted_hangs.html', content)
 
 @login_required
 @user_passes_test(is_coach)
 def coach_weighted_hangs(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    contenet = standard_content(request)
 
     if request.method == 'POST':
         form = FullWeightedHangsForm(request.POST)
@@ -293,16 +289,13 @@ def coach_weighted_hangs(request):
             today.save()
             return redirect('coach_weighted_hangs')
     else:
-        form = FullWeightedHangsForm()
-    return render(request, 'training/add_weighted_hangs.html', {'form': form, 'date':DATE})
+        content['form'] = FullWeightedHangsForm()
+    return render(request, 'training/add_weighted_hangs.html', content)
 
 @login_required
 def max_conditioning(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     athlete = get_user(request)
-    theForm = request.session.get('theForm', [MaxConditioningForm, Top3SendsForm, MaxConditioningForm])
-    newForm = theForm.pop()
-    request.session.modified = True
     if request.method == 'POST':
         form = MaxConditioningForm(request.POST)
         if form.is_valid():
@@ -312,64 +305,18 @@ def max_conditioning(request):
             max_conditioning.save()
             return redirect('max_conditioning')
     else:
-        form = newForm()
-    return render(request, 'training/add_max_conditioning.html', {'athlete':athlete, 'form': form,
-                'date': DATE, 'quote': quote})
-
-
-@login_required
-def top_3_sends(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    athlete = get_user(request)
-
-    if request.method == 'POST':
-        form = Top3SendsForm(request.POST)
-        if form.is_valid():
-            max_conditioning = form.save(commit=False)
-            max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
-                athlete=athlete)
-            max_conditioning.save()
-            return redirect('athleteMetrics')
-    else:
-        form = Top3SendsForm()
-    return render(request, 'training/add_top_3_sends.html', {'athlete':athlete, 'form': form,
-                'date': DATE, 'quote': quote})
-
-@login_required
-@user_passes_test(is_coach)
-def coach_top_3_sends(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    if request.method == 'POST':
-        form = CoachTop3SendsForm(request.POST)
-        if form.is_valid():
-            max_form = form#.save(commit=False)
-            athlete = max_form.cleaned_data['Athlete']
-            session, created = Session.objects.get_or_create(sessionDate=DATE,
-                athlete=athlete)
-            today = Top3Sends()
-            today.hang = hang_form.cleaned_data['hang']
-            today.seconds = hang_form.cleaned_data['seconds']
-            today.weight = hang_form.cleaned_data['weight']
-            today.session = session
-            today.save()
-            return redirect('add_top_3_sends')
-    else:
-        form = CoachTop3SendsForm()
-    return render(request, 'training/add_top_3_sends.html', {'form': form, 'date': DATE, 'quote': quote})
-
-
-
+        content['form'] = MaxConditioningForm()
+    return render(request, 'training/add_max_conditioning.html', content)
 
 @login_required
 def athleteMetrics(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    athlete = get_user(request)
-    return render(request, 'athlete_metrics.html', {'date':DATE, 'athlete': athlete, 'quote': quote})
+    content = standard_content(request)
+    return render(request, 'athlete_metrics.html', content)
 
 @login_required
 @user_passes_test(is_coach)
 def coach_max_conditioning(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     if request.method == 'POST':
         form = CoachMaxConditioningForm(request.POST)
         if form.is_valid():
@@ -384,20 +331,20 @@ def coach_max_conditioning(request):
             today.save()
             return redirect('coach_max_conditioning')
     else:
-        form = CoachMaxConditioningForm()
-    return render(request, 'training/add_max_conditioning.html', {'form': form, 'date': DATE, 'quote': quote})
+        content['form'] = CoachMaxConditioningForm()
+    return render(request, 'training/add_max_conditioning.html', content)
 
 @login_required
 def practice_schedule(request):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
+    content = standard_content(request)
     athlete = get_user(request)
-    schedule= Practice.objects.all()
-    assigned_practice = athlete.get_assigned_practice()
+    content['practice'] = Practice.objects.all()
+    content['assigned_practice'] = athlete.get_assigned_practice()
 
-    return render(request, 'practice_schedule.html', {'athlete': athlete, 'assigned_practice': assigned_practice, 'practice': schedule, 'date': DATE, 'quote': quote})
+    return render(request, 'practice_schedule.html', content)
 
 @login_required
 def exercise_description(request, exercise_name):
-    quote = ClimbingQuotes.objects.get(id=random.randint(1, quote_num))
-    exercise = get_object_or_404(RefExercise, pk=exercise_name)
-    return render(request, 'exercise_description.html', {'exercise': exercise, 'quote': quote})
+    content = standard_content(request)
+    content['exercise'] = get_object_or_404(RefExercise, pk=exercise_name)
+    return render(request, 'exercise_description.html', content)

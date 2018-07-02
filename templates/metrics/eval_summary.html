@@ -1,7 +1,26 @@
 {% extends 'base.html' %}
+{% load django_tables2 %}
+
 {% block content %}
+<div class="container">
+
+{% for metric in metrics%}
+  <div class="row">
+    <div class="col-sm-12">
+      <div class = 'row'>
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{metric.name}}</h3>
+            {% render_table metric.table %}
+           </div>
+         </div>
+       </div>
+    </div>
+  </div>
 
 
+{% endfor %}
+</div>
 <a href='{% url 'home' %}' class='btn btn-primary'>Home</a>
 
 

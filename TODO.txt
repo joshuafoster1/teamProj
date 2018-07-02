@@ -1,8 +1,7 @@
 teamproj2 notes
 NOTE: NoSleep.js to keep browser from sleeping during the timer.
-      Speech utterance need to be initiated by user action. Need to debug the timer
-          to get the proper functionality working...
-
+      Speech utterance need to be initiated by user action.
+      
 Work on session for assigned practice...
    --allow individuals to move forward and backward through assigned practice and
      try to translate this logic to the metric testing
@@ -72,7 +71,7 @@ LAUNCH TODO:
     - Hangboard page
       - get the timer working properly
       -list all timers
-      
+
 
     Conditioning page
 

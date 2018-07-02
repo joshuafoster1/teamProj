@@ -50,8 +50,13 @@ urlpatterns = [
     url(r'^timer/', include('timers.urls')),
     url(r'^metrics/', include('metrics.urls')),
     url(r'^schedule/', include('schedule.urls')),
+<<<<<<< HEAD
     url(r'^challenge/', include('challenge.urls')),
     url(r'^goals/', include('goals.urls')),
+=======
+    url(r'^chart/', include('charts.urls')),
+    url(r'^challenge/', include('challenge.urls')),
+>>>>>>> pandas
 
     url(r'^admin/', admin.site.urls),
     url(r'^AthletePage/$', views.athletePage, name='athletePage'),
@@ -74,9 +79,6 @@ urlpatterns = [
 
     url(r'^coachmaxconditioning/add/$', views.coach_max_conditioning, name='coach_max_conditioning'),
     url(r'^maxconditioning/add/$', views.max_conditioning, name='max_conditioning'),
-
-    url(r'^top3sends/add/$', views.top_3_sends, name='top_3_sends'),
-    url(r'^coachtop3sends/add/$', views.coach_top_3_sends, name='coach_top_3_sends'),
 
 
     url(r'^schedule/$', views.practice_schedule, name='practice_schedule'),

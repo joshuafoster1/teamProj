@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from training.models import Session, Athlete, V_GRADES, ROUTE_GRADES
-from django.db import models
-
+from django.db import models, connection
+from django.apps import apps
 # Create your models here.
 # class MetricTestInformation(model.Models):
 #     test = models.CharField
@@ -102,54 +102,28 @@ class LateralCore(models.Model):
 
 
 class MetricDescription(models.Model):
-    metric = models.CharField(max_length=100)
+    metric = models.CharField(max_length=100)# key for
     description = models.CharField(max_length=500)
 
     def __str__(self):
         return self.metric
 
+    def query(self, athleteID):
+        model = 'metrics_' + ''.join(self.metric.split()).lower()
+        with connection.cursor() as cursor:
+            string = '''
+                    join metrics_metrictest
+                    on (test_id=metrics_metrictest.id)
+                    join training_session
+                    on (session_id=training_session.id)
+                    where (athlete_id = 1) '''
+            cursor.execute('select * from '+model+string)#, str(athleteID)])
 
-'''
-class Metric(models.Model):
-    metric = models.CharField(max_length=20)
-    description = models.CharField(max_length=500)
+            columns = [col[0] for col in cursor.description]
+            return [dict(zip(columns, row))for row in cursor.fetchall()]
 
-class IntParameter(models.Model):
-    name = models.CharField(max_length=40)
-    measure = models.IntegerField()
-
-class BooleanParameter(models.Model):
-    name = models.CharField(max_length=40)
-    check = models.BooleanField()
-
-class TestBooleanParameter(models.Model):
-    test = models.ForeignKey(Test)
-    boolean_parameter = models.ForeignKey(BooleanParameter)
-
-class TestIntParameter(models.Model):
-    test = models.ForeignKey(Test)
-    int_parameter = models.ForeignKey(IntParameter)
-
-class Test(models.Model):
-    test = models.ForeignKey(MetricTest)
-    metric = models.ForeignKey(Metric)
-    parameter = models.ManyToManyField(IntParameter, through='TestIntParameter') #for each, we want draw and ac_dc
-    booleanparameter = models.ManyToManyField(BooleanParameter, through='TestBooleanParameter')
-class MetricTest(model):
-    name
-    description
-
-class MetricData(model):
-    test = ForeignKey(MetricTest)
-    session
-    wieght
-    time
-class MetricData(model):
-    test = ForeignKey(MetricTest)
-    session
-    wieght
-    time
-    RUNG
-    feet_on
-
-'''
+        #     rows = cursor.fetchall()
+        # return rows
+    def retrieve_model(self):
+        model = ''.join(self.metric.split())
+        return  apps.get_model('metrics', model)

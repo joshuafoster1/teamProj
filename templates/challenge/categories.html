@@ -16,7 +16,11 @@
           <h3 class="card-title">Summer Challenge Categories</h3>
           {% for category in categories %}
           <div class = 'mb-2'>
+<<<<<<< HEAD
           <a href='{% url 'challenge_list' category.name %}' class='btn btn-primary'>{{category.name}}</a>
+=======
+          <a href='{% url 'challenge_list' category.name %}' class='btn btn-primary btn-block'>{{category.name}}</a>
+>>>>>>> pandas
           </div>
 
           {% endfor %}

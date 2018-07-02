@@ -11,5 +11,7 @@ timers/migrations
 training/migrations
 schedule/migrations
 metrics/migrations
-team
+challenge/migrations
+charts/migrations
+team1
 TODO.txt

@@ -4,21 +4,49 @@ from .models import *
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import *
 import datetime
+from .tables import *
+from django_tables2 import RequestConfig
+from django_pandas.io import read_frame
+
+
 
 DATE = datetime.date.today()
 
 FORM_DICT = {'Finger Power': FingerPowerForm, 'Finger Endurance': FingerEnduranceForm,
-    'Finger Power Endurance': FingerMuscularEnduranceForm, 'Pull and Slap': PullAndSlapForm, 'Max Weight Pull Up': MaxWeightPullUpForm,
+    'Finger Muscular Endurance': FingerMuscularEnduranceForm, 'Pull and Slap': PullAndSlapForm, 'Max Weight Pull Up': MaxWeightPullUpForm,
     'Max Pull Ups': MaxPullUpsForm, 'Campus Power Endurance': CampusPowerEnduranceForm,
-    'Lateral Core': LateralCoreForm, 'Sending Ability': CurrentSendForm}
+    'Lateral Core': LateralCoreForm, 'Sending Level': CurrentSendForm}
 
-STANDARD_EVAL = ['Sending Ability', 'Pull and Slap', 'Lateral Core', 'Campus Power Endurance',
+STANDARD_EVAL = ['Sending Level', 'Pull and Slap', 'Lateral Core', 'Campus Power Endurance',
                  'Finger Endurance']
 
 def get_user(request):
     pk = request.user.pk
     athlete = get_object_or_404(Athlete, user__pk=pk)
     return athlete
+
+def create_metric_data_table(metric, athlete):
+    alt = read_frame(metric.retrieve_model().objects.filter(test__session__athlete=athlete).order_by('-test__session__sessionDate')[:5]).drop(['id'], axis=1).rename(columns={'test':'date'}).to_dict('records')
+    if len(alt) >= 1:
+        table = EvalTable(alt, extra_columns=[(str(key), tables.Column()) for key in alt[0].keys()])
+    else:
+        table = EvalTable([{'date':DATE}])
+    RequestConfig(table)
+
+    return table
+
+def create_eval_summary_table(metric, athlete):
+    data = read_frame(metric.retrieve_model().objects.filter(test__session__athlete=athlete).order_by('-test__session__sessionDate')[:2]).drop(['id'], axis=1).rename(columns={'test':'date'})
+    # data['diff'] = data[0]-data[1]
+    data = data.to_dict('records')
+
+    if len(data) >= 1:
+        table = EvalTable(data, extra_columns=[(str(key), tables.Column()) for key in data[0].keys()])
+    else:
+        table = EvalTable([{'date':DATE}])
+    RequestConfig(table)
+
+    return table
 
 
 # Create your views here.
@@ -37,9 +65,12 @@ def metric_test(request, metricform):
             return redirect('athleteMetrics')
     else:
         form = FORM_DICT[metricform]()
-    metric_description = MetricDescription.objects.get(metric=metricform)
+    metric = MetricDescription.objects.get(metric=metricform)
+    metric_data = metric.query(athlete.id)
+    table = create_metric_data_table(metric, athlete)
+    return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric, 'table': table})
 
-    return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric_description})
+
 def evaluation(request):
     athlete = get_user(request)
     if request.session.get('standard_eval')== None:
@@ -67,12 +98,21 @@ def evaluation(request):
             return redirect('evaluation')
     else:
         form = FORM_DICT[eval_form]()
-        metric_description = MetricDescription.objects.get(metric=eval_form)
 
-    return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric_description})
+    metric = MetricDescription.objects.get(metric=eval_form)
+    metric_data = metric.query(athlete.id)
+    table = create_metric_data_table(metric, athlete)
+
+    return render(request, 'metrics/metrics.html', {'athlete': athlete, 'date': DATE, 'form': form, 'metricdescription': metric, 'table':table})
+
 
 def eval_summary(request):
     athlete = get_user(request)
     athlete.eval_date = DATE
     athlete.save()
-    return render(request, 'metrics/eval_summary.html', {'athlete': athlete, 'date':DATE})
+    metrics = []
+    for evaluation in STANDARD_EVAL:
+        metric = MetricDescription.objects.get(metric=evaluation)
+        table = create_eval_summary_table(metric, athlete)
+        metrics.append({'name': metric.metric, 'table':table})
+    return render(request, 'metrics/eval_summary.html', {'athlete': athlete, 'date':DATE, 'metrics': metrics})
