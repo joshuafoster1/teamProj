@@ -17,11 +17,9 @@
           <h3 class="card-title">{{category}}</h3>
           {% for challenge in challenges %}
           <div class = 'mb-2'>
-<<<<<<< HEAD
-          <a href='{% url 'challenge_description' challenge.name category %}' class='btn btn-primary'>{{challenge.name}}</a>
-=======
+
           <a href='{% url 'challenge_description' challenge.name category %}' class='btn btn-primary btn-block'>{{challenge.name}}</a>
->>>>>>> pandas
+
         </div>
 
           {% endfor %}
