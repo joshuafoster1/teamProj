@@ -1,0 +1,8 @@
+DEBUG:root:Test
+DEBUG:root:Metric Test; Date: 2018-07-10, Athlete: Coach
+views 2018-07-10 13:00:03,623 Test
+views 2018-07-10 13:00:07,730 Test
+views 2018-07-10 13:00:07,730 Metric Test; Date: 2018-07-10, Athlete: Coach
+metric_test 2018-07-10 13:01:40,318 Test
+metric_test 2018-07-10 13:01:43,084 Test
+debugging 2018-07-10 13:01:43,085 Metric Test; Date: 2018-07-10, Athlete: Coach

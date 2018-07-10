@@ -100,17 +100,19 @@
       {% block content %}
       {% endblock %}
     </div>
+
     {% endblock body %}
-    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/popper.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    {% block scripts %}{% endblock %}
+
   </div>
   </body>
   <footer class="pt-3">
     <div class='bg-dark'>
       <div class='blockquote text-white text-center'>
-        <p class='pt-3'>{{quote.quote}}</p>
-        <p class= 'pb-3 blockquote-footer'>{{quote.author}}</p>
+        <p class='p-5'>{{quote.quote}}</p>
+        <p class= 'pb-4 blockquote-footer'>{{quote.author}}</p>
       </div>
     </div>
   </footer>

@@ -1,0 +1,357 @@
+2018-07-10 13:17:49,499 Internal Server Error: /metrics/metrictest/Finger Power Endurance/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/metrics/views.py", line 73, in metric_test
+    form = FORM_DICT[metricform]()
+KeyError: 'Finger Power Endurance'
+2018-07-10 13:18:44,427 Internal Server Error: /metrics/metrictest/Finger Power Endurance/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/utils.py", line 63, in execute
+    return self.cursor.execute(sql)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/sqlite3/base.py", line 326, in execute
+    return Database.Cursor.execute(self, query)
+sqlite3.OperationalError: no such table: metrics_fingerpowerendurance
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/metrics/views.py", line 75, in metric_test
+    metric_data = metric.query(athlete.id)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/metrics/models.py", line 120, in query
+    cursor.execute('select * from '+model+string)#, str(athleteID)])
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/utils.py", line 80, in execute
+    return super(CursorDebugWrapper, self).execute(sql, params)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/utils.py", line 65, in execute
+    return self.cursor.execute(sql, params)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/utils.py", line 94, in __exit__
+    six.reraise(dj_exc_type, dj_exc_value, traceback)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/utils/six.py", line 685, in reraise
+    raise value.with_traceback(tb)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/utils.py", line 63, in execute
+    return self.cursor.execute(sql)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/backends/sqlite3/base.py", line 326, in execute
+    return Database.Cursor.execute(self, query)
+django.db.utils.OperationalError: no such table: metrics_fingerpowerendurance
+2018-07-10 13:22:01,456 Internal Server Error: /metrics/metrictest/Finger Power Endurance/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/metrics/views.py", line 73, in metric_test
+    form = FORM_DICT[metricform]()
+KeyError: 'Finger Power Endurance'
+2018-07-10 14:58:24,326 ; Date: 2018-07-10, Athlete: Coach
+2018-07-10 15:17:21,793 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 112, in protocol
+    form = protocol_object.form.get_form(forms)()
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 51, in get_form
+    return forms[self.name]
+KeyError: 'RouteRedpointForm'
+2018-07-10 15:17:33,625 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 112, in protocol
+    form = protocol_object.form.get_form(forms)()
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 51, in get_form
+    return forms[self.name]
+KeyError: 'RouteRedpointForm'
+2018-07-10 15:19:08,735 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 114, in protocol
+    form = protocol_object.form.get_form(forms)()
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 51, in get_form
+    return forms[self.name]
+KeyError: 'RouteRedpointForm'
+2018-07-10 15:21:36,305 Form matching query does not exist.
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 457, in import_row
+    self.import_obj(instance, row, dry_run)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 329, in import_obj
+    self.import_field(field, obj, data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 316, in import_field
+    field.save(obj, data, is_m2m)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 115, in save
+    cleaned = self.clean(data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 69, in clean
+    value = self.widget.clean(value, row=data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/widgets.py", line 334, in clean
+    return self.get_queryset(value, row, *args, **kwargs).get(**{self.field: val})
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/models/query.py", line 380, in get
+    self.model._meta.object_name
+schedule.models.DoesNotExist: Form matching query does not exist.
+2018-07-10 15:21:36,359 Form matching query does not exist.
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 457, in import_row
+    self.import_obj(instance, row, dry_run)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 329, in import_obj
+    self.import_field(field, obj, data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 316, in import_field
+    field.save(obj, data, is_m2m)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 115, in save
+    cleaned = self.clean(data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 69, in clean
+    value = self.widget.clean(value, row=data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/widgets.py", line 334, in clean
+    return self.get_queryset(value, row, *args, **kwargs).get(**{self.field: val})
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/models/query.py", line 380, in get
+    self.model._meta.object_name
+schedule.models.DoesNotExist: Form matching query does not exist.
+2018-07-10 15:21:36,400 Form matching query does not exist.
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 457, in import_row
+    self.import_obj(instance, row, dry_run)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 329, in import_obj
+    self.import_field(field, obj, data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/resources.py", line 316, in import_field
+    field.save(obj, data, is_m2m)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 115, in save
+    cleaned = self.clean(data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/fields.py", line 69, in clean
+    value = self.widget.clean(value, row=data)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/import_export/widgets.py", line 334, in clean
+    return self.get_queryset(value, row, *args, **kwargs).get(**{self.field: val})
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/db/models/query.py", line 380, in get
+    self.model._meta.object_name
+schedule.models.DoesNotExist: Form matching query does not exist.
+2018-07-10 15:28:06,836 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 120, in protocol
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 43, in create_metric_data_table
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 64, in retrieve_model
+    return apps.get_model('schedule', model)
+UnboundLocalError: local variable 'model' referenced before assignment
+2018-07-10 15:28:24,985 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 120, in protocol
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 43, in create_metric_data_table
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 64, in retrieve_model
+    return apps.get_model('schedule', model)
+UnboundLocalError: local variable 'model' referenced before assignment
+2018-07-10 15:28:31,555 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 120, in protocol
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 43, in create_metric_data_table
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 64, in retrieve_model
+    return apps.get_model('schedule', model)
+UnboundLocalError: local variable 'model' referenced before assignment
+2018-07-10 15:30:56,977 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 120, in protocol
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 43, in create_metric_data_table
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 64, in retrieve_model
+    return apps.get_model('schedule', model)
+UnboundLocalError: local variable 'model' referenced before assignment
+2018-07-10 15:31:00,245 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 120, in protocol
+    table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 43, in create_metric_data_table
+    data = read_frame(protocol.form.retrieve_model().objects.filter(session__athlete=athlete, routine__name = routine)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 64, in retrieve_model
+    return apps.get_model('schedule', model)
+UnboundLocalError: local variable 'model' referenced before assignment
+2018-07-10 15:32:46,744 Internal Server Error: /schedule/protocol/execute/Rope Redpoint/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 129, in protocol
+    'section':protocol_object, "table": table, 'grade': grade})
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/shortcuts.py", line 30, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/loader.py", line 68, in render_to_string
+    return template.render(context, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/backends/django.py", line 66, in render
+    return self.template.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 207, in render
+    return self._render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 199, in _render
+    return self.nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/loader_tags.py", line 177, in render
+    return compiled_parent._render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 199, in _render
+    return self.nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/loader_tags.py", line 72, in render
+    result = block.nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/loader_tags.py", line 72, in render
+    result = block.nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/defaulttags.py", line 322, in render
+    return nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/loader_tags.py", line 216, in render
+    return template.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 209, in render
+    return self._render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 199, in _render
+    return self.nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/defaulttags.py", line 216, in render
+    nodelist.append(node.render_annotated(context))
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/defaulttags.py", line 216, in render
+    nodelist.append(node.render_annotated(context))
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/defaulttags.py", line 322, in render
+    return nodelist.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 990, in render
+    bit = node.render_annotated(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/template/base.py", line 957, in render_annotated
+    return self.render(context)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/widget_tweaks/templatetags/widget_tweaks.py", line 192, in render
+    set_attr(bounded_field, '%s:%s' % (k, v.resolve(context)))
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/widget_tweaks/templatetags/widget_tweaks.py", line 12, in wrapped
+    return fn(field, attr)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/widget_tweaks/templatetags/widget_tweaks.py", line 46, in set_attr
+    return _process_field_attributes(field, attr, process)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/widget_tweaks/templatetags/widget_tweaks.py", line 26, in _process_field_attributes
+    old_as_widget = field.as_widget
+AttributeError: 'BoundWidget' object has no attribute 'as_widget'
+2018-07-10 15:40:58,537 ; Date: 2018-07-10, Athlete: Coach
+2018-07-10 15:41:05,983 ; Date: 2018-07-10, Athlete: Coach
+2018-07-10 15:41:58,665 ; Date: 2018-07-10, Athlete: Coach
+2018-07-10 15:43:18,399 Internal Server Error: /schedule/protocol/execute/Burst Points (5 Minutes)/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 114, in protocol
+    form = protocol_object.form.get_form(forms)()
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 51, in get_form
+    return forms[self.name]
+KeyError: 'BoulderingFormset'
+2018-07-10 15:43:35,641 Internal Server Error: /schedule/protocol/execute/Burst Points (5 Minutes)/
+Traceback (most recent call last):
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/ubuntuDev/lib/python3.5/site-packages/django/contrib/auth/decorators.py", line 23, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/views.py", line 114, in protocol
+    form = protocol_object.form.get_form(forms)()
+  File "/home/josh/Dropbox/ComputerScience/LearnDjango/teamproj2/schedule/models.py", line 51, in get_form
+    return forms[self.name]
+KeyError: 'BoulderingFormset'
+2018-07-10 16:16:28,521 ; Date: 2018-07-10, Athlete: Coach

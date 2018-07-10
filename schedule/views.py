@@ -15,13 +15,25 @@ from metrics.tables import EvalTable
 from timers.models import Timer
 from training.views import get_user, DATE
 
+import logging
+
+def debugging(date, athlete):
+    logging.debug('; Date: %s, Athlete: %s', date, athlete)
+
+logging.basicConfig(format='%(asctime)s %(message)s', filename= 'debug.log', filemode='a', level=logging.DEBUG)
+
 # Create your views here.
 
-forms ={'BoulderingRoutineMetrics': BoulderingRoutineMetricsForm, 'RopeRoutineMetrics': RopeRoutineMetricsForm,
-        'HangboardMetrics':HangboardMetrics, 'RouteRedpointFormset':RouteRedpointFormset,
-        'BoulderRedpointFormset': BoulderRedpointFormset,
-        'BoulderingFormset':BoulderingFormset, 'Top3RopeSends': Top3RopeSendsForm, 'Top3BoulderSends':Top3RopeSendsForm,
-        'BoulderProjectMetrics':BoulderProjectForm, 'RouteProjectMetrics': RouteProjectForm}
+forms ={'BoulderingRoutineMetrics': BoulderingRoutineMetricsForm,
+        'RopeRoutineMetrics': RopeRoutineMetricsForm,
+        'HangboardMetrics':HangboardMetrics,
+        'RouteRedpoint':RouteRedpointForm,
+        'BoulderRedpoint': BoulderRedpointForm,
+        'Top3RopeSends': Top3RopeSendsForm,
+        'Top3BoulderSends':Top3RopeSendsForm,
+        'BoulderProjectMetrics':BoulderProjectForm,
+        'RouteProjectMetrics': RouteProjectForm
+        }
 
 
 def create_metric_data_table(protocol, athlete, routine):
@@ -70,22 +82,24 @@ def protocol(request, protocol):
     if request.method == "POST":
         form = protocol_object.form.get_form(forms)(request.POST)
 
-        if formset:
-            if form.is_valid():
-                for set in form:
-                    protocol_data = set.save(commit=False)
-                    protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
-                        athlete=athlete)
-                    protocol_data.routine = protocol_object
-                    try:
-                        protocol_data.save()
-                    except:
-                        continue
+        # if formset:
+        #     if form.is_valid():
+        #         for set in form:
+        #             protocol_data = set.save(commit=False)
+        #             debugging(DATE, athlete)
+        #             protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
+        #                 athlete=athlete)
+        #             protocol_data.routine = protocol_object
+        #             try:
+        #                 protocol_data.save()
+        #             except:
+        #                 continue
+        #
+        #         return redirect('home')
 
-                return redirect('home')
-
-        elif form.is_valid():
+        if form.is_valid():
             protocol_data = form.save(commit=False)
+            debugging(DATE, athlete)
             protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             protocol_data.routine = protocol_object
@@ -94,10 +108,10 @@ def protocol(request, protocol):
             return redirect('home')
 
     else:
-        if formset:
-            form = protocol_object.form.get_form(forms)()
-        else:
-            form = protocol_object.form.get_form(forms)()
+        # if formset:
+        #     form = protocol_object.form.get_form(forms)()
+        # else:
+        form = protocol_object.form.get_form(forms)()
 
     grade = protocol_object.get_grade_level(athlete)
     timer = protocol_object.timer
@@ -106,14 +120,35 @@ def protocol(request, protocol):
     table = create_metric_data_table(protocol_object, athlete, protocol_object.name)
 
     if timer:
-        return render(request, 'schedule/practice.html',
-            {'athlete': athlete, 'date': DATE, 'form': form,'formset':formset, 'description': description,
+        return render(request, 'schedule/practice_ajax.html',
+            {'athlete': athlete, 'date': DATE, 'form': form, 'description': description,
                 'timer':mark_safe(timer.get_timer()), 'section':protocol_object, 'table':table, 'grade': grade})
 
-    return render(request, 'schedule/practice.html',
-        {'athlete': athlete, 'date': DATE, 'form': form, 'formset':formset, 'goal': goal, 'description': description,
+    return render(request, 'schedule/practice_ajax.html',
+        {'athlete': athlete, 'date': DATE, 'form': form, 'goal': goal, 'description': description,
              'section':protocol_object, "table": table, 'grade': grade})
 
+def create_post(request, protocol):
+    athlete = get_user(request)
+    protocol_object = Protocol.objects.get(name=protocol)
+
+    if request.method == 'POST':
+        form = protocol_object.form.get_form(forms)(request.POST)
+        print('Sanity')
+        if form.is_valid():
+            print('form')
+            protocol_data = form.save(commit=False)
+            debugging(DATE, athlete)
+            protocol_data.session, created = Session.objects.get_or_create(sessionDate=DATE,
+                athlete=athlete)
+            protocol_data.routine = protocol_object
+            protocol_data.save()
+
+            return JsonResponse({'success':True})
+        else:
+            return JsonResponse({'success': 'false', 'error': form.errors})
+    else:
+        return JsonResponse({'That': 'is this happening'})
 
 def practice_home(request):
     athlete = get_user(request)
@@ -149,6 +184,7 @@ def practice_form(request, id):
 
         if form.is_valid():
             practice_section = form.save(commit=False)
+            debugging(DATE, athlete)
             practice_section.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             practice_section.routine = Protocol.objects.get(id =session_attributes['id'])

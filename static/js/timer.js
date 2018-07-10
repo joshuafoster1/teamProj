@@ -1,7 +1,5 @@
 
-// $(document).ready(function() {
 
-// rewite to take [{activity:***, time:***},{activity:***, time:***}]
 function timerEvent(timer_intervals, initial = true){
 
 

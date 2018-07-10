@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^protocol/json/$', views.json_example, name='json_example'),
     url(r'^protocol/(?P<protocol_type>[0-9a-zA-Z\ \-\(\)\']+)/$', views.protocol_home, name='protocol_display'),
 
-
+    url(r'^create_post/(?P<protocol>[0-9a-zA-Z\ \-\(\)\']+)/$', views.create_post, name = 'create_post'),
 
 ]

@@ -8,6 +8,12 @@ from .tables import *
 from django_tables2 import RequestConfig
 from django_pandas.io import read_frame
 
+import logging
+
+def debugging(date, athlete):
+    logging.debug('; Date: %s, Athlete: %s', date, athlete)
+
+logging.basicConfig(format='%(asctime)s %(message)s', filename= 'debug.log', filemode='a', level=logging.DEBUG)
 
 
 DATE = datetime.date.today()
@@ -51,12 +57,12 @@ def create_eval_summary_table(metric, athlete):
 
 # Create your views here.
 def metric_test(request, metricform):
-    # process_metric_form(FORM_DICT[form])
     athlete = get_user(request)
     if request.method == 'POST':
         form = FORM_DICT[metricform](request.POST)
         if form.is_valid():
             metric_test = form.save(commit=False)
+            debugging(DATE, athlete)
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             metrictest, created = MetricTest.objects.get_or_create(session=session)
@@ -87,6 +93,7 @@ def evaluation(request):
         form =FORM_DICT[eval_form](request.POST)
         if form.is_valid():
             metric_test = form.save(commit=False)
+            debugging(DATE, athlete)
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             metrictest, created = MetricTest.objects.get_or_create(session=session)

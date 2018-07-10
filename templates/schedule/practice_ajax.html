@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+{% load static %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item">{{ date }}</li>
+<li class="breadcrumb-item active">{{athlete.user.username}}</li>
+{% endblock %}
+
+{% block content %}
+<div class="">
+  <h3>{{section}}</h3>
+  <p>{{description}}</p>
+</div>
+<div class="">
+  <h4>Goal</h4>
+  <p>Rocommendation for the hardest grade for this routine: {{grade}}
+  <p>{{goal}}</p>
+</div>
+<div>
+  <h4>Prior {{section}} Sessions</h4>
+</div>
+<div class = 'card mb-2'>
+  {% render_table table %}
+</div>
+{% if timer %}
+<div class="">
+  {% include 'includes/timer.html' %}
+</div>
+{% endif %}
+<div class="">
+  <h4>Log your session</h4>
+    {% if formset %}
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+
+        {% include 'includes/formset.html' %}
+    {% else %}
+    <form method="post" id = 'post-form' post-url="{% url 'create_post' section.name %}" novalidate>
+      {% csrf_token %}
+
+
+        {% include 'includes/form.html' %}
+    {% endif %}
+<div id = 'results'></div>
+    <button type="submit" class="btn btn-success">Submit</button>
+    <a class="btn btn-success" href="{% url 'home' %}">Finished</a>
+  </form>
+
+
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+  <script src="{% static 'js/main.js' %}"></script>
+
+{% endblock %}

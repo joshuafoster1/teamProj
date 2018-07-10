@@ -7,6 +7,19 @@ class BoulderingRoutineMetricsForm(forms.ModelForm):
     class Meta:
         model = BoulderingRoutineMetrics
         fields = ['total_points', 'total_climbs', 'max', 'min']
+        widgets = {
+            'total_points': forms.NumberInput(attrs={
+                'id': 'total_points',
+                'required': True,
+                'placeholder': 'Total'}),
+            'total_climbs': forms.NumberInput(attrs={
+                'id': 'total_climbs',
+                'required': True,
+                'placeholder': 'Total Points'
+            }),
+
+        }
+
 
 class RopeRoutineMetricsForm(forms.ModelForm):
     class Meta:

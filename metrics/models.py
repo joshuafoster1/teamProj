@@ -41,7 +41,7 @@ class FingerMuscularEndurance(models.Model):
     time = models.IntegerField()
 
     def __str__(self):
-        return str(self.weight) + " " + str(self.time)
+        return str(self.time)
 
 
 class FingerEndurance(models.Model):
@@ -51,7 +51,7 @@ class FingerEndurance(models.Model):
     feet_on = models.BooleanField()
 
     def __str__(self):
-        return str(self.weight) + " " + str(self.time)
+        return str(self.rung) + " " + str(self.time)
 
 
 class PullAndSlap(models.Model):

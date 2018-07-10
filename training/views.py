@@ -10,11 +10,19 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.models import User
 
+import logging
+
+def debugging(date, athlete):
+    logging.debug('; Date: %s, Athlete: %s', date, athlete)
+
+logging.basicConfig(format='%(asctime)s %(message)s', filename= 'debug.log', filemode='a', level=logging.DEBUG)
+
 
 #view globals
 CATEGORY_ID = {'pulls':1, 'core':3, 'push':2, 'triceps':4}
 DATE = datetime.date.today()
 quote_num = ClimbingQuotes.objects.count()
+
 #view helper function(s)
 def get_user(request):
     user = request.user
@@ -51,8 +59,8 @@ def home(request):
 def athletePage(request):
     """ Page for conditioning, pinch blocks and weighted hangs"""
 
-    athlete = get_user(request)
     content = standard_content(request)
+    athlete = content['athlete']
 
     # compile conditioning
     conditioning = []
@@ -99,7 +107,7 @@ class UpdateAthlete(UpdateView):
 @login_required
 def newConditioning(request):
     content = standard_content(request)
-    athlete = get_user(request)
+    athlete = content['athlete']
 
     # retrive last exercise from prior session to prepopulate form
     pulls = RefCategory.objects.get(pk=CATEGORY_ID['pulls']).get_last_exercise(athlete)
@@ -112,6 +120,7 @@ def newConditioning(request):
         if form.is_valid():
             conditioning = form
             coreObject = Conditioning()
+            debugging(DATE, athlete)
             coreObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             coreObject.exercise = conditioning.cleaned_data['Core']
@@ -119,6 +128,7 @@ def newConditioning(request):
             coreObject.setNum = conditioning.cleaned_data['Set']
 
             pullObject = Conditioning()
+            debugging(DATE, athlete)
             pullObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pullObject.exercise = conditioning.cleaned_data['Pulls']
@@ -126,6 +136,7 @@ def newConditioning(request):
             pullObject.setNum = conditioning.cleaned_data['Set']
 
             pushObject = Conditioning()
+            debugging(DATE, athlete)
             pushObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pushObject.exercise = conditioning.cleaned_data['Push']
@@ -133,6 +144,7 @@ def newConditioning(request):
             pushObject.setNum = conditioning.cleaned_data['Set']
 
             TricepsObject = Conditioning()
+            debugging(DATE, athlete)
             TricepsObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             TricepsObject.exercise = conditioning.cleaned_data['Triceps']
@@ -166,6 +178,7 @@ def coachNewConditioning(request):
             conditioning = form #save(commit=False)
             athlete = conditioning.cleaned_data['Athlete']
             coreObject = Conditioning()
+            debugging(DATE, athlete)
             coreObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             coreObject.exercise = conditioning.cleaned_data['Core']
@@ -173,6 +186,7 @@ def coachNewConditioning(request):
             coreObject.setNum = conditioning.cleaned_data['Set']
 
             pullObject = Conditioning()
+            debugging(DATE, athlete)
             pullObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pullObject.exercise = conditioning.cleaned_data['Pulls']
@@ -180,6 +194,7 @@ def coachNewConditioning(request):
             pullObject.setNum = conditioning.cleaned_data['Set']
 
             pushObject = Conditioning()
+            debugging(DATE, athlete)
             pushObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pushObject.exercise = conditioning.cleaned_data['Push']
@@ -187,6 +202,7 @@ def coachNewConditioning(request):
             pushObject.setNum = conditioning.cleaned_data['Set']
 
             TricepsObject = Conditioning()
+            debugging(DATE, athlete)
             TricepsObject.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             TricepsObject.exercise = conditioning.cleaned_data['Triceps']
@@ -214,6 +230,7 @@ def pinch_blocks(request):
         form = PinchBlockForm(request.POST)
         if form.is_valid():
             pinch_training = form.save(commit=False)
+            debugging(DATE, athlete)
             pinch_training.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             pinch_training.save()
@@ -235,6 +252,7 @@ def coach_pinch_blocks(request):
         if form.is_valid():
             pinch_training = form
             athlete = pinch_training.cleaned_data['Athlete']
+            debugging(DATE, athlete)
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             today = PinchBlocks()
@@ -258,6 +276,7 @@ def weighted_hangs(request):
         form = WeightedHangsForm(request.POST)
         if form.is_valid():
             weighted_hang = form.save(commit=False)
+            debugging(DATE, athlete)
             weighted_hang.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             weighted_hang.save()
@@ -279,6 +298,7 @@ def coach_weighted_hangs(request):
         if form.is_valid():
             hang_form = form#.save(commit=False)
             athlete = hang_form.cleaned_data['Athlete']
+            debugging(DATE, athlete)
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             today = WeightedHangs()
@@ -300,6 +320,7 @@ def max_conditioning(request):
         form = MaxConditioningForm(request.POST)
         if form.is_valid():
             max_conditioning = form.save(commit=False)
+            debugging(DATE, athlete)
             max_conditioning.session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             max_conditioning.save()
@@ -322,6 +343,7 @@ def coach_max_conditioning(request):
         if form.is_valid():
             max_form = form#.save(commit=False)
             athlete = max_form.cleaned_data['Athlete']
+            debugging(DATE, athlete)
             session, created = Session.objects.get_or_create(sessionDate=DATE,
                 athlete=athlete)
             today = MaxConditioning()

@@ -51,15 +51,15 @@ class Form(models.Model):
         return forms[self.name]
 
     def retrieve_model(self):
-        if self.formset:
-            if self.name == 'BoulderingFormset':
-                model = 'BoulderingRoutineMetrics'
-            elif self.name =='RouteRedpointFormset':
-                model = 'RouteRedpoint'
-            elif self.name == 'BoulderRedpointFormset':
-                model = 'BoulderRedpoint'
-        else:
-            model = self.name
+        # if self.formset:
+        #     if self.name == 'BoulderingFormset':
+        #         model = 'BoulderingRoutineMetrics'
+        #     elif self.name =='RouteRedpointFormset':
+        #         model = 'RouteRedpoint'
+        #     elif self.name == 'BoulderRedpointFormset':
+        #         model = 'BoulderRedpoint'
+        # else:
+        model = self.name
 
         return apps.get_model('schedule', model)
 
