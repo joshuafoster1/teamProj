@@ -17,8 +17,9 @@ from training.views import get_user, DATE
 
 import logging
 
+logger = logging.getLogger('poop')
 def debugging(date, athlete):
-    logging.debug('; Date: %s, Athlete: %s', date, athlete)
+    logger.debug("%s, %s", date, athlete)
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename= 'debug.log', filemode='a', level=logging.DEBUG)
 

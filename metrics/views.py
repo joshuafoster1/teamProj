@@ -10,8 +10,9 @@ from django_pandas.io import read_frame
 
 import logging
 
+logger = logging.getLogger('poop')
 def debugging(date, athlete):
-    logging.debug('; Date: %s, Athlete: %s', date, athlete)
+    logger.debug("%s, %s", date, athlete)
 
 logging.basicConfig(format='%(asctime)s %(message)s', filename= 'debug.log', filemode='a', level=logging.DEBUG)
 
